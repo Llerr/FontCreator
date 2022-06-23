@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="file">
+    <property name="title">
+     <string>Файл</string>
+    </property>
+    <addaction name="actOpenCode"/>
+    <addaction name="actSaveCode"/>
+    <addaction name="separator"/>
+    <addaction name="actOpenFont"/>
+    <addaction name="separator"/>
+    <addaction name="actExit"/>
+   </widget>
+   <widget class="QMenu" name="help">
+    <property name="title">
+     <string>Помощь</string>
+    </property>
+    <addaction name="actAbout"/>
+   </widget>
+   <addaction name="file"/>
+   <addaction name="help"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actAbout">
+   <property name="text">
+    <string>О ...</string>
+   </property>
+  </action>
+  <action name="actOpenCode">
+   <property name="text">
+    <string>Открыть код</string>
+   </property>
+  </action>
+  <action name="actSaveCode">
+   <property name="text">
+    <string>Сохранить код</string>
+   </property>
+  </action>
+  <action name="actOpenFont">
+   <property name="text">
+    <string>Импортировать шрифт</string>
+   </property>
+  </action>
+  <action name="actExit">
+   <property name="text">
+    <string>Выход</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>actExit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
