@@ -1,8 +1,8 @@
 #include <QSplitter>
 
-#include "font.h"
-#include "glyphs.h"
-#include "edit.h"
+#include "fontWidget.h"
+#include "glyphsWidget.h"
+#include "editWidget.h"
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -15,9 +15,9 @@ MainWindow::MainWindow(QWidget *parent)
     QSplitter *splitter = new QSplitter(this);
     setCentralWidget(splitter);
 
-    _wgtEdit   = new Edit(this);
-    _wgtFont   = new Font(this);
-    _wgtGlyphs = new Glyphs(this);
+    _wgtEdit   = new EditWidget(this);
+    _wgtFont   = new FontWidget(this);
+    _wgtGlyphs = new GlyphsWidget(this);
     splitter->addWidget(_wgtFont);
     splitter->addWidget(_wgtEdit);
     splitter->addWidget(_wgtGlyphs);

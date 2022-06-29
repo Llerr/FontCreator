@@ -40,7 +40,22 @@
     </property>
     <addaction name="actAbout"/>
    </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Правка</string>
+    </property>
+    <addaction name="action"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>Вид</string>
+    </property>
+    <addaction name="actFintIn"/>
+    <addaction name="actFontOut"/>
+   </widget>
    <addaction name="file"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu"/>
    <addaction name="help"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -60,13 +75,37 @@
    </property>
   </action>
   <action name="actOpenFont">
+   <property name="icon">
+    <iconset theme="fileopen"/>
+   </property>
    <property name="text">
-    <string>Импортировать шрифт</string>
+    <string>Открыть шрифт</string>
    </property>
   </action>
   <action name="actExit">
    <property name="text">
     <string>Выход</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>Шрифт</string>
+   </property>
+  </action>
+  <action name="actFintIn">
+   <property name="icon">
+    <iconset theme="zoom-in"/>
+   </property>
+   <property name="text">
+    <string>Шрифт увеличить</string>
+   </property>
+  </action>
+  <action name="actFontOut">
+   <property name="icon">
+    <iconset theme="zoom-out"/>
+   </property>
+   <property name="text">
+    <string>Шрифт уменьшить</string>
    </property>
   </action>
  </widget>

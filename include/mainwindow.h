@@ -3,9 +3,9 @@
 
 #include <QMainWindow>
 
-class Edit;
-class Glyphs;
-class Font;
+class EditWidget;
+class GlyphsWidget;
+class FontWidget;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -22,8 +22,8 @@ public:
 private:
     Ui::MainWindow *ui;
 
-    Font   *_wgtFont;
-    Glyphs *_wgtGlyphs;
-    Edit   *_wgtEdit;
+    FontWidget   *_wgtFont;
+    GlyphsWidget *_wgtGlyphs;
+    EditWidget   *_wgtEdit;
 };
 #endif // MAINWINDOW_H

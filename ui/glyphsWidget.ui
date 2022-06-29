@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Font</class>
- <widget class="QWidget" name="Font">
+ <class>GlyphsWidget</class>
+ <widget class="QWidget" name="GlyphsWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -27,7 +27,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="lblFontName">
      <property name="text">
       <string>TextLabel</string>
      </property>

@@ -16,22 +16,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    src/edit.cpp \
-    src/font.cpp \
-    src/glyphs.cpp \
+    src/characterWidget.cpp \
+    src/editWidget.cpp \
+    src/fontWidget.cpp \
+    src/glyphsWidget.cpp \
     src/main.cpp \
     src/mainwindow.cpp
 
 HEADERS += \
-    include/edit.h \
-    include/font.h \
-    include/glyphs.h \
+    include/characterWidget.h \
+    include/editWidget.h \
+    include/fontWidget.h \
+    include/glyphsWidget.h \
     include/mainwindow.h
 
 FORMS += \
-    ui/edit.ui \
-    ui/font.ui \
-    ui/glyphs.ui \
+    ui/editWidget.ui \
+    ui/fontWidget.ui \
+    ui/glyphsWidget.ui \
     ui/mainwindow.ui
 
 TRANSLATIONS += \
