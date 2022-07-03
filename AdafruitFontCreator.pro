@@ -16,8 +16,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    include/src/glyphswidget.cpp \
     src/characterWidget.cpp \
+    src/drawGlyphsWidget.cpp \
     src/editWidget.cpp \
     src/fontWidget.cpp \
     src/glyph.cpp \
@@ -27,10 +27,10 @@ SOURCES += \
 
 HEADERS += \
     include/characterWidget.h \
+    include/drawGlyphWidget.h \
     include/editWidget.h \
     include/fontWidget.h \
     include/glyph.h \
-    include/glyphsWidget.h \
     include/include/glyphswidget.h \
     include/mainwindow.h
 
