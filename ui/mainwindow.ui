@@ -50,8 +50,8 @@
     <property name="title">
      <string>Вид</string>
     </property>
-    <addaction name="actFintIn"/>
-    <addaction name="actFontOut"/>
+    <addaction name="actFont"/>
+    <addaction name="actGlyphs"/>
    </widget>
    <addaction name="file"/>
    <addaction name="menu_2"/>
@@ -59,6 +59,27 @@
    <addaction name="help"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QDockWidget" name="dockGlyphs">
+   <property name="windowTitle">
+    <string>Глифы</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents"/>
+  </widget>
+  <widget class="QDockWidget" name="dockFont">
+   <property name="floating">
+    <bool>false</bool>
+   </property>
+   <property name="windowTitle">
+    <string>Шрифт</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_2"/>
+  </widget>
   <action name="actAbout">
    <property name="text">
     <string>О ...</string>
@@ -76,7 +97,8 @@
   </action>
   <action name="actOpenFont">
    <property name="icon">
-    <iconset theme="fileopen"/>
+    <iconset theme="fileopen">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Открыть шрифт</string>
@@ -92,20 +114,26 @@
     <string>Шрифт</string>
    </property>
   </action>
-  <action name="actFintIn">
-   <property name="icon">
-    <iconset theme="zoom-in"/>
+  <action name="actFont">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
    </property>
    <property name="text">
-    <string>Шрифт увеличить</string>
+    <string>Шрифт</string>
    </property>
   </action>
-  <action name="actFontOut">
-   <property name="icon">
-    <iconset theme="zoom-out"/>
+  <action name="actGlyphs">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
    </property>
    <property name="text">
-    <string>Шрифт уменьшить</string>
+    <string>Глифы</string>
    </property>
   </action>
  </widget>
@@ -124,6 +152,70 @@
     <hint type="destinationlabel">
      <x>399</x>
      <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actFont</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>dockFont</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>28</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dockFont</sender>
+   <signal>visibilityChanged(bool)</signal>
+   <receiver>actFont</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>28</x>
+     <y>299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actGlyphs</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>dockGlyphs</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>770</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dockGlyphs</sender>
+   <signal>visibilityChanged(bool)</signal>
+   <receiver>actGlyphs</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>770</x>
+     <y>299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
     </hint>
    </hints>
   </connection>

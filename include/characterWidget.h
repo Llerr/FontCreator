@@ -56,13 +56,14 @@
 #include <QSize>
 #include <QString>
 #include <QWidget>
+#include <QSet>
 
 QT_BEGIN_NAMESPACE
 class QMouseEvent;
 class QPaintEvent;
+class QLabel;
 QT_END_NAMESPACE
 
-//! [0]
 class CharacterWidget : public QWidget
 {
     Q_OBJECT
@@ -78,21 +79,23 @@ public slots:
     void updateFontMerging(bool enable);
 
 signals:
-    void characterSelected(const QString &character);
+    void characterSelectedInfo(const QString &character);
+    void characterSelected(const QChar &key);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
 
 private:
     void calculateSquareSize();
 
-    QFont displayFont;
-    int columns;
-    int lastKey;
-    int squareSize;
+    QFont _displayFont;
+    int _columns;
+    uint _lastKey;
+    QSet<int> _keys;
+    int _squareSize;
 };
-//! [0]
 
 #endif

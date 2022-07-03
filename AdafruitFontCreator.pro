@@ -16,9 +16,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    include/src/glyphswidget.cpp \
     src/characterWidget.cpp \
     src/editWidget.cpp \
     src/fontWidget.cpp \
+    src/glyph.cpp \
     src/glyphsWidget.cpp \
     src/main.cpp \
     src/mainwindow.cpp
@@ -27,7 +29,9 @@ HEADERS += \
     include/characterWidget.h \
     include/editWidget.h \
     include/fontWidget.h \
+    include/glyph.h \
     include/glyphsWidget.h \
+    include/include/glyphswidget.h \
     include/mainwindow.h
 
 FORMS += \
@@ -40,7 +44,7 @@ TRANSLATIONS += \
     AdafruitFontCreator_ru_RU.ts
 
 INCLUDEPATH += include
-
+CONFIG   += rtti
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin

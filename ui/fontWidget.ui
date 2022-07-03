@@ -105,7 +105,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="cmbSizes"/>
+      <widget class="QComboBox" name="cmbSize"/>
      </item>
     </layout>
    </item>
