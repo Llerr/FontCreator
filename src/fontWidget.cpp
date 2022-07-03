@@ -12,9 +12,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 FontWidget::FontWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::FontWidget)
+    _ui(new Ui::FontWidget)
 {
-    ui->setupUi(this);
+    _ui->setupUi(this);
 
 
     qDebug() << "Start font: " << _font << " size: " << _font.pointSize();
@@ -22,7 +22,7 @@ FontWidget::FontWidget(QWidget *parent) :
     QScrollArea *scrollArea = new QScrollArea(this);
     _wgtChars = new CharacterWidget();
     scrollArea->setWidget(_wgtChars);
-    ui->verticalLayout->addWidget(scrollArea);
+    _ui->verticalLayout->addWidget(scrollArea);
     _wgtChars->updateFontMerging(false);
 
 //    _wgt = new QWidget;
@@ -38,17 +38,17 @@ FontWidget::FontWidget(QWidget *parent) :
 
 
 
-    connect(ui->cmbStyles, QOverload<const QString &>::of(&QComboBox::currentIndexChanged), _wgtChars, &CharacterWidget::updateStyle);
-    connect(ui->cmbSize, QOverload<const QString &>::of(&QComboBox::currentIndexChanged), _wgtChars, &CharacterWidget::updateSize);
-    connect(_wgtChars, QOverload<const QString &>::of(&CharacterWidget::characterSelectedInfo), ui->lblSymbolCode, &QLabel::setText);
+    connect(_ui->cmbStyles, QOverload<const QString &>::of(&QComboBox::currentIndexChanged), _wgtChars, &CharacterWidget::updateStyle);
+    connect(_ui->cmbSize, QOverload<const QString &>::of(&QComboBox::currentIndexChanged), _wgtChars, &CharacterWidget::updateSize);
+    connect(_wgtChars, QOverload<const QString &>::of(&CharacterWidget::characterSelectedInfo), _ui->lblSymbolCode, &QLabel::setText);
     connect(_wgtChars, QOverload<const QChar &>::of(&CharacterWidget::characterSelected), this, &FontWidget::receiveChar);
-    on_cmbFont_currentFontChanged(ui->cmbFont->font());
+    on_cmbFont_currentFontChanged(_ui->cmbFont->font());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 FontWidget::~FontWidget()
 {
-    delete ui;
+    delete _ui;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -84,53 +84,53 @@ void FontWidget::hideEvent(QHideEvent *event)
 void FontWidget::findStyles(const QFont &font)
 {
     QFontDatabase fontDatabase;
-    QString currentItem = ui->cmbStyles->currentText();
-    ui->cmbStyles->clear();
+    QString currentItem = _ui->cmbStyles->currentText();
+    _ui->cmbStyles->clear();
 
     QString style;
     foreach (style, fontDatabase.styles(font.family()))
-        ui->cmbStyles->addItem(style);
+        _ui->cmbStyles->addItem(style);
 
-    int styleIndex = ui->cmbStyles->findText(currentItem);
+    int styleIndex = _ui->cmbStyles->findText(currentItem);
 
     if (styleIndex == -1)
-        ui->cmbStyles->setCurrentIndex(0);
+        _ui->cmbStyles->setCurrentIndex(0);
     else
-        ui->cmbStyles->setCurrentIndex(styleIndex);
+        _ui->cmbStyles->setCurrentIndex(styleIndex);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 void FontWidget::findSizes(const QFont &font)
 {
     QFontDatabase fontDatabase;
-    QString currentSize = ui->cmbSize->currentText();
+    QString currentSize = _ui->cmbSize->currentText();
 
     {
-        const QSignalBlocker blocker(ui->cmbSize);
+        const QSignalBlocker blocker(_ui->cmbSize);
         // sizeCombo signals are now blocked until end of scope
-        ui->cmbSize->clear();
+        _ui->cmbSize->clear();
 
         int size;
         if (fontDatabase.isSmoothlyScalable(font.family(), fontDatabase.styleString(font))) {
             foreach (size, QFontDatabase::standardSizes()) {
-                ui->cmbSize->addItem(QVariant(size).toString());
-                ui->cmbSize->setEditable(true);
+                _ui->cmbSize->addItem(QVariant(size).toString());
+                _ui->cmbSize->setEditable(true);
             }
 
         } else {
             foreach (size, fontDatabase.smoothSizes(font.family(), fontDatabase.styleString(font))) {
-                ui->cmbSize->addItem(QVariant(size).toString());
-                ui->cmbSize->setEditable(false);
+                _ui->cmbSize->addItem(QVariant(size).toString());
+                _ui->cmbSize->setEditable(false);
             }
         }
     }
 
-    int sizeIndex = ui->cmbSize->findText(currentSize);
+    int sizeIndex = _ui->cmbSize->findText(currentSize);
 
     if(sizeIndex == -1)
-        ui->cmbSize->setCurrentIndex(qMax(0, ui->cmbSize->count() / 3));
+        _ui->cmbSize->setCurrentIndex(qMax(0, _ui->cmbSize->count() / 3));
     else
-        ui->cmbSize->setCurrentIndex(sizeIndex);
+        _ui->cmbSize->setCurrentIndex(sizeIndex);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -31,7 +31,7 @@ HEADERS += \
     include/editWidget.h \
     include/fontWidget.h \
     include/glyph.h \
-    include/include/glyphswidget.h \
+    include/glyphsWidget.h \
     include/mainwindow.h
 
 FORMS += \

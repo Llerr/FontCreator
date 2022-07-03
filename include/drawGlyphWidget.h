@@ -1,32 +1,29 @@
-#ifndef GLYPHS_H
-#define GLYPHS_H
+#ifndef DRAW_GLYPHS_H
+#define DRAW_GLYPHS_H
 
 #include <QWidget>
 #include <QMap>
 
 #include "glyph.h"
 
-namespace Ui {
-class GlyphsWidget;
-}
-
 ///
 /// \brief class GlyphsWidget отображает выбранные символы (глифы)
 ///
-class GlyphsWidget : public QWidget
+class DrawGlyphsWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit GlyphsWidget(QWidget *parent = nullptr);
-    ~GlyphsWidget();
+    explicit DrawGlyphsWidget(QWidget *parent = nullptr);
+    ~DrawGlyphsWidget();
 
-    void removeGlyph(int key);
-    void setGlyph(int key, Glyph glyph);
+protected:
+//    void mouseMoveEvent(QMouseEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+//    void mouseDoubleClickEvent(QMouseEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 private:
-    Ui::GlyphsWidget *_ui; ///< Указатель на форму
 
-    QMap<int, Glyph> _glyphs; ///< Набор глифов с изображениями
 };
 
-#endif // GLYPHS_H
+#endif // DRAW_GLYPHS_H

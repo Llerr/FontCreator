@@ -1,3 +1,5 @@
+#include <QtWidgets>
+
 #include "glyphsWidget.h"
 #include "ui_glyphsWidget.h"
 
@@ -9,6 +11,12 @@ GlyphsWidget::GlyphsWidget(QWidget *parent) :
     _ui(new Ui::GlyphsWidget)
 {
     _ui->setupUi(this);
+
+    QScrollArea *scrollArea = new QScrollArea(this);
+    _wgtDraw = new DrawGlyphsWidget();
+    scrollArea->setWidget(_wgtDraw);
+    _ui->verticalLayout->addWidget(scrollArea);
+
 }
 
 //----------------------------------------------------------------------------------------------------------------------

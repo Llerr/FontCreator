@@ -34,7 +34,7 @@ private slots:
     void on_cmbSize_currentIndexChanged(const QString &fontSize);
     void receiveChar(const QChar &symb);
 private:
-    Ui::FontWidget *ui;
+    Ui::FontWidget *_ui;
 
     int _pointSize;
     QFont _font;

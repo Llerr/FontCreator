@@ -2,7 +2,7 @@
 #include <QDebug>
 
 #include "fontWidget.h"
-#include "drawGlyphWidget.h"
+#include "glyphsWidget.h"
 #include "editWidget.h"
 
 #include "mainwindow.h"
