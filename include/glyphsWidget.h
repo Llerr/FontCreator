@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QMap>
 
-#include "drawGlyphWidget.h"
+#include "drawGlyphsWidget.h"
 #include "glyph.h"
 
 namespace Ui {

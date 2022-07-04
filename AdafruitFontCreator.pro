@@ -27,7 +27,7 @@ SOURCES += \
 
 HEADERS += \
     include/characterWidget.h \
-    include/drawGlyphWidget.h \
+    include/drawGlyphsWidget.h \
     include/editWidget.h \
     include/fontWidget.h \
     include/glyph.h \
