@@ -12,17 +12,18 @@
 //----------------------------------------------------------------------------------------------------------------------
 FontWidget::FontWidget(QWidget *parent) :
     QWidget(parent),
-    _ui(new Ui::FontWidget)
+    _ui(new Ui::FontWidget),
+    _glyphs()
 {
     _ui->setupUi(this);
 
 
     qDebug() << "Start font: " << _font << " size: " << _font.pointSize();
     setFontSize(_font.pointSize());
-    QScrollArea *scrollArea = new QScrollArea(this);
+    _scrollArea = new QScrollArea(this);
     _wgtChars = new CharacterWidget();
-    scrollArea->setWidget(_wgtChars);
-    _ui->verticalLayout->addWidget(scrollArea);
+    _scrollArea->setWidget(_wgtChars);
+    _ui->verticalLayout->addWidget(_scrollArea);
     _wgtChars->updateFontMerging(false);
 
 //    _wgt = new QWidget;
@@ -111,14 +112,19 @@ void FontWidget::findSizes(const QFont &font)
         _ui->cmbSize->clear();
 
         int size;
-        if (fontDatabase.isSmoothlyScalable(font.family(), fontDatabase.styleString(font))) {
-            foreach (size, QFontDatabase::standardSizes()) {
+        if (fontDatabase.isSmoothlyScalable(font.family(), fontDatabase.styleString(font)))
+        {
+            foreach (size, QFontDatabase::standardSizes())
+            {
                 _ui->cmbSize->addItem(QVariant(size).toString());
                 _ui->cmbSize->setEditable(true);
             }
 
-        } else {
-            foreach (size, fontDatabase.smoothSizes(font.family(), fontDatabase.styleString(font))) {
+        }
+        else
+        {
+            foreach (size, fontDatabase.smoothSizes(font.family(), fontDatabase.styleString(font)))
+            {
                 _ui->cmbSize->addItem(QVariant(size).toString());
                 _ui->cmbSize->setEditable(false);
             }
@@ -188,6 +194,67 @@ void FontWidget::on_cmbStyles_currentIndexChanged(const QString &fontStyle)
 void FontWidget::on_cmbSize_currentIndexChanged(const QString &fontSize)
 {
     setFontSize(fontSize.toInt());
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void FontWidget::on_edtSymbSearch_textEdited(const QString &text)
+{
+    int key = 0;
+    bool ok = false;
+    switch (text.length())
+    {
+    case 0:
+        break;
+    case 1:
+        key = text.at(0).unicode();
+        break;
+    default:
+        key = text.toInt(&ok, 16);
+    }
+    qDebug() << "Text for search: " << text << ", code: " << hex << key;
+    int squareSize = _wgtChars->squareSize();
+    int columns = _wgtChars->columns();
+    _scrollArea->verticalScrollBar()->setValue(squareSize*key/columns - _wgtChars->width());
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void FontWidget::on_btnExport_clicked()
+{
+    auto & keys = _wgtChars->getKeys();
+    QString fontName = _ui->cmbFont->currentText() +
+            _ui->cmbStyles->currentText() + _ui->cmbSize->currentText();
+    fontName.remove(QChar(' '));
+    QFontMetrics fm(_font);
+
+    qDebug() << "Export glyphs" << _wgtChars->getKeys().size() << ", font name: " << fontName;
+    _glyphs.clear();
+    for(auto &&key:keys)
+    {
+        QChar symb(key);
+        QRect boundRect = fm.boundingRect(symb);
+        Glyph glyph;
+        qDebug() << "key: " << key << " " << QString(symb) << boundRect << boundRect.topLeft();
+        QImage img(boundRect.size(), QImage::Format_Mono);
+        img.fill(1);
+        QPainter painter(&img);
+        painter.setPen(Qt::black);
+
+        painter.setFont(_font);
+        painter.drawText(-boundRect.topLeft(), QString(symb));
+        painter.end();
+//        img.save(QString::number(key,16) + ".xpm");
+        glyph.key = key;
+        glyph.img = img;
+        glyph.width = boundRect.size().width();
+        glyph.height = boundRect.size().height();
+        glyph.dx = boundRect.topLeft().rx();
+        glyph.dy = boundRect.topLeft().ry();
+        glyph.xAdvance = fm.horizontalAdvance(symb);
+        glyph.yAdvance = fm.lineSpacing();
+
+        _glyphs[key] = glyph;
+    }
+    emit exportGlyphs(_glyphs, fontName);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

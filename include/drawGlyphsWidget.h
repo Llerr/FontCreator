@@ -14,15 +14,24 @@ class DrawGlyphsWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit DrawGlyphsWidget(QWidget *parent = nullptr);
+    explicit DrawGlyphsWidget(GlyphsMap &glyph, QWidget *parent = nullptr);
     ~DrawGlyphsWidget();
+    QSize sizeHint() const override;
 
+    void updateSize();
+    void calculateSquareSize();
 protected:
 //    void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
 //    void mouseDoubleClickEvent(QMouseEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
 private:
+    int _columns;  ///< Количество столбцов в таблице
+    int _rows;     ///< Количество строк в таблице
+    int _lastKey;
+    int _squareSize;
+
+    GlyphsMap &_glyphs;
 
 };
 

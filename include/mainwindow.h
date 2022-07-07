@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMap>
+
+#include "glyph.h"
 
 class EditWidget;
 class GlyphsWidget;
@@ -26,5 +29,7 @@ private:
     FontWidget   *_wgtFont;
     GlyphsWidget *_wgtGlyphs;
     EditWidget   *_wgtEdit;
+
+//    GlyphsMap _glyphs;
 };
 #endif // MAINWINDOW_H

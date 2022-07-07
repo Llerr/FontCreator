@@ -71,6 +71,9 @@ class CharacterWidget : public QWidget
 public:
     CharacterWidget(QWidget *parent = 0);
     QSize sizeHint() const override;
+    int squareSize() {return _squareSize;}
+    int columns() {return _columns;}
+    QSet<int> &getKeys() {return _keys;}
 
 public slots:
     void updateFont(const QFont &font);

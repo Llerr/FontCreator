@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QMap>
 
+
 #include "drawGlyphsWidget.h"
 #include "glyph.h"
 
@@ -25,12 +26,15 @@ public:
 
     void removeGlyph(int key);
     void setGlyph(int key, Glyph glyph);
+public slots:
+    void receiveGlyphs(const GlyphsMap &glyphs, const QString &name);
 private:
     Ui::GlyphsWidget *_ui; ///< Указатель на форму
 
     DrawGlyphsWidget *_wgtDraw; ///< Виджет отрисовки гифов
 
-    QMap<int, Glyph> _glyphs; ///< Набор глифов с изображениями
+    QString _fontName; ///< Имя шрифта
+    GlyphsMap _glyphs; ///< Набор глифов с изображениями
 };
 
 #endif // GLYPHS_H

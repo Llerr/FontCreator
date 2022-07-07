@@ -22,12 +22,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->dockGlyphs->setWidget(_wgtGlyphs);
     _wgtEdit   = new EditWidget(this);
     setCentralWidget(_wgtEdit);
-//    QSplitter *splitter = new QSplitter(this);
-//    setCentralWidget(splitter);
 
-//    splitter->addWidget(_wgtFont);
-//    splitter->addWidget(_wgtEdit);
-//    splitter->addWidget(_wgtGlyphs);
+    connect(_wgtFont, qOverload<const GlyphsMap &, const QString &>(&FontWidget::exportGlyphs),
+            _wgtGlyphs, &GlyphsWidget::receiveGlyphs);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

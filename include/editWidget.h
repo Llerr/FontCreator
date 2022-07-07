@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include "glyph.h"
+
 namespace Ui {
 class EditWidget;
 }
@@ -17,6 +19,7 @@ public:
 
 private:
     Ui::EditWidget *ui;
+
 };
 
 #endif // EDIT_H

@@ -112,7 +112,7 @@ void CharacterWidget::calculateSquareSize()
 //----------------------------------------------------------------------------------------------------------------------
 QSize CharacterWidget::sizeHint() const
 {
-    return QSize(_columns*_squareSize, (65536/_columns)*_squareSize);
+    return QSize(_columns*_squareSize + 1, (65536/_columns)*_squareSize);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
