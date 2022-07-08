@@ -48,6 +48,33 @@ void DrawGlyphsWidget::calculateSquareSize()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+//void CharacterWidget::mouseMoveEvent(QMouseEvent *event)
+//{
+//    QPoint widgetPosition = mapFromGlobal(event->globalPos());
+//    uint key = (widgetPosition.y()/_squareSize)*_columns + widgetPosition.x()/_squareSize;
+
+//    QString text = QString("U+%1").arg(key, 4, 16, QLatin1Char('0'));
+////    QToolTip::showText(event->globalPos(), text, this);
+//    emit characterSelectedInfo(text);
+
+//    if(event->buttons() == Qt::LeftButton && _lastKey != key)
+//    {
+//        uint start = std::min(key, _lastKey);
+//        uint stop = std::max(key, _lastKey);
+////        qDebug() << start << "| " << stop;
+//        for(uint i = start+1; i < stop +1; ++i)
+//        {
+//            if(_keys.contains(i))
+//                _keys.remove(i);
+//            else
+//                _keys.insert(i);
+//        }
+//        update();
+//        _lastKey = key;
+//    }
+//}
+
+//----------------------------------------------------------------------------------------------------------------------
 void DrawGlyphsWidget::mousePressEvent(QMouseEvent *event)
 {
     adjustSize();
@@ -65,6 +92,7 @@ void DrawGlyphsWidget::mousePressEvent(QMouseEvent *event)
 void DrawGlyphsWidget::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
+    int key;
 //    painter.fillRect(event->rect(), QBrush(Qt::white));
 
     QRect redrawRect = event->rect();
@@ -86,19 +114,27 @@ void DrawGlyphsWidget::paintEvent(QPaintEvent *event)
 
 //    QFontMetrics fontMetrics(_displayFont);
 //    painter.setPen(QPen(Qt::black));
+//    qDebug() << "Glyph size: " << _glyphs.size();
     for (int row = beginRow; row <= endRow; ++row) {
 
         for (int column = beginColumn; column <= endColumn; ++column)
         {
             if( (column + row*_columns) >= _glyphs.size() )
-                continue;
-            int key = row*_columns + column;
+                break;
+            int idx = row*_columns + column;
             painter.setClipRect(column*_squareSize, row*_squareSize, _squareSize, _squareSize);
 
-            if (_lastKey == key)
+            if (_lastKey == idx)
                 painter.fillRect(column*_squareSize + 1, row*_squareSize + 1, _squareSize, _squareSize, QBrush(Qt::lightGray));
 
-//            painter.drawText(column*_squareSize + (_squareSize / 2) - fontMetrics.horizontalAdvance(QChar(key))/2,
+            key = getByIndex(_glyphs, idx);
+            QImage img = _glyphs[key].img;
+            img.setColor(1, qRgba(0,0,0,0) );
+            QPoint pointForImage(column*_squareSize + (_squareSize / 2) - _glyphs[key].width/2,
+                              row*_squareSize + (_squareSize / 2) - _glyphs[key].height/2);
+            painter.drawImage(pointForImage, img);
+//            qDebug() << key << ": " << glyph;
+//            painter.drawText(cpointForImageolumn*_squareSize + (_squareSize / 2) - fontMetrics.horizontalAdvance(QChar(key))/2,
 //                             row*_squareSize + 4 + fontMetrics.ascent(),
 //                             QString(QChar(key)));
         }

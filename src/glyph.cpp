@@ -20,7 +20,25 @@ Glyph::Glyph():
 //----------------------------------------------------------------------------------------------------------------------
 QDebug operator<<(QDebug stream, const Glyph &gl)
 {
-     stream.nospace() << "symb: " << QString(QChar(gl.key)) << " size (" << gl.width << ", " << gl.height << ")" <<
-                     ", dx:dy " << gl.dx << ":" << gl.dy << ", advance [" << gl.xAdvance << ", " << gl.yAdvance << "]";
+     stream.nospace() << hex << gl.key << " - symb: " << QString(QChar(gl.key))
+                      << dec << " size (" << gl.width << ", " << gl.height << ")"
+                      << ", dx:dy " << gl.dx << ":" << gl.dy
+                      << ", advance [" << gl.xAdvance << ", " << gl.yAdvance << "] " << gl.img;
      return stream.maybeSpace();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+int getByIndex(GlyphsMap &map, int idx)
+{
+    if(idx < 0 || idx >= map.size())
+        return -1;
+    for(auto &&glyp:map)
+    {
+        if(idx == 0)
+        {
+            return glyp.key;
+        }
+        --idx;
+    }
+    return -1;
 }

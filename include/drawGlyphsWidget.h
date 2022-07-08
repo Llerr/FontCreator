@@ -29,6 +29,7 @@ private:
     int _columns;  ///< Количество столбцов в таблице
     int _rows;     ///< Количество строк в таблице
     int _lastKey;
+    QSet<int> _keys;
     int _squareSize;
 
     GlyphsMap &_glyphs;

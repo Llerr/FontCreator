@@ -24,6 +24,8 @@ public:
 
 typedef QMap<int, Glyph> GlyphsMap;
 
+int getByIndex(GlyphsMap &map, int idx);
+
 //QDebug &operator<<(QDebug &stream, const Glyph &gl);
 
 #endif // GLYPH_H
