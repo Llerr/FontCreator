@@ -17,9 +17,13 @@ public:
     explicit EditWidget(QWidget *parent = nullptr);
     ~EditWidget();
 
+public slots:
+    void receiveGlyph(int key);
 private:
     Ui::EditWidget *ui;
 
+    int _sale;
+    Glyph _editGlyph;
 };
 
 #endif // EDIT_H

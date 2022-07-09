@@ -20,16 +20,27 @@ public:
 
     void updateSize();
     void calculateSquareSize();
+public slots:
+    void on_btnDel_clicked();
+    void on_btnPlus_clicked();
+    void on_btnOne_clicked();
+    void on_btnMinus_clicked();
+
+signals:
+    void characterSelectedInfo(const QString &character);
+    void glyphSelected(int key);
+
 protected:
-//    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
-//    void mouseDoubleClickEvent(QMouseEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
 private:
+    float _scale;
     int _columns;  ///< Количество столбцов в таблице
     int _rows;     ///< Количество строк в таблице
-    int _lastKey;
-    QSet<int> _keys;
+    int _lastIdx;
+    QSet<int> _Idxs;
     int _squareSize;
 
     GlyphsMap &_glyphs;

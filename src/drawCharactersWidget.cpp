@@ -50,13 +50,16 @@
 #include <QDebug>
 #include <QtWidgets>
 
-#include "characterWidget.h"
+#include "drawCharactersWidget.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 CharacterWidget::CharacterWidget(QWidget *parent)
-    : QWidget(parent), _columns(16), _lastKey(std::numeric_limits<uint>::max())
+    : QWidget(parent),
+      _columns(16),
+      _lastKey(-1),
+      _squareSize(16)
 {
     calculateSquareSize();
     setMouseTracking(true);
@@ -119,9 +122,9 @@ QSize CharacterWidget::sizeHint() const
 void CharacterWidget::mouseMoveEvent(QMouseEvent *event)
 {
     QPoint widgetPosition = mapFromGlobal(event->globalPos());
-    uint key = (widgetPosition.y()/_squareSize)*_columns + widgetPosition.x()/_squareSize;
+    int key = (widgetPosition.y()/_squareSize)*_columns + widgetPosition.x()/_squareSize;
 
-    QString text = QString("U+%1").arg(key, 4, 16, QLatin1Char('0'));
+    QString text = QString("U+%1").arg(key, 4, 16, QLatin1Char('0')).toUpper();
 //    QToolTip::showText(event->globalPos(), text, this);
     emit characterSelectedInfo(text);
 
@@ -148,6 +151,10 @@ void CharacterWidget::mousePressEvent(QMouseEvent *event)
     if (event->button() == Qt::LeftButton)
     {
         _lastKey = (event->y()/_squareSize)*_columns + event->x()/_squareSize;
+        if((event->modifiers() & Qt::ControlModifier) != Qt::ControlModifier )
+        {
+            _keys.clear();
+        }
         if(_keys.contains(_lastKey))
             _keys.remove(_lastKey);
         else

@@ -19,6 +19,13 @@ GlyphsWidget::GlyphsWidget(QWidget *parent) :
     scrollArea->setWidget(_wgtDraw);
     _ui->verticalLayout->addWidget(scrollArea);
 
+    connect(_wgtDraw, QOverload<const QString &>::of(&DrawGlyphsWidget::characterSelectedInfo), _ui->lblGlyph, &QLabel::setText);
+    connect(_wgtDraw, qOverload<int>(&DrawGlyphsWidget::glyphSelected), this, qOverload<int>(&GlyphsWidget::glyphSelected));
+
+    connect(_ui->btnDel, qOverload<bool>(&QPushButton::clicked), _wgtDraw, &DrawGlyphsWidget::on_btnDel_clicked);
+    connect(_ui->btnPlus, qOverload<bool>(&QPushButton::clicked), _wgtDraw, &DrawGlyphsWidget::on_btnPlus_clicked);
+    connect(_ui->btnOne, qOverload<bool>(&QPushButton::clicked), _wgtDraw, &DrawGlyphsWidget::on_btnOne_clicked);
+    connect(_ui->btnMinus, qOverload<bool>(&QPushButton::clicked), _wgtDraw, &DrawGlyphsWidget::on_btnMinus_clicked);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -51,5 +58,10 @@ void GlyphsWidget::receiveGlyphs(const GlyphsMap &glyphs, const QString &name)
         qDebug() << glyph;
         _glyphs[glyph.key] = glyph;
     }
+    _ui->lblFont->setText(name);
     _wgtDraw->updateSize();
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+//------------------------------ P R I V A T E   S L O T S -------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------

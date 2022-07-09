@@ -28,6 +28,15 @@ public:
     void setGlyph(int key, Glyph glyph);
 public slots:
     void receiveGlyphs(const GlyphsMap &glyphs, const QString &name);
+
+signals:
+    void glyphSelected(int key);
+
+private slots:
+//    void on_btnDel_clicked();
+//    void on_btnPlus_clicked();
+//    void on_btnMinus_clicked();
+
 private:
     Ui::GlyphsWidget *_ui; ///< Указатель на форму
 

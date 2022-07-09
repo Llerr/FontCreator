@@ -96,7 +96,7 @@ private:
 
     QFont _displayFont;
     int _columns;
-    uint _lastKey;
+    int _lastKey;
     QSet<int> _keys;
     int _squareSize;
 };

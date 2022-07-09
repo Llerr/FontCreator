@@ -1,3 +1,5 @@
+#include <QDebug>
+
 #include "include/editWidget.h"
 #include "ui_editWidget.h"
 
@@ -11,4 +13,9 @@ EditWidget::EditWidget(QWidget *parent) :
 EditWidget::~EditWidget()
 {
     delete ui;
+}
+
+void EditWidget::receiveGlyph(int key)
+{
+    qDebug() << "Select glyph: U+" << hex << key;
 }

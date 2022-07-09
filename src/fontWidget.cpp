@@ -3,7 +3,7 @@
 #include <QFileDialog>
 #include <QtWidgets>
 
-#include "characterWidget.h"
+#include "drawCharactersWidget.h"
 #include "fontWidget.h"
 #include "ui_fontWidget.h"
 
@@ -256,6 +256,9 @@ void FontWidget::on_btnExport_clicked()
     }
     emit exportGlyphs(_glyphs, fontName);
 }
+void on_btnDel_clicked();
+void on_btnPlus_clicked();
+void on_btnMinus_clicked();
 
 //----------------------------------------------------------------------------------------------------------------------
 void FontWidget::receiveChar(const QChar &symb)

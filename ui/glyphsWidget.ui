@@ -39,7 +39,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="lblKey">
+      <widget class="QLabel" name="lblFont">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>1</horstretch>
@@ -47,18 +47,20 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>TextLabel</string>
+        <string>font</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="btnPlus">
-       <property name="text">
-        <string/>
+      <widget class="QLabel" name="lblGlyph">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <property name="icon">
-        <iconset theme="zoom-in">
-         <normaloff>.</normaloff>.</iconset>
+       <property name="text">
+        <string>glyph</string>
        </property>
       </widget>
      </item>
@@ -69,6 +71,27 @@
        </property>
        <property name="icon">
         <iconset theme="zoom-out">
+         <normaloff>.</normaloff>.</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnOne">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="zoom-original"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnPlus">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="zoom-in">
          <normaloff>.</normaloff>.</iconset>
        </property>
       </widget>

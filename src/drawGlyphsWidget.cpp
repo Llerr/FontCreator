@@ -8,10 +8,13 @@
 //----------------------------------------------------------------------------------------------------------------------
 DrawGlyphsWidget::DrawGlyphsWidget(GlyphsMap &glyph, QWidget *parent) :
     QWidget(parent),
+    _scale(1),
     _columns(16),
     _squareSize(20),
     _glyphs(glyph)
 {
+    updateSize();
+    setMouseTracking(true);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -23,7 +26,8 @@ DrawGlyphsWidget::~DrawGlyphsWidget()
 //----------------------------------------------------------------------------------------------------------------------
 QSize DrawGlyphsWidget::sizeHint() const
 {
-    return QSize(_columns*_squareSize + 1, (_glyphs.size()/_columns + 1)*_squareSize + 1);
+    int sqSize = _squareSize * _scale;
+    return QSize(_columns*sqSize + 1, (_glyphs.size()/_columns + 1)*sqSize + 1);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -31,10 +35,9 @@ void DrawGlyphsWidget::updateSize()
 {
     calculateSquareSize();
     adjustSize();
+    update();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-//---------------------------- P R O T E C T E D -----------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 void DrawGlyphsWidget::calculateSquareSize()
 {
@@ -48,39 +51,105 @@ void DrawGlyphsWidget::calculateSquareSize()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-//void CharacterWidget::mouseMoveEvent(QMouseEvent *event)
-//{
-//    QPoint widgetPosition = mapFromGlobal(event->globalPos());
-//    uint key = (widgetPosition.y()/_squareSize)*_columns + widgetPosition.x()/_squareSize;
+//------------------------------ P R I V A T E   S L O T S -------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+void DrawGlyphsWidget::on_btnDel_clicked()
+{
+    qDebug() << "Delete " << _Idxs.size() << " glyphs";
+    qDebug() << "Before delete size: " << _glyphs.size();
+    int cnt = 0;
+    QVector<int> rmKeys;
+    qDebug() << "rmKeyes size: " << rmKeys.size();
+    for(auto &&idx:_Idxs)
+    {
+        int key = getByIndex(_glyphs, idx);
+        qDebug() << ++cnt << ": ix: " << idx << ", key: " << key;
+        rmKeys.push_back(key);
+    }
+    for (auto &&key:rmKeys)
+    {
+        _glyphs.remove(key);
+    }
+    qDebug() << "After delete size: " << _glyphs.size();
+    _Idxs.clear();
+    updateSize();
+}
 
-//    QString text = QString("U+%1").arg(key, 4, 16, QLatin1Char('0'));
-////    QToolTip::showText(event->globalPos(), text, this);
-//    emit characterSelectedInfo(text);
+//----------------------------------------------------------------------------------------------------------------------
+void DrawGlyphsWidget::on_btnPlus_clicked()
+{
+    qDebug() << "Button plus";
+    _scale *= (_scale > 10.) ? 1 : 1.2;
 
-//    if(event->buttons() == Qt::LeftButton && _lastKey != key)
-//    {
-//        uint start = std::min(key, _lastKey);
-//        uint stop = std::max(key, _lastKey);
-////        qDebug() << start << "| " << stop;
-//        for(uint i = start+1; i < stop +1; ++i)
-//        {
-//            if(_keys.contains(i))
-//                _keys.remove(i);
-//            else
-//                _keys.insert(i);
-//        }
-//        update();
-//        _lastKey = key;
-//    }
-//}
+    updateSize();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void DrawGlyphsWidget::on_btnOne_clicked()
+{
+    _scale = 1.0;
+    updateSize();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void DrawGlyphsWidget::on_btnMinus_clicked()
+{
+    qDebug() << "Button minus";
+    _scale /= (_scale < 0.2) ? 1 : 1.2;
+    updateSize();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+//---------------------------- P R O T E C T E D -----------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+void DrawGlyphsWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    QPoint widgetPosition = mapFromGlobal(event->globalPos());
+    int sqSize = _squareSize * _scale;
+    int idx = (widgetPosition.y()/(sqSize))*_columns + widgetPosition.x()/sqSize;
+
+    int key = getByIndex(_glyphs, idx);
+
+    if(key > 0)
+    {
+        QString text = QString("U+%1").arg(key, 4, 16, QLatin1Char('0')).toUpper();
+        emit characterSelectedInfo(text);
+    }
+    if(event->buttons() == Qt::LeftButton && _lastIdx != idx)
+    {
+        uint start = std::min(idx, _lastIdx);
+        uint stop = std::max(idx, _lastIdx);
+//        qDebug() << start << "| " << stop;
+        for(uint i = start+1; i < stop +1; ++i)
+        {
+            if(_Idxs.contains(i))
+                _Idxs.remove(i);
+            else
+                _Idxs.insert(i);
+        }
+        update();
+        _lastIdx = idx;
+    }
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 void DrawGlyphsWidget::mousePressEvent(QMouseEvent *event)
 {
     adjustSize();
+    int sqSize = _squareSize * _scale;
     if (event->button() == Qt::LeftButton)
     {
-        _lastKey = (event->y()/_squareSize)*_columns + event->x()/_squareSize;
+        _lastIdx = (event->y()/sqSize)*_columns + event->x()/sqSize;
+        int key = getByIndex(_glyphs, _lastIdx);
+        emit glyphSelected(key);
+        if((event->modifiers() & Qt::ControlModifier) != Qt::ControlModifier )
+        {
+            _Idxs.clear();
+        }
+        if(_Idxs.contains(_lastIdx))
+            _Idxs.remove(_lastIdx);
+        else
+            _Idxs.insert(_lastIdx);
         update();
     }
     else
@@ -89,17 +158,25 @@ void DrawGlyphsWidget::mousePressEvent(QMouseEvent *event)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+void DrawGlyphsWidget::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event);
+    _Idxs.clear();
+    update();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 void DrawGlyphsWidget::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     int key;
 //    painter.fillRect(event->rect(), QBrush(Qt::white));
-
+    int sqSize = _squareSize * _scale;
     QRect redrawRect = event->rect();
-    int beginRow = redrawRect.top()/_squareSize;
-    int endRow = redrawRect.bottom()/_squareSize;
-    int beginColumn = redrawRect.left()/_squareSize;
-    int endColumn = redrawRect.right()/_squareSize;
+    int beginRow = redrawRect.top()/sqSize;
+    int endRow = redrawRect.bottom()/sqSize;
+    int beginColumn = redrawRect.left()/sqSize;
+    int endColumn = redrawRect.right()/sqSize;
 
     painter.setPen(QPen(Qt::gray));
     painter.setBrush(QBrush(Qt::white));
@@ -108,7 +185,7 @@ void DrawGlyphsWidget::paintEvent(QPaintEvent *event)
         for (int column = beginColumn; column <= endColumn; ++column)
         {
             if( (column + row*_columns) < _glyphs.size() )
-                painter.drawRect(column*_squareSize, row*_squareSize, _squareSize, _squareSize);
+                painter.drawRect(column*sqSize, row*sqSize, sqSize, sqSize);
         }
     }
 
@@ -122,17 +199,19 @@ void DrawGlyphsWidget::paintEvent(QPaintEvent *event)
             if( (column + row*_columns) >= _glyphs.size() )
                 break;
             int idx = row*_columns + column;
-            painter.setClipRect(column*_squareSize, row*_squareSize, _squareSize, _squareSize);
+            painter.setClipRect(column*sqSize, row*sqSize, sqSize, sqSize);
 
-            if (_lastKey == idx)
-                painter.fillRect(column*_squareSize + 1, row*_squareSize + 1, _squareSize, _squareSize, QBrush(Qt::lightGray));
+            if (_Idxs.contains(idx))
+                painter.fillRect(column*sqSize + 1, row*sqSize + 1, sqSize, sqSize, QBrush(Qt::lightGray));
 
             key = getByIndex(_glyphs, idx);
             QImage img = _glyphs[key].img;
             img.setColor(1, qRgba(0,0,0,0) );
-            QPoint pointForImage(column*_squareSize + (_squareSize / 2) - _glyphs[key].width/2,
-                              row*_squareSize + (_squareSize / 2) - _glyphs[key].height/2);
-            painter.drawImage(pointForImage, img);
+            QPoint pointForImage(column*sqSize + (sqSize / 2) - _glyphs[key].width*_scale/2,
+                              row*sqSize + (sqSize / 2) - _glyphs[key].height*_scale/2);
+            QSize imgSize(_glyphs[key].width*_scale, _glyphs[key].height*_scale);
+            QRect drawRect(pointForImage, imgSize);
+            painter.drawImage(drawRect, img);
 //            qDebug() << key << ": " << glyph;
 //            painter.drawText(cpointForImageolumn*_squareSize + (_squareSize / 2) - fontMetrics.horizontalAdvance(QChar(key))/2,
 //                             row*_squareSize + 4 + fontMetrics.ascent(),

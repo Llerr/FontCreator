@@ -25,6 +25,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(_wgtFont, qOverload<const GlyphsMap &, const QString &>(&FontWidget::exportGlyphs),
             _wgtGlyphs, &GlyphsWidget::receiveGlyphs);
+
+    connect(_wgtGlyphs, qOverload<int>(&GlyphsWidget::glyphSelected),
+            _wgtEdit, &EditWidget::receiveGlyph);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
