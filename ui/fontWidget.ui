@@ -63,7 +63,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="btnOpenFont">
+      <widget class="QToolButton" name="btnOpenFont">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -71,11 +71,17 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string/>
+        <string>Открыть</string>
        </property>
        <property name="icon">
         <iconset theme="fileopen">
          <normaloff>.</normaloff>.</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>18</width>
+         <height>18</height>
+        </size>
        </property>
       </widget>
      </item>
@@ -152,12 +158,18 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="btnExport">
+      <widget class="QToolButton" name="btnExport">
        <property name="text">
-        <string/>
+        <string>Добавить</string>
        </property>
        <property name="icon">
         <iconset theme="add"/>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>18</width>
+         <height>18</height>
+        </size>
        </property>
       </widget>
      </item>

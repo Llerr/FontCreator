@@ -30,7 +30,7 @@ public slots:
     void receiveGlyphs(const GlyphsMap &glyphs, const QString &name);
 
 signals:
-    void glyphSelected(int key);
+    void glyphSelected(const Glyph &);
 
 private slots:
 //    void on_btnDel_clicked();

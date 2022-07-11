@@ -141,7 +141,7 @@ void DrawGlyphsWidget::mousePressEvent(QMouseEvent *event)
     {
         _lastIdx = (event->y()/sqSize)*_columns + event->x()/sqSize;
         int key = getByIndex(_glyphs, _lastIdx);
-        emit glyphSelected(key);
+        emit glyphSelected(_glyphs[key]);
         if((event->modifiers() & Qt::ControlModifier) != Qt::ControlModifier )
         {
             _Idxs.clear();
@@ -208,7 +208,7 @@ void DrawGlyphsWidget::paintEvent(QPaintEvent *event)
             QImage img = _glyphs[key].img;
             img.setColor(1, qRgba(0,0,0,0) );
             QPoint pointForImage(column*sqSize + (sqSize / 2) - _glyphs[key].width*_scale/2,
-                              row*sqSize + (sqSize / 2) - _glyphs[key].height*_scale/2);
+                              (row + 1)*sqSize - 4 + _glyphs[key].dy*_scale);
             QSize imgSize(_glyphs[key].width*_scale, _glyphs[key].height*_scale);
             QRect drawRect(pointForImage, imgSize);
             painter.drawImage(drawRect, img);

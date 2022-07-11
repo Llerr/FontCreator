@@ -21,7 +21,7 @@ FontWidget::FontWidget(QWidget *parent) :
     qDebug() << "Start font: " << _font << " size: " << _font.pointSize();
     setFontSize(_font.pointSize());
     _scrollArea = new QScrollArea(this);
-    _wgtChars = new CharacterWidget();
+    _wgtChars = new DrawCharactersWidget();
     _scrollArea->setWidget(_wgtChars);
     _ui->verticalLayout->addWidget(_scrollArea);
     _wgtChars->updateFontMerging(false);
@@ -39,10 +39,10 @@ FontWidget::FontWidget(QWidget *parent) :
 
 
 
-    connect(_ui->cmbStyles, QOverload<const QString &>::of(&QComboBox::currentIndexChanged), _wgtChars, &CharacterWidget::updateStyle);
-    connect(_ui->cmbSize, QOverload<const QString &>::of(&QComboBox::currentIndexChanged), _wgtChars, &CharacterWidget::updateSize);
-    connect(_wgtChars, QOverload<const QString &>::of(&CharacterWidget::characterSelectedInfo), _ui->lblSymbolCode, &QLabel::setText);
-    connect(_wgtChars, QOverload<const QChar &>::of(&CharacterWidget::characterSelected), this, &FontWidget::receiveChar);
+    connect(_ui->cmbStyles, QOverload<const QString &>::of(&QComboBox::currentIndexChanged), _wgtChars, &DrawCharactersWidget::updateStyle);
+    connect(_ui->cmbSize, QOverload<const QString &>::of(&QComboBox::currentIndexChanged), _wgtChars, &DrawCharactersWidget::updateSize);
+    connect(_wgtChars, QOverload<const QString &>::of(&DrawCharactersWidget::characterSelectedInfo), _ui->lblSymbolCode, &QLabel::setText);
+    connect(_wgtChars, QOverload<const QChar &>::of(&DrawCharactersWidget::characterSelected), this, &FontWidget::receiveChar);
     on_cmbFont_currentFontChanged(_ui->cmbFont->font());
 }
 
@@ -273,7 +273,10 @@ void FontWidget::receiveChar(const QChar &symb)
 
     QRect boundRect = fm.boundingRect(symb);
 //    int aligin = fm.ascent();
-    qDebug() << "Bound rect: " << boundRect << ", xAdvance: " << fm.horizontalAdvance(symb) << ", yAdvance: " << fm.lineSpacing();
+    qDebug() << "Bound rect: " << boundRect
+             << ", xAdvance: " << fm.horizontalAdvance(symb)
+             << ", yAdvance: " << fm.lineSpacing()
+             << ", ascent: " << fm.ascent();
     boundRect.translate(dx, dy);
     painter.setPen(Qt::gray);
     painter.drawRect(boundRect);
@@ -293,7 +296,7 @@ void FontWidget::receiveChar(const QChar &symb)
     painter.setPen(Qt::gray);
     _testImage->save("gliph.png");
     _lbl->setPixmap(QPixmap::fromImage(*_testImage));
-    _lbl->show();
+//    _lbl->show();
 //    _wgt->show();
 //    _wgt->update();
 }

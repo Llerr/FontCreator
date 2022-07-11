@@ -5,7 +5,7 @@
 
 #include "glyph.h"
 
-class CharacterWidget;
+class DrawCharactersWidget;
 class QLabel;
 class QScrollArea;
 
@@ -46,7 +46,7 @@ private:
     GlyphsMap _glyphs;
     int _pointSize;
     QFont _font;
-    CharacterWidget *_wgtChars;
+    DrawCharactersWidget *_wgtChars;
 
     QScrollArea *_scrollArea;
     QImage *_testImage;

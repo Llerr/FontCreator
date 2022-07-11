@@ -28,7 +28,7 @@ public slots:
 
 signals:
     void characterSelectedInfo(const QString &character);
-    void glyphSelected(int key);
+    void glyphSelected(const Glyph &);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;

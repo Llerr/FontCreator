@@ -55,7 +55,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-CharacterWidget::CharacterWidget(QWidget *parent)
+DrawCharactersWidget::DrawCharactersWidget(QWidget *parent)
     : QWidget(parent),
       _columns(16),
       _lastKey(-1),
@@ -66,7 +66,7 @@ CharacterWidget::CharacterWidget(QWidget *parent)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void CharacterWidget::updateFont(const QFont &font)
+void DrawCharactersWidget::updateFont(const QFont &font)
 {
     _displayFont.setFamily(font.family());
     calculateSquareSize();
@@ -75,7 +75,7 @@ void CharacterWidget::updateFont(const QFont &font)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void CharacterWidget::updateSize(const QString &fontSize)
+void DrawCharactersWidget::updateSize(const QString &fontSize)
 {
     _displayFont.setPointSize(fontSize.toInt());
     calculateSquareSize();
@@ -84,7 +84,7 @@ void CharacterWidget::updateSize(const QString &fontSize)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void CharacterWidget::updateStyle(const QString &fontStyle)
+void DrawCharactersWidget::updateStyle(const QString &fontStyle)
 {
     QFontDatabase fontDatabase;
     const QFont::StyleStrategy oldStrategy = _displayFont.styleStrategy();
@@ -96,7 +96,7 @@ void CharacterWidget::updateStyle(const QString &fontStyle)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void CharacterWidget::updateFontMerging(bool enable)
+void DrawCharactersWidget::updateFontMerging(bool enable)
 {
     if (enable)
         _displayFont.setStyleStrategy(QFont::PreferDefault);
@@ -107,19 +107,19 @@ void CharacterWidget::updateFontMerging(bool enable)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void CharacterWidget::calculateSquareSize()
+void DrawCharactersWidget::calculateSquareSize()
 {
     _squareSize = qMax(16, 4 + QFontMetrics(_displayFont, this).height());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QSize CharacterWidget::sizeHint() const
+QSize DrawCharactersWidget::sizeHint() const
 {
     return QSize(_columns*_squareSize + 1, (65536/_columns)*_squareSize);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void CharacterWidget::mouseMoveEvent(QMouseEvent *event)
+void DrawCharactersWidget::mouseMoveEvent(QMouseEvent *event)
 {
     QPoint widgetPosition = mapFromGlobal(event->globalPos());
     int key = (widgetPosition.y()/_squareSize)*_columns + widgetPosition.x()/_squareSize;
@@ -146,7 +146,7 @@ void CharacterWidget::mouseMoveEvent(QMouseEvent *event)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void CharacterWidget::mousePressEvent(QMouseEvent *event)
+void DrawCharactersWidget::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
@@ -169,7 +169,7 @@ void CharacterWidget::mousePressEvent(QMouseEvent *event)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void CharacterWidget::mouseDoubleClickEvent(QMouseEvent *event)
+void DrawCharactersWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
     _keys.clear();
@@ -177,7 +177,7 @@ void CharacterWidget::mouseDoubleClickEvent(QMouseEvent *event)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void CharacterWidget::paintEvent(QPaintEvent *event)
+void DrawCharactersWidget::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     painter.fillRect(event->rect(), QBrush(Qt::white));

@@ -64,12 +64,12 @@ class QPaintEvent;
 class QLabel;
 QT_END_NAMESPACE
 
-class CharacterWidget : public QWidget
+class DrawCharactersWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    CharacterWidget(QWidget *parent = 0);
+    DrawCharactersWidget(QWidget *parent = 0);
     QSize sizeHint() const override;
     int squareSize() {return _squareSize;}
     int columns() {return _columns;}
