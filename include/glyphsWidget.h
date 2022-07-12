@@ -26,11 +26,13 @@ public:
 
     void removeGlyph(int key);
     void setGlyph(int key, Glyph glyph);
-public slots:
-    void receiveGlyphs(const GlyphsMap &glyphs, const QString &name);
 
 signals:
     void glyphSelected(const Glyph &);
+
+public slots:
+    void receiveGlyphs(const GlyphsMap &glyphs, const QString &name);
+    void editFinish(const Glyph &glyph);
 
 private slots:
 //    void on_btnDel_clicked();

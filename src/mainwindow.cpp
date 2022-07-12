@@ -28,6 +28,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(_wgtGlyphs, qOverload<const Glyph &>(&GlyphsWidget::glyphSelected),
             _wgtEdit, &EditWidget::receiveGlyph);
+
+    connect(_wgtEdit, qOverload<const Glyph &>(&EditWidget::editFinished),
+            _wgtGlyphs, &GlyphsWidget::editFinish);
+
 }
 
 //----------------------------------------------------------------------------------------------------------------------

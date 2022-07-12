@@ -24,7 +24,8 @@ SOURCES += \
     src/glyph.cpp \
     src/glyphsWidget.cpp \
     src/main.cpp \
-    src/mainwindow.cpp
+    src/mainwindow.cpp \
+    src/settings.cpp
 
 HEADERS += \
     include/drawCharactersWidget.h \
@@ -34,13 +35,15 @@ HEADERS += \
     include/fontWidget.h \
     include/glyph.h \
     include/glyphsWidget.h \
-    include/mainwindow.h
+    include/mainwindow.h \
+    include/settings.h
 
 FORMS += \
     ui/editWidget.ui \
     ui/fontWidget.ui \
     ui/glyphsWidget.ui \
-    ui/mainwindow.ui
+    ui/mainwindow.ui \
+    ui/settings.ui
 
 TRANSLATIONS += \
     AdafruitFontCreator_ru_RU.ts

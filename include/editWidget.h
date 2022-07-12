@@ -18,6 +18,9 @@ public:
     explicit EditWidget(QWidget *parent = nullptr);
     ~EditWidget();
 
+signals:
+    void editFinished(const Glyph &glyph);
+
 public slots:
     void receiveGlyph(const Glyph &glyph);
 
