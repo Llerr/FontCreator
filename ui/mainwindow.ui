@@ -40,22 +40,17 @@
     </property>
     <addaction name="actAbout"/>
    </widget>
-   <widget class="QMenu" name="menu">
-    <property name="title">
-     <string>Правка</string>
-    </property>
-    <addaction name="action"/>
-   </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
      <string>Вид</string>
     </property>
     <addaction name="actFont"/>
     <addaction name="actGlyphs"/>
+    <addaction name="separator"/>
+    <addaction name="actSettings"/>
    </widget>
    <addaction name="file"/>
    <addaction name="menu_2"/>
-   <addaction name="menu"/>
    <addaction name="help"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -140,6 +135,11 @@
    </property>
    <property name="text">
     <string>Глифы</string>
+   </property>
+  </action>
+  <action name="actSettings">
+   <property name="text">
+    <string>Настройки</string>
    </property>
   </action>
  </widget>

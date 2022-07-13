@@ -23,6 +23,7 @@ SOURCES += \
     src/fontWidget.cpp \
     src/glyph.cpp \
     src/glyphsWidget.cpp \
+    src/highlighter.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
     src/settings.cpp
@@ -35,6 +36,7 @@ HEADERS += \
     include/fontWidget.h \
     include/glyph.h \
     include/glyphsWidget.h \
+    include/highlighter.h \
     include/mainwindow.h \
     include/settings.h
 

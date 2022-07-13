@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+class Highlighter;
+
 namespace Ui {
 class Settings;
 }
@@ -16,7 +18,9 @@ public:
     ~Settings();
 
 private:
-    Ui::Settings *ui;
+    Ui::Settings *_ui;
+
+    Highlighter *_highliter;
 };
 
 #endif // SETTINGS_H
