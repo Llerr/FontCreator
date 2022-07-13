@@ -20,8 +20,10 @@ GlyphsWidget::GlyphsWidget(QWidget *parent) :
     scrollArea->resize(600,-1);
     _ui->verticalLayout->addWidget(scrollArea);
 
-    connect(_wgtDraw, QOverload<const QString &>::of(&DrawGlyphsWidget::characterSelectedInfo), _ui->lblGlyph, &QLabel::setText);
-    connect(_wgtDraw, qOverload<const Glyph &>(&DrawGlyphsWidget::glyphSelected), this, qOverload<const Glyph &>(&GlyphsWidget::glyphSelected));
+    connect(_wgtDraw, qOverload<const QString &>(&DrawGlyphsWidget::characterSelectedInfo),
+            _ui->lblGlyph, &QLabel::setText);
+    connect(_wgtDraw, qOverload<const Glyph &>(&DrawGlyphsWidget::glyphSelected),
+            this, qOverload<const Glyph &>(&GlyphsWidget::glyphSelected));
 
     connect(_ui->btnDel, qOverload<bool>(&QPushButton::clicked), _wgtDraw, &DrawGlyphsWidget::on_btnDel_clicked);
     connect(_ui->btnPlus, qOverload<bool>(&QPushButton::clicked), _wgtDraw, &DrawGlyphsWidget::on_btnPlus_clicked);
@@ -74,3 +76,20 @@ void GlyphsWidget::editFinish(const Glyph &glyph)
 //----------------------------------------------------------------------------------------------------------------------
 //------------------------------ P R I V A T E   S L O T S -------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------- P R O T E C T E D ------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+void GlyphsWidget::wheelEvent(QWheelEvent *event)
+{
+    qDebug() << "Wheel event. key: " << event->delta();
+    if(event->modifiers() == Qt::NoModifier)
+    {
+        _wgtDraw->wheelEvent(event);
+    }
+    else
+    {
+        QWidget::wheelEvent(event);
+    }
+}
+

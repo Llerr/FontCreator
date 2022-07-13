@@ -29,7 +29,7 @@ QSize DrawEditWidget::sizeHint() const
 void DrawEditWidget::on_btnZoomOut_clicked()
 {
     _scale -= (_scale < 2)?0:1;
-    qDebug() << __func__ << "|width: " << _glyph.width * _scale << ", scale: " << _scale;
+//    qDebug() << __func__ << "|width: " << _glyph.width * _scale << ", scale: " << _scale;
     adjustSize();
     update();
 }
@@ -38,13 +38,34 @@ void DrawEditWidget::on_btnZoomOut_clicked()
 void DrawEditWidget::on_btnZoomIn_clicked()
 {
     _scale += (_scale > 101)?0:1;
-    qDebug() << __func__ << "|width: " << _glyph.width * _scale << ", scale: " << _scale;
+//    qDebug() << __func__ << "|width: " << _glyph.width * _scale << ", scale: " << _scale;
     adjustSize();
     update();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------- P R O T E C T E D ----------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+void DrawEditWidget::wheelEvent(QWheelEvent *event)
+{
+    qDebug() << "Wheel event. key: " << event->delta();
+    if(event->modifiers() == Qt::NoModifier)
+    {
+        if(event->delta() < 0)
+        {
+            on_btnZoomIn_clicked();
+        }
+        else
+        {
+            on_btnZoomOut_clicked();
+        }
+    }
+    else
+    {
+        QWidget::wheelEvent(event);
+    }
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 void DrawEditWidget::mousePressEvent(QMouseEvent *event)
 {
@@ -65,8 +86,9 @@ void DrawEditWidget::mousePressEvent(QMouseEvent *event)
         update();
     }
     else
+    {
         QWidget::mousePressEvent(event);
-
+    }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

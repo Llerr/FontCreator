@@ -13,6 +13,7 @@ class DrawGlyphsWidget : public QWidget
 {
     Q_OBJECT
 
+    friend class GlyphsWidget;
 public:
     explicit DrawGlyphsWidget(GlyphsMap &glyph, QWidget *parent = nullptr);
     ~DrawGlyphsWidget();
@@ -31,6 +32,7 @@ signals:
     void glyphSelected(const Glyph &);
 
 protected:
+    void wheelEvent(QWheelEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseDoubleClickEvent(QMouseEvent *event) override;

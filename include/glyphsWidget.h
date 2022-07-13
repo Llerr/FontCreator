@@ -39,6 +39,9 @@ private slots:
 //    void on_btnPlus_clicked();
 //    void on_btnMinus_clicked();
 
+protected:
+        void wheelEvent(QWheelEvent *event) override;
+
 private:
     Ui::GlyphsWidget *_ui; ///< Указатель на форму
 

@@ -102,6 +102,27 @@ void DrawGlyphsWidget::on_btnMinus_clicked()
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------- P R O T E C T E D -----------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
+void DrawGlyphsWidget::wheelEvent(QWheelEvent *event)
+{
+    qDebug() << "Wheel event. key: " << event->delta();
+    if(event->modifiers() == Qt::NoModifier)
+    {
+        if(event->delta() < 0)
+        {
+            on_btnPlus_clicked();
+        }
+        else
+        {
+            on_btnMinus_clicked();
+        }
+    }
+    else
+    {
+        QWidget::wheelEvent(event);
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 void DrawGlyphsWidget::mouseMoveEvent(QMouseEvent *event)
 {
     QPoint widgetPosition = mapFromGlobal(event->globalPos());
