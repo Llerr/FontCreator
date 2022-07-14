@@ -17,6 +17,9 @@ public:
     explicit Settings(QWidget *parent = nullptr);
     ~Settings();
 
+public slots:
+    void accept() override;
+
 private:
     Ui::Settings *_ui;
 

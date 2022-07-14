@@ -1,7 +1,12 @@
+#include <QDebug>
+
 #include "settings.h"
 #include "highlighter.h"
 #include "ui_settings.h"
 
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 Settings::Settings(QWidget *parent) :
     QDialog(parent),
     _ui(new Ui::Settings)
@@ -13,7 +18,14 @@ Settings::Settings(QWidget *parent) :
     _highliterPostfix = new Highlighter(_ui->edtPostfix->document());
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 Settings::~Settings()
 {
     delete _ui;
+}
+
+void Settings::accept()
+{
+    qDebug() << __PRETTY_FUNCTION__;
+    QDialog::accept();
 }

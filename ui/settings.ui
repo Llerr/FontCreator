@@ -14,6 +14,18 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>6</number>
+   </property>
+   <property name="topMargin">
+    <number>6</number>
+   </property>
+   <property name="rightMargin">
+    <number>6</number>
+   </property>
+   <property name="bottomMargin">
+    <number>6</number>
+   </property>
    <item row="1" column="0">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
@@ -27,15 +39,15 @@
    <item row="0" column="0">
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
-     <widget class="QWidget" name="page">
+     <widget class="QWidget" name="page_0">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>745</width>
-        <height>497</height>
+        <width>751</width>
+        <height>503</height>
        </rect>
       </property>
       <attribute name="label">
@@ -54,21 +66,52 @@
        <property name="bottomMargin">
         <number>6</number>
        </property>
-       <item row="0" column="1">
+       <item row="0" column="2">
         <widget class="QLineEdit" name="edtPath">
          <property name="text">
           <string>.</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item row="1" column="2">
         <widget class="QLineEdit" name="edtFileName">
          <property name="text">
           <string>font.h</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="0" colspan="3">
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Имя базового файла</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Базовый путь</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="3">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Описание структур в базовом файле</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QToolButton" name="btnSelectPath">
+         <property name="text">
+          <string>Выбрать путь</string>
+         </property>
+         <property name="icon">
+          <iconset theme="fileopen"/>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="3">
         <widget class="QPlainTextEdit" name="edtFileBody">
          <property name="plainText">
           <string>#ifndef _STRUCT_FONT_H_
@@ -100,46 +143,43 @@ typedef struct {
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Имя базового файла</string>
+       <item row="6" column="0" colspan="3">
+        <widget class="QCheckBox" name="chkGenPathStruct">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Генерировать файловую структуру по текущему пути.&lt;/p&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 0;&quot;&gt;
+&lt;li style=&quot; margin-top:6px; margin-bottom:0px; margin-left:15px; margin-right:5px; -qt-block-indent:0; text-indent:0px;&quot;&gt;/include &lt;/li&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; margin-top:6px; margin-bottom:0px; margin-left:0px; margin-right:5px; -qt-block-indent:0; text-indent:0px;&quot;&gt;/fonts &lt;/li&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;&quot;&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left: 0px; margin-right:5px; -qt-block-indent:0; text-indent:0px;&quot;&gt;fontName.h (Заголовочный файл шрифта) &lt;/li&gt;&lt;/ul&gt;
+
+&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:15px; margin-right:5px; -qt-block-indent:0; text-indent:0px;&quot;&gt;font.h (Описание структуры шрифтов) &lt;/li&gt;&lt;/ul&gt;
+&lt;li style=&quot; margin-top:6px; margin-bottom:0px; margin-left:15px; margin-right:5px; -qt-block-indent:0; text-indent:0px;&quot;&gt;/src &lt;/li&gt;&lt;/ul&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;/fonts &lt;/li&gt;&lt;/ul&gt;&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;&quot;&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;fontName.cpp (Файл с данными шрифта) &lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
          <property name="text">
-          <string>Базовый путь</string>
+          <string>Генерировать файловую структуры</string>
          </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QToolButton" name="btnSelectPath">
-         <property name="text">
-          <string>Выбрать путь</string>
+         <property name="checked">
+          <bool>true</bool>
          </property>
-         <property name="icon">
-          <iconset theme="fileopen"/>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" colspan="2">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Описание структур в базовом файле</string>
+         <property name="tristate">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_2">
+     <widget class="QWidget" name="page_1">
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-213</y>
-        <width>731</width>
-        <height>710</height>
+        <y>-4</y>
+        <width>737</width>
+        <height>512</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -152,18 +192,11 @@ typedef struct {
        <string>Генерация</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="8" column="0">
-        <widget class="QLabel" name="label_7">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Генерировать функцию, которая будет возвращать указатель на шрифт&lt;/p&gt;&lt;pre style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; background-color:#ffffff;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; color:#808030;&quot;&gt;font_t*&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000;&quot;&gt; TerminusTTFMedium12&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#808030;&quot;&gt;()&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#800080;&quot;&gt;{}&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000;&quot;&gt;,&lt;/span&gt;&lt;/pre&gt;&lt;p&gt;вместо объекта шрифта в заголовочном файле.&lt;/p&gt;&lt;pre style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; background-color:#ffffff;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:600; color:#800000;&quot;&gt;extern const&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000;&quot;&gt; font_t TerminusTTFMedium12&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#800080;&quot;&gt;;&lt;/span&gt;&lt;/pre&gt;&lt;&lt;br/&gt;&lt;p/&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="0">
         <widget class="QCheckBox" name="chkPointer">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Генерировать в массиве глифов указатель в массив байтов, вместо смещения для массива. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="text">
           <string>Генерировать указатель вместо индекса</string>
          </property>
@@ -175,7 +208,7 @@ typedef struct {
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
+       <item row="6" column="0">
         <widget class="QCheckBox" name="chkGenFunc">
          <property name="toolTip">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Генерировать функцию, которая будет возвращать указатель на шрифт&lt;/p&gt;&lt;pre style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; &quot;&gt;&lt;span style=&quot; font-family:'monospace'; color:#808030;&quot;&gt;font_t*&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000;&quot;&gt; TerminusTTFMedium12&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#808030;&quot;&gt;()&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#800080;&quot;&gt;{}&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000;&quot;&gt;&lt;/span&gt;&lt;/pre&gt;&lt;p&gt;вместо объекта шрифта в заголовочном файле.&lt;/p&gt;&lt;pre style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:600; color:#800000;&quot;&gt;extern const&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#000000;&quot;&gt; font_t TerminusTTFMedium12&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; color:#800080;&quot;&gt;;&lt;/span&gt;&lt;/pre&gt;&lt;&lt;br/&gt;&lt;p/&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -188,16 +221,6 @@ typedef struct {
          </property>
          <property name="checked">
           <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Генерировать в массиве глифов указатель в массив байтов, вместо смещения для массива. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -215,10 +238,10 @@ typedef struct {
          </property>
         </widget>
        </item>
-       <item row="11" column="0">
+       <item row="9" column="0">
         <widget class="QPlainTextEdit" name="edtPostfix"/>
        </item>
-       <item row="9" column="0">
+       <item row="7" column="0">
         <widget class="QLabel" name="label_5">
          <property name="text">
           <string>Постфикс</string>
