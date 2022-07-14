@@ -28,8 +28,9 @@ private:
     QRegularExpression commentStartExpression;
     QRegularExpression commentEndExpression;
 
-    QTextCharFormat classTypeFormat;
     QTextCharFormat keywordFormat;
+    QTextCharFormat classTypeFormat;
+    QTextCharFormat typeFormat;
     QTextCharFormat classFormat;
     QTextCharFormat singleLineCommentFormat;
     QTextCharFormat multiLineCommentFormat;

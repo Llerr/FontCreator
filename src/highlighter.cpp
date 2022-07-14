@@ -5,22 +5,34 @@ Highlighter::Highlighter(QTextDocument *parent)
 {
     HighlightingRule rule;
 
-    keywordFormat.setForeground(Qt::darkGreen);
+    typeFormat.setForeground(Qt::darkGreen);
 //    keywordFormat.setFontWeight(QFont::Bold);
-    QStringList keywordPatterns;
-    keywordPatterns << "\\bchar\\b" << "\\bconst\\b"
-                    << "\\bdouble\\b" << "\\benum\\b" << "\\bexplicit\\b"
-                    << "\\bfriend\\b" << "\\binline\\b" << "\\bint\\b"
-                    << "\\blong\\b" << "\\bnamespace\\b" << "\\boperator\\b"
-                    << "\\bprivate\\b" << "\\bprotected\\b" << "\\bpublic\\b"
-                    << "\\bshort\\b" << "\\bsignals\\b" << "\\bsigned\\b"
-                    << "\\bslots\\b" << "\\bstatic\\b"
-                    << "\\btemplate\\b" << "\\btypedef\\b" << "\\btypename\\b"
-                    << "\\bunsigned\\b" << "\\bvirtual\\b"
-                    << "\\bvoid\\b" << "\\bvolatile\\b" << "\\bbool\\b"
+    QStringList typesPatterns;
+    typesPatterns << "\\bchar\\b"
+                    << "\\bdouble\\b" << "\\bint\\b" << "\\blong\\b"
+                    << "\\bshort\\b" << "\\bsigned\\b" << "\\bunsigned\\b"
+                    << "\\bvoid\\b" << "\\bbool\\b"
                     << "\\bint16_t\\b" << "\\buint16_t\\b"
                     << "\\bint32_t\\b" << "\\buint32_t\\b"
                     << "\\bint8_t\\b" << "\\buint8_t\\b";
+
+    foreach (const QString &pattern, typesPatterns)
+    {
+        rule.pattern = QRegularExpression(pattern);
+        rule.format = typeFormat;
+        highlightingRules.append(rule);
+    }
+
+    keywordFormat.setForeground(Qt::darkBlue);
+//    keywordFormat.setFontWeight(QFont::Bold);
+    QStringList keywordPatterns;
+    keywordPatterns << "\\bconst\\b"<< "\\bexplicit\\b" << "\\bvolatile\\b"
+                    << "\\bfriend\\b" << "\\binline\\b" << "\\bconst\\b"
+                    << "\\bnamespace\\b" << "\\boperator\\b"
+                    << "\\bprivate\\b" << "\\bprotected\\b" << "\\bpublic\\b"
+                    << "\\bsignals\\b" << "\\bslots\\b" << "\\bstatic\\b"
+                    << "\\btemplate\\b" << "\\btypedef\\b" << "\\btypename\\b"
+                    << "\\bvirtual\\b";
 
     foreach (const QString &pattern, keywordPatterns)
     {
@@ -32,7 +44,7 @@ Highlighter::Highlighter(QTextDocument *parent)
     classTypeFormat.setForeground(Qt::darkBlue);
     classTypeFormat.setFontWeight(QFont::Bold);
     QStringList classPatterns;
-    classPatterns << "\\bclass\\b" << "\\bstruct\\b" << "\\bunion\\b";
+    classPatterns << "\\bclass\\b" << "\\bstruct\\b" << "\\bunion\\b" << "\\benum\\b";
 
     foreach (const QString &pattern, classPatterns)
     {

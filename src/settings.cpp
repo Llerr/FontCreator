@@ -8,7 +8,9 @@ Settings::Settings(QWidget *parent) :
 {
     _ui->setupUi(this);
 
-    _highliter = new Highlighter(_ui->edtFileBody->document());
+    _highliterMain = new Highlighter(_ui->edtFileBody->document());
+    _highliterPrefix = new Highlighter(_ui->edtPrefix->document());
+    _highliterPostfix = new Highlighter(_ui->edtPostfix->document());
 }
 
 Settings::~Settings()

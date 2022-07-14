@@ -20,7 +20,9 @@ public:
 private:
     Ui::Settings *_ui;
 
-    Highlighter *_highliter;
+    Highlighter *_highliterMain;
+    Highlighter *_highliterPrefix;
+    Highlighter *_highliterPostfix;
 };
 
 #endif // SETTINGS_H
