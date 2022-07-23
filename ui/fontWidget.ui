@@ -111,7 +111,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="cmbSize"/>
+      <widget class="QComboBox" name="cmbFontSize"/>
      </item>
     </layout>
    </item>
@@ -136,7 +136,8 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset theme="edit-find"/>
+        <iconset theme="edit-find">
+         <normaloff>.</normaloff>.</iconset>
        </property>
        <property name="flat">
         <bool>true</bool>
@@ -158,12 +159,13 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="btnExport">
+      <widget class="QToolButton" name="btnAddGlyphs">
        <property name="text">
         <string>Добавить</string>
        </property>
        <property name="icon">
-        <iconset theme="add"/>
+        <iconset theme="add">
+         <normaloff>.</normaloff>.</iconset>
        </property>
        <property name="iconSize">
         <size>

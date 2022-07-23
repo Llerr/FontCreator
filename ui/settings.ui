@@ -38,6 +38,9 @@
    </item>
    <item row="0" column="0">
     <widget class="QToolBox" name="toolBox">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
@@ -107,7 +110,8 @@
           <string>Выбрать путь</string>
          </property>
          <property name="icon">
-          <iconset theme="fileopen"/>
+          <iconset theme="fileopen">
+           <normaloff>.</normaloff>.</iconset>
          </property>
         </widget>
        </item>
@@ -177,9 +181,9 @@ typedef struct {
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-4</y>
+        <y>0</y>
         <width>737</width>
-        <height>512</height>
+        <height>541</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -189,7 +193,7 @@ typedef struct {
        </sizepolicy>
       </property>
       <attribute name="label">
-       <string>Генерация</string>
+       <string>Содержимое</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="2" column="0">
@@ -238,13 +242,29 @@ typedef struct {
          </property>
         </widget>
        </item>
-       <item row="9" column="0">
+       <item row="10" column="0">
         <widget class="QPlainTextEdit" name="edtPostfix"/>
        </item>
-       <item row="7" column="0">
+       <item row="8" column="0">
         <widget class="QLabel" name="label_5">
          <property name="text">
           <string>Постфикс</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QCheckBox" name="chkPack">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;При уплотнениии данных шрифта, каждая строка растра шрифта добовляется к следующей. &lt;/p&gt;&lt;p&gt;Если уплотнение отключено каждая строк шрифта записывается в отдельный байт.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Уплотнять данные шрифта.</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

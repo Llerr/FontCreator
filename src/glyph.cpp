@@ -20,8 +20,8 @@ Glyph::Glyph():
 //----------------------------------------------------------------------------------------------------------------------
 QDebug operator<<(QDebug stream, const Glyph &gl)
 {
-     stream.nospace() << hex << gl.key << " - symb: " << QString(QChar(gl.key))
-                      << dec << " size (" << gl.width << ", " << gl.height << ")"
+     stream.nospace() << Qt::hex << gl.key << " - symb: " << QString(QChar(gl.key))
+                      << Qt::dec << " size (" << gl.width << ", " << gl.height << ")"
                       << ", dx:dy " << gl.dx << ":" << gl.dy
                       << ", advance [" << gl.xAdvance << ", " << gl.yAdvance << "] " << gl.img;
      return stream.maybeSpace();

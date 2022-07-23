@@ -30,13 +30,13 @@ protected:
 private:
     void findStyles(const QFont &font);
     void findSizes(const QFont &font);
-private slots:
-    void on_btnOpenFont_clicked();
-    void on_cmbFont_currentFontChanged(const QFont &font);
-    void on_cmbStyles_currentIndexChanged(const QString &fontStyle);
-    void on_cmbSize_currentIndexChanged(const QString &fontSize);
-    void on_edtSymbSearch_textEdited(const QString &text);
-    void on_btnExport_clicked();
+public slots:
+    void openFontClick();
+    void fontChange(const QFont &font);
+    void StyleChange(int idx);
+    void fontSizeChange(int idx);
+    void symbSearchEdit(const QString &text);
+    void addGlyphsClick();
     void receiveChar(const QChar &symb);
 signals:
     void exportGlyphs(const GlyphsMap &, const QString &);
