@@ -48,10 +48,10 @@ void DrawEditWidget::on_btnZoomIn_clicked()
 //----------------------------------------------------------------------------------------------------------------------
 void DrawEditWidget::wheelEvent(QWheelEvent *event)
 {
-    qDebug() << "Wheel event. key: " << event->delta();
+    qDebug() << "Wheel event. key: " << event->angleDelta();
     if(event->modifiers() == Qt::NoModifier)
     {
-        if(event->delta() < 0)
+        if(event->angleDelta().y() < 0)
         {
             on_btnZoomIn_clicked();
         }
@@ -79,7 +79,7 @@ void DrawEditWidget::mousePressEvent(QMouseEvent *event)
 
         auto color = _glyph.img.pixelIndex(iX, iY);
         qDebug() << "(" << iX << ", " << iY << ")  - color ("
-                 << hex << color << " ), " << _glyph.img.format();
+                 << Qt::hex << color << " ), " << _glyph.img.format();
 
         color = (color)?0:1;
         _glyph.img.setPixel(iX, iY, color);

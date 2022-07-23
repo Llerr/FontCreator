@@ -82,7 +82,7 @@ void GlyphsWidget::editFinish(const Glyph &glyph)
 //----------------------------------------------------------------------------------------------------------------------
 void GlyphsWidget::wheelEvent(QWheelEvent *event)
 {
-    qDebug() << "Wheel event. key: " << event->delta();
+    qDebug() << "Wheel event. key: " << event->angleDelta();
     if(event->modifiers() == Qt::NoModifier)
     {
         _wgtDraw->wheelEvent(event);

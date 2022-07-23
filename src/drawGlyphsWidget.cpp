@@ -104,10 +104,10 @@ void DrawGlyphsWidget::on_btnMinus_clicked()
 //----------------------------------------------------------------------------------------------------------------------
 void DrawGlyphsWidget::wheelEvent(QWheelEvent *event)
 {
-    qDebug() << "Wheel event. key: " << event->delta();
+    qDebug() << "Wheel event. key: " << event->angleDelta();
     if(event->modifiers() == Qt::NoModifier)
     {
-        if(event->delta() < 0)
+        if(event->angleDelta().y() < 0)
         {
             on_btnPlus_clicked();
         }

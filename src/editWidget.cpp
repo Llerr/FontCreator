@@ -36,7 +36,7 @@ EditWidget::~EditWidget()
 //----------------------------------------------------------------------------------------------------------------------
 void EditWidget::receiveGlyph(const Glyph &glyph)
 {
-    qDebug() << "Select glyph: U+" << hex << glyph.key;
+    qDebug() << "Select glyph: U+" << Qt::hex << glyph.key;
     _glyphIn = glyph;
     _glyphEdt = _glyphIn;
 
