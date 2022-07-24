@@ -3,8 +3,10 @@
 
 #include <QMainWindow>
 #include <QMap>
+#include <QDir>
 
 #include "glyph.h"
+#include "ioFontGode.h"
 
 class EditWidget;
 class GlyphsWidget;
@@ -22,13 +24,18 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+    Settings *settings() const;
+
 private slots:
-    void on_actAbout_triggered();
-    void on_actSettings_triggered();
+    void generateCode();
+    void generateCodeAs();
+    void settingsShow();
+    void aboutShow();
 protected:
  void closeEvent(QCloseEvent *event);
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow *_ui;
 
     FontWidget   *_wgtFont;   ///< Выбор начертания шрифта
     GlyphsWidget *_wgtGlyphs; ///< Выбраные глифы шрифта
@@ -36,6 +43,7 @@ private:
 
     Settings *_settings; ///< Окно настроек
 
-//    GlyphsMap _glyphs;
+    QDir _baseDir;
+    IOFontGode _generator; ///< Класс создания кода шрифта
 };
 #endif // MAINWINDOW_H

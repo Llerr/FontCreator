@@ -29,6 +29,7 @@
     </property>
     <addaction name="actOpenCode"/>
     <addaction name="actSaveCode"/>
+    <addaction name="actSaveCodeAs"/>
     <addaction name="separator"/>
     <addaction name="actOpenFont"/>
     <addaction name="separator"/>
@@ -140,6 +141,11 @@
   <action name="actSettings">
    <property name="text">
     <string>Настройки</string>
+   </property>
+  </action>
+  <action name="actSaveCodeAs">
+   <property name="text">
+    <string>Сохранить код как ...</string>
    </property>
   </action>
  </widget>

@@ -62,7 +62,7 @@ void GlyphsWidget::receiveGlyphs(const GlyphsMap &glyphs, const QString &name)
         qDebug() << glyph;
         _glyphs[glyph.key] = glyph;
     }
-    _ui->lblFont->setText(name);
+    _ui->lblFont->setText(_fontName);
     _wgtDraw->updateSize();
 }
 

@@ -27,6 +27,8 @@ public:
     void removeGlyph(int key);
     void setGlyph(int key, Glyph glyph);
 
+    GlyphsMap *glyphs() {return &_glyphs;}
+    const QString &fontName(){return _fontName;}
 signals:
     void glyphSelected(const Glyph &);
 
