@@ -79,7 +79,7 @@
        <item row="1" column="2">
         <widget class="QLineEdit" name="edtFileName">
          <property name="text">
-          <string>font.h</string>
+          <string>dgxFont.h</string>
          </property>
         </widget>
        </item>
@@ -124,24 +124,30 @@
 #include &lt;stdint.h&gt;
 #include &lt;stddef.h&gt;
 
-typedef struct {
+typedef struct
+{
     const uint8_t *bitmap; ///&lt; Pointer into GFXfont-&gt;bitmap
     int16_t width;                 ///&lt; Bitmap dimensions in pixels
     int16_t height;               ///&lt; Bitmap dimensions in pixels
     int16_t xAdvance;        ///&lt; Distance to advance cursor (x axis)
     int16_t xOffset;
     int16_t yOffset;
-}glyph_t;
+} glyph_t;
 
-typedef struct {
+typedef struct
+{
     int first, number;
     const glyph_t *glyphs;
-}glyph_array_t;
+} glyph_array_t;
 
-typedef struct {
+typedef struct
+{
     const glyph_array_t *glyph_ranges;
-    int16_t yAdvance, yOffsetLowest, xWidest, xWidthAverage;
-}dgx_font_t;
+    int16_t yAdvance;
+    int16_t yOffsetLowest;
+    int16_t xWidest;
+    int16_t xWidthAverage;
+} dgx_font_t;
 
 #endif //_STRUCT_FONT_H_</string>
          </property>
@@ -171,7 +177,7 @@ typedef struct {
           <bool>true</bool>
          </property>
          <property name="tristate">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -231,7 +237,7 @@ typedef struct {
        <item row="1" column="0">
         <widget class="QPlainTextEdit" name="edtPrefix">
          <property name="plainText">
-          <string>#include &quot;font.h&quot;</string>
+          <string/>
          </property>
         </widget>
        </item>

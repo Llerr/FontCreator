@@ -66,14 +66,14 @@ Settings *MainWindow::settings() const
 //----------------------------------------------------------------------------------------------------------------------
 void MainWindow::generateCode()
 {
-    qDebug() << "Base dir: " << _baseDir;
+    qDebug() << "Base dir: " << _baseDir.path();
     if(_wgtGlyphs->glyphs()->isEmpty())
     {
         qDebug() << "Haven`t glyphs for save code";
         return;
     }
 
-    _generator.saveFont(_wgtGlyphs->fontName());
+    _generator.saveFont(_baseDir, _wgtGlyphs->fontName());
 }
 
 //----------------------------------------------------------------------------------------------------------------------

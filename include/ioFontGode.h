@@ -11,21 +11,28 @@ class Settings;
 class IOFontGode
 {
 public:
-    IOFontGode(const GlyphsMap *glyphs = nullptr, const Settings *sets = nullptr);
+    IOFontGode(GlyphsMap *glyphs = nullptr, const Settings *sets = nullptr);
 
-    void setGlyphs(const GlyphsMap *newGlyphs);
+    void setGlyphs(GlyphsMap *newGlyphs);
     void setSettings(const Settings *newSettings);
+    void setBaseDir(const QDir &newBaseDir);
 
     void saveFont(const QDir &baseDir, const QString &fontName);
 
     void generateBaseFile();
     void generateFontHeader(const QString &fontName);
     void generateFontBody(const QString &fontName);
+protected:
+    QDir filePath(const QString &&dir);
+    void outImage(QTextStream &out, QImage &img, uint16_t &idx);
+    /// Вывод байта в 16-ричной системе.
+    /// Добавление префикса 0x, при длинной строке, добавление переноса
+    QTextStream &outHexByte(QTextStream &out, uint8_t byte, int &numInLine);
 
 private:
-    QDir _baseDir; ///< Базовый путь, где создаётся шрифт
+    QDir _basePath; ///< Базовый путь, где создаётся шрифт
 
-    const GlyphsMap *_glyphs;  ///< Набор глифов для экспорта
+    GlyphsMap *_glyphs;  ///< Набор глифов для экспорта
     const Settings *_settings; ///< Настройки
 };
 
