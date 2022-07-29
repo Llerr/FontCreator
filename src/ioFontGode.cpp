@@ -141,7 +141,7 @@ void IOFontGode::generateFontBody(const QString &fontName)
 
         outImage(out, glyph.img, idx);
         // чтобы вывести запятые, кроме последнего изображения
-        if(glyph.key != _glyphs->last().key)
+        if(glyph.key != _glyphs->last().key && glyph.img.sizeInBytes() > 0)
         {
             out << ", ";
         }
