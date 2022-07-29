@@ -121,11 +121,11 @@ void Settings::saveSettings()
     _genGenFunc = _ui->chkGenFunc->isChecked();
     _genPack    = _ui->chkPack->isChecked();
     _genPostfix = _ui->edtPostfix->toPlainText();
-    _settings.setValue("Generation/Prefix",  _genPostfix);
+    _settings.setValue("Generation/Prefix",  _genPrefix);
     _settings.setValue("Generation/Pointer", _genPointer  );
     _settings.setValue("Generation/GenFunc", _genGenFunc);
     _settings.setValue("Generation/Pack",    _genPack);
-    _settings.setValue("Generation/Postfix", _genPrefix );
+    _settings.setValue("Generation/Postfix",  _genPostfix);
 
     qDebug() << "Save settings";
 

@@ -113,9 +113,9 @@ void IOFontGode::generateFontBody(const QString &fontName)
 
     uint16_t idx = 0;
     int16_t yAdvance = glyph.yAdvance;
-    int16_t yOffsetLowest = glyph.yAdvance;
-    int16_t xWidest = glyph.xAdvance;
-    int16_t xWidthAverage = glyph.xAdvance;
+    int16_t yOffsetLowest = glyph.dy;
+    int16_t xWidest = glyph.width;
+    int16_t xWidthAverage = glyph.width;
     int dXWidth = 0;
 
     //---------------------------------- Генерация массива данных ------------------------------------------------------
@@ -125,9 +125,14 @@ void IOFontGode::generateFontBody(const QString &fontName)
     // Пройдёмся по всем глифам
     for(auto &glyph: *_glyphs)
     {
+        // Вычислим глобальные характеристики шрифта
+        yOffsetLowest = qMin(yOffsetLowest, glyph.dy);
+        xWidest = qMax(xWidest, glyph.width);
+        dXWidth += glyph.xAdvance - xWidthAverage;
+
         glyph.idx = idx;
-        out << QString("// U+%1   ").arg(glyph.key, 4, 16, QChar('0')) << "'" << QString(QChar(glyph.key)) << "' ("
-            << glyph.idx <<")\n";
+        out << QString("// U+%1   ").arg(glyph.key, 4, 16, QChar('0')) << "'" << QString(QChar(glyph.key)) << "' ["
+            << glyph.idx <<"]\n";
         // Для того чтобы не печатать лишние пробелы, проверим размер
         if(glyph.img.sizeInBytes() > 0)
         {
@@ -143,13 +148,14 @@ void IOFontGode::generateFontBody(const QString &fontName)
 
         out << "\n";
     }
-
-    out << "};\n\n";
+    out << "};\n";
+    out << "//  Data size: " << idx << "\n\n";
 
     //--------------------------- Генерация описания глифов ------------------------------------------------------------
     out << "// glyphs in bitmaps\n";
     out << "static const glyph_t glyphs[] =\n"
            "{\n";
+    idx = 0;
     for(auto &glyph: *_glyphs)
     {
         out << "    { ";
@@ -171,17 +177,40 @@ void IOFontGode::generateFontBody(const QString &fontName)
         {
             out << "  ";
         }
-        out << QString("// U+%1   ").arg(glyph.key, 4, 16, QChar('0')) << "'" << QString(QChar(glyph.key)) << "' \n";
+        out << QString("// U+%1   ").arg(glyph.key, 4, 16, QChar('0')) << "'" << QString(QChar(glyph.key)) <<
+               "' " << ", [" << idx++<< "]\n";
     }
     out << "};\n\n";
 
+    uint16_t startKey = _glyphs->first().key;
+    uint16_t groupLength = 0;
+    idx = 0;
     //-------------------------------- Генерация групп глифов ----------------------------------------------------------
     out << "// glyphs ranges\n";
     out << "static const glyph_array_t glyph_ranges[] =\n"
            "{\n";
+    for(auto &glyph: *_glyphs)
+    {
+        qDebug() << glyph.key << " - (" << startKey << " + " << groupLength << ") = " << glyph.key - (startKey + groupLength);
+        if( (glyph.key - (startKey + groupLength)) > 0)
+        {
+            out << "    { " << Qt::showbase << Qt::hex << startKey<< ", ";
+            out <<  Qt::dec << groupLength << ", " <<
+                    "glyphs + " << idx << " },\n";
+            idx += groupLength;
+            groupLength = 0;
+            startKey = glyph.key;
+        }
+        ++groupLength;
+    }
+    out << "    { " << Qt::showbase << Qt::hex << startKey<< ", ";
+    out <<  Qt::dec << groupLength << ", " <<
+            "glyphs + " << idx << " },\n";
+    out << "    { 0x0, 0, 0 }\n";
     out << "};\n\n";
 
 
+    xWidthAverage += dXWidth/_glyphs->size();
     //---------------------------- Создание объекта шрифта -------------------------------------------------------------
     if(_settings->genGenFunc())
     {
@@ -193,7 +222,7 @@ void IOFontGode::generateFontBody(const QString &fontName)
            yAdvance << ", " <<
            yOffsetLowest << ", " <<
            xWidest << ", " <<
-           xWidthAverage + dXWidth <<
+           xWidthAverage <<
            "};\n";
     out << "    return &rval;\n";
     out << "}\n\n";
@@ -273,7 +302,7 @@ void IOFontGode::outImage(QTextStream &out, QImage &img, uint16_t &idx)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QTextStream & IOFontGode::outHexByte(QTextStream &out, uint8_t byte, int &numInLine)
+QTextStream & IOFontGode::outHexByte(QTextStream &out, uint8_t byte, int &numInLine, int Numberlen)
 {
     if(numInLine%17 == 16)
     {
@@ -282,6 +311,6 @@ QTextStream & IOFontGode::outHexByte(QTextStream &out, uint8_t byte, int &numInL
     }
     ++numInLine;
 
-    return out << QString("0x%1").arg(byte, 2, 16, QChar('0'));
+    return out << QString("0x%1").arg(byte, Numberlen, 16, QChar('0'));
 }
 

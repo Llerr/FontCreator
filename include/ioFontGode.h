@@ -27,7 +27,7 @@ protected:
     void outImage(QTextStream &out, QImage &img, uint16_t &idx);
     /// Вывод байта в 16-ричной системе.
     /// Добавление префикса 0x, при длинной строке, добавление переноса
-    QTextStream &outHexByte(QTextStream &out, uint8_t byte, int &numInLine);
+    QTextStream &outHexByte(QTextStream &out, uint8_t byte, int &numInLine, int Numberlen = 2);
 
 private:
     QDir _basePath; ///< Базовый путь, где создаётся шрифт

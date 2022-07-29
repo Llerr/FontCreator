@@ -41,7 +41,7 @@ void DrawGlyphsWidget::updateSize()
 //----------------------------------------------------------------------------------------------------------------------
 void DrawGlyphsWidget::calculateSquareSize()
 {
-    int maxSize = 0;
+    int16_t maxSize = 0;
     for(auto &&glyph:_glyphs)
     {
         maxSize = qMax(maxSize, glyph.height);
