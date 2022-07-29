@@ -191,7 +191,6 @@ void IOFontGode::generateFontBody(const QString &fontName)
            "{\n";
     for(auto &glyph: *_glyphs)
     {
-        qDebug() << glyph.key << " - (" << startKey << " + " << groupLength << ") = " << glyph.key - (startKey + groupLength);
         if( (glyph.key - (startKey + groupLength)) > 0)
         {
             out << "    { " << Qt::showbase << Qt::hex << startKey<< ", ";
