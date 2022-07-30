@@ -29,7 +29,6 @@ QSize DrawEditWidget::sizeHint() const
 void DrawEditWidget::on_btnZoomOut_clicked()
 {
     _scale -= (_scale < 2)?0:1;
-//    qDebug() << __func__ << "|width: " << _glyph.width * _scale << ", scale: " << _scale;
     adjustSize();
     update();
 }
@@ -38,7 +37,6 @@ void DrawEditWidget::on_btnZoomOut_clicked()
 void DrawEditWidget::on_btnZoomIn_clicked()
 {
     _scale += (_scale > 101)?0:1;
-//    qDebug() << __func__ << "|width: " << _glyph.width * _scale << ", scale: " << _scale;
     adjustSize();
     update();
 }
@@ -48,7 +46,6 @@ void DrawEditWidget::on_btnZoomIn_clicked()
 //----------------------------------------------------------------------------------------------------------------------
 void DrawEditWidget::wheelEvent(QWheelEvent *event)
 {
-    qDebug() << "Wheel event. key: " << event->angleDelta();
     if(event->modifiers() == Qt::NoModifier)
     {
         if(event->angleDelta().y() < 0)

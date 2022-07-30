@@ -262,42 +262,50 @@ void IOFontGode::outImage(QTextStream &out, QImage &img, uint16_t &idx)
     int numInLine = 0;
     uint8_t byte = 0;
     int x = 0;
+    int numBit = 0;
 
     // Пройдёмся по всем пикселям глифа
     for(int y  = 0; y < img.height(); ++y)
     {
-        for(x = 0; x < img.width(); ++x)
+        for(x = 0; x < img.width(); ++x, ++numBit)
         {
 //                qDebug() << "(" << x << ", " << y << "): " << glyph.img.pixelIndex(x ,y);
             byte |= !img.pixelIndex(x ,y);
-            if((x % 8) == 7)
+            // Если набрали 8 бит, то выведем их
+            if((numBit % 8) == 7)
             {
                 outHexByte(out, byte, numInLine);
                 ++idx;
-                // Чтобы не вывести запятую после вывода картинки
-                if(x != img.width() - 1)
-                {
-                    out << ", ";
-                }
+                out << ", ";
+                numBit = -1;
                 byte = 0;
             }
             byte <<=1;
         }
+
         if(!_settings->genPack())
         {
-            if(x%8 != 0)
+            if(numBit%8 != 0)
             {
                 byte <<= 8 - (x+1)%8;
                 outHexByte(out, byte, numInLine);
                 ++idx;
+                numBit = 0;
             }
             // Чтобы не вывести запятую после вывода картинки
             if(y != img.height() - 1)
             {
-                out << ", ";
+                out << ",";
             }
         }
     }
+    if(numBit%8 != 0)
+    {
+        byte <<= 8 - (x+1)%8;
+        outHexByte(out, byte, numInLine);
+        ++idx;
+    }
+
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -310,6 +318,6 @@ QTextStream & IOFontGode::outHexByte(QTextStream &out, uint8_t byte, int &numInL
     }
     ++numInLine;
 
-    return out << QString("0x%1").arg(byte, Numberlen, 16, QChar('0'));
+    return out << QString(" 0x%1").arg(byte, Numberlen, 16, QChar('0'));
 }
 
