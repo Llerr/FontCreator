@@ -161,6 +161,10 @@ void DrawGlyphsWidget::mousePressEvent(QMouseEvent *event)
     {
         _lastIdx = (event->y()/sqSize)*_columns + event->x()/sqSize;
         int key = getByIndex(_glyphs, _lastIdx);
+        if(key < 0)
+        {
+            return;
+        }
         emit glyphSelected(_glyphs[key]);
         if((event->modifiers() & Qt::ControlModifier) != Qt::ControlModifier )
         {
