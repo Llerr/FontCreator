@@ -60,7 +60,7 @@ void DrawGlyphsWidget::on_btnDel_clicked()
     int cnt = 0;
     QVector<int> rmKeys;
     qDebug() << "rmKeyes size: " << rmKeys.size();
-    for(auto &&idx:_Idxs)
+    for(const auto &idx:qAsConst(_Idxs))
     {
         int key = getByIndex(_glyphs, idx);
         qDebug() << ++cnt << ": ix: " << idx << ", key: " << key;
@@ -156,7 +156,6 @@ void DrawGlyphsWidget::mouseMoveEvent(QMouseEvent *event)
 //----------------------------------------------------------------------------------------------------------------------
 void DrawGlyphsWidget::mousePressEvent(QMouseEvent *event)
 {
-    adjustSize();
     int sqSize = _squareSize * _scale;
     if (event->button() == Qt::LeftButton)
     {
