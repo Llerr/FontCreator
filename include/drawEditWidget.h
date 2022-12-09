@@ -5,11 +5,11 @@
 
 #include "glyph.h"
 
-class DrawEditWidget : public QWidget
+class DrawTextWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DrawEditWidget(Glyph &glyph, QWidget *parent = nullptr);
+    explicit DrawTextWidget(Glyph &glyph, QWidget *parent = nullptr);
 
     QSize sizeHint() const override;
 

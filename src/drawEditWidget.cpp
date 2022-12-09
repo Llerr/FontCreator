@@ -5,7 +5,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-DrawEditWidget::DrawEditWidget(Glyph &glyph, QWidget *parent) :
+DrawTextWidget::DrawTextWidget(Glyph &glyph, QWidget *parent) :
     QWidget(parent),
     _glyph(glyph),
     _scale(1)
@@ -14,7 +14,7 @@ DrawEditWidget::DrawEditWidget(Glyph &glyph, QWidget *parent) :
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QSize DrawEditWidget::sizeHint() const
+QSize DrawTextWidget::sizeHint() const
 {
     QWidget *parent = parentWidget();
     QSize retSize = parent->size();
@@ -26,7 +26,7 @@ QSize DrawEditWidget::sizeHint() const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void DrawEditWidget::on_btnZoomOut_clicked()
+void DrawTextWidget::on_btnZoomOut_clicked()
 {
     _scale -= (_scale < 2)?0:1;
     adjustSize();
@@ -34,7 +34,7 @@ void DrawEditWidget::on_btnZoomOut_clicked()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void DrawEditWidget::on_btnZoomIn_clicked()
+void DrawTextWidget::on_btnZoomIn_clicked()
 {
     _scale += (_scale > 101)?0:1;
     adjustSize();
@@ -44,7 +44,7 @@ void DrawEditWidget::on_btnZoomIn_clicked()
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------- P R O T E C T E D ----------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-void DrawEditWidget::wheelEvent(QWheelEvent *event)
+void DrawTextWidget::wheelEvent(QWheelEvent *event)
 {
     if(event->modifiers() == Qt::NoModifier)
     {
@@ -64,7 +64,7 @@ void DrawEditWidget::wheelEvent(QWheelEvent *event)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void DrawEditWidget::mousePressEvent(QMouseEvent *event)
+void DrawTextWidget::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
@@ -89,7 +89,7 @@ void DrawEditWidget::mousePressEvent(QMouseEvent *event)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void DrawEditWidget::paintEvent(QPaintEvent *event)
+void DrawTextWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
     QPainter painter(this);

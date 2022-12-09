@@ -15,12 +15,12 @@ EditWidget::EditWidget(QWidget *parent) :
     _ui->setupUi(this);
 
     QScrollArea *scrollArea = new QScrollArea(this);
-    _wgtEdit = new DrawEditWidget(_glyphEdt);
+    _wgtEdit = new DrawTextWidget(_glyphEdt);
     scrollArea->setWidget(_wgtEdit);
     _ui->verticalLayout->addWidget(scrollArea);
 
-    connect(_ui->btnZoomIn,  qOverload<bool>(&QPushButton::clicked), _wgtEdit, &DrawEditWidget::on_btnZoomIn_clicked);
-    connect(_ui->btnZoomOut, qOverload<bool>(&QPushButton::clicked), _wgtEdit, &DrawEditWidget::on_btnZoomOut_clicked);
+    connect(_ui->btnZoomIn,  qOverload<bool>(&QPushButton::clicked), _wgtEdit, &DrawTextWidget::on_btnZoomIn_clicked);
+    connect(_ui->btnZoomOut, qOverload<bool>(&QPushButton::clicked), _wgtEdit, &DrawTextWidget::on_btnZoomOut_clicked);
 
 
 }

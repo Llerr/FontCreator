@@ -128,6 +128,10 @@ void DrawGlyphsWidget::mouseMoveEvent(QMouseEvent *event)
     QPoint widgetPosition = mapFromGlobal(event->globalPos());
     int sqSize = _squareSize * _scale;
     int idx = (widgetPosition.y()/(sqSize))*_columns + widgetPosition.x()/sqSize;
+    if(idx < 0)
+    {
+        return;
+    }
 
     int key = getByIndex(_glyphs, idx);
 
