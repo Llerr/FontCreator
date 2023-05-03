@@ -2,6 +2,7 @@
 #include <QDebug>
 
 #include "drawGlyphsWidget.h"
+#include "glyph.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -65,6 +66,10 @@ void DrawGlyphsWidget::on_btnDel_clicked()
         int key = getByIndex(_glyphs, idx);
         qDebug() << ++cnt << ": ix: " << idx << ", key: " << key;
         rmKeys.push_back(key);
+        if(_key == key)
+        {
+            emit glyphSelected(Glyph());
+        }
     }
     for (auto &&key:rmKeys)
     {
@@ -170,6 +175,7 @@ void DrawGlyphsWidget::mousePressEvent(QMouseEvent *event)
             return;
         }
         emit glyphSelected(_glyphs[key]);
+        _key = key;
         if((event->modifiers() & Qt::ControlModifier) != Qt::ControlModifier )
         {
             _Idxs.clear();
