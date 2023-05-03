@@ -45,6 +45,8 @@ private:
     QSet<int> _Idxs;
     int _squareSize;
 
+    int _key = -1; ///< Номер глифа отправленого на редактирование
+
     GlyphsMap &_glyphs;
 
 };
