@@ -6,7 +6,7 @@
 #include <QDir>
 
 #include "glyph.h"
-#include "ioFontGode.h"
+#include "ioFontCode.h"
 
 class EditWidget;
 class GlyphsWidget;
@@ -44,6 +44,6 @@ private:
     Settings *_settings; ///< Окно настроек
 
     QDir _baseDir;
-    IOFontGode _generator; ///< Класс создания кода шрифта
+    IOFontCode _generator; ///< Класс создания кода шрифта
 };
 #endif // MAINWINDOW_H
