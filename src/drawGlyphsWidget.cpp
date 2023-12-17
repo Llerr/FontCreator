@@ -48,7 +48,13 @@ void DrawGlyphsWidget::calculateSquareSize()
         maxSize = qMax(maxSize, glyph.height);
     }
     _squareSize = qMax(16, 4 + maxSize);
-    qDebug() << "Square size: " << _squareSize;
+    //    qDebug() << "Square size: " << _squareSize;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void DrawGlyphsWidget::resetSelected()
+{
+    _Idxs.clear();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -57,7 +63,7 @@ void DrawGlyphsWidget::calculateSquareSize()
 void DrawGlyphsWidget::on_btnDel_clicked()
 {
     qDebug() << "Delete " << _Idxs.size() << " glyphs";
-    qDebug() << "Before delete size: " << _glyphs.size();
+//    qDebug() << "Before delete size: " << _glyphs.size();
     int cnt = 0;
     QVector<int> rmKeys;
     qDebug() << "rmKeyes size: " << rmKeys.size();
@@ -75,7 +81,7 @@ void DrawGlyphsWidget::on_btnDel_clicked()
     {
         _glyphs.remove(key);
     }
-    qDebug() << "After delete size: " << _glyphs.size();
+//    qDebug() << "After delete size: " << _glyphs.size();
     _Idxs.clear();
     updateSize();
 }
@@ -109,7 +115,7 @@ void DrawGlyphsWidget::on_btnMinus_clicked()
 //----------------------------------------------------------------------------------------------------------------------
 void DrawGlyphsWidget::wheelEvent(QWheelEvent *event)
 {
-    qDebug() << "Wheel event. key: " << event->angleDelta();
+//    qDebug() << "Wheel event. key: " << event->angleDelta();
     if(event->modifiers() == Qt::NoModifier)
     {
         if(event->angleDelta().y() < 0)
@@ -223,6 +229,17 @@ void DrawGlyphsWidget::paintEvent(QPaintEvent *event)
         }
     }
 
+
+//    painter.setBrush(brush);
+//    int width = _glyph.width * _scale;
+//    int height = _glyph.height * _scale;
+//    int x = size().width()/2 - width/2;
+//    int y = size().height()/2 - height/2;
+//    QRect rect(x,y, width, height);
+//    painter.drawRect(rect);
+
+//    painter.drawImage(rect, _glyph.img);
+
 //    QFontMetrics fontMetrics(_displayFont);
 //    painter.setPen(QPen(Qt::black));
 //    qDebug() << "Glyph size: " << _glyphs.size();
@@ -240,11 +257,11 @@ void DrawGlyphsWidget::paintEvent(QPaintEvent *event)
 
             key = getByIndex(_glyphs, idx);
             QImage img = _glyphs[key].img;
-            img.setColor(1, qRgba(0,0,0,0) );
             QPoint pointForImage(column*sqSize + (sqSize / 2) - _glyphs[key].width*_scale/2,
                               (row + 1)*sqSize - 4 + _glyphs[key].dy*_scale);
             QSize imgSize(_glyphs[key].width*_scale, _glyphs[key].height*_scale);
             QRect drawRect(pointForImage, imgSize);
+            painter.setPen(QPen(Qt::black));
             painter.drawImage(drawRect, img);
 //            qDebug() << key << ": " << glyph;
 //            painter.drawText(cpointForImageolumn*_squareSize + (_squareSize / 2) - fontMetrics.horizontalAdvance(QChar(key))/2,

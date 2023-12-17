@@ -95,9 +95,7 @@ void DrawTextWidget::paintEvent(QPaintEvent *event)
     QPainter painter(this);
 
     QBrush brush(Qt::white);
-    QPen pen(Qt::lightGray);
 
-    painter.setPen(pen);
     painter.setBrush(brush);
     int width = _glyph.width * _scale;
     int height = _glyph.height * _scale;

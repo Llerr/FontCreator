@@ -1,11 +1,11 @@
 
 #include "settings.h"
-#include "ioFontGode.h"
+#include "ioFontCode.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-IOFontGode::IOFontGode(GlyphsMap *glyphs, const Settings *sets):
+IOFontCode::IOFontCode(GlyphsMap *glyphs, const Settings *sets):
     _glyphs(glyphs),
     _settings(sets)
 {
@@ -13,26 +13,27 @@ IOFontGode::IOFontGode(GlyphsMap *glyphs, const Settings *sets):
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void IOFontGode::setGlyphs(GlyphsMap *newGlyphs)
+void IOFontCode::setGlyphs(GlyphsMap *newGlyphs)
 {
     _glyphs = newGlyphs;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void IOFontGode::setSettings(const Settings *newSettings)
+void IOFontCode::setSettings(const Settings *newSettings)
 {
     _settings = newSettings;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void IOFontGode::setBaseDir(const QDir &newBaseDir)
+void IOFontCode::setBaseDir(const QDir &newBaseDir)
 {
     _basePath = newBaseDir;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void IOFontGode::saveFont(const QDir &baseDir, const QString &fontName)
+void IOFontCode::saveFont(const QDir &baseDir, const QString &fontName)
 {
+    qDebug() << "Geneate files into a dir: " << baseDir.absolutePath();
     setBaseDir(baseDir);
 
     generateBaseFile();
@@ -41,7 +42,7 @@ void IOFontGode::saveFont(const QDir &baseDir, const QString &fontName)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void IOFontGode::generateBaseFile()
+void IOFontCode::generateBaseFile()
 {
     qDebug() << "Generate base file: " << _settings->baseFileName();
     if(_settings->baseFileName().isEmpty())
@@ -59,7 +60,7 @@ void IOFontGode::generateBaseFile()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void IOFontGode::generateFontHeader(const QString &fontName)
+void IOFontCode::generateFontHeader(const QString &fontName)
 {
     QDir path = filePath("include");
     qDebug() << "Generate body: " << path.path() << fontName;
@@ -93,7 +94,7 @@ void IOFontGode::generateFontHeader(const QString &fontName)
     out << "#endif // _" << fontName.toUpper() << "_FONT_H_\n";
 }
 
-void IOFontGode::generateFontBody(const QString &fontName)
+void IOFontCode::generateFontBody(const QString &fontName)
 {
 
     QDir path = filePath("src");
@@ -243,7 +244,7 @@ void IOFontGode::generateFontBody(const QString &fontName)
 //----------------------------------------------------------------------------------------------------------------------
 //------------------------------------ P R O T E C T E D ---------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-QDir IOFontGode::filePath(const QString &&dir)
+QDir IOFontCode::filePath(const QString &&dir)
 {
     QDir path = _basePath;
     if(_settings->baseGenPathStruct())
@@ -257,7 +258,7 @@ QDir IOFontGode::filePath(const QString &&dir)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void IOFontGode::outImage(QTextStream &out, QImage &img, uint16_t &idx)
+void IOFontCode::outImage(QTextStream &out, QImage &img, uint16_t &idx)
 {
     int numInLine = 0;
     uint8_t byte = 0;
@@ -309,7 +310,7 @@ void IOFontGode::outImage(QTextStream &out, QImage &img, uint16_t &idx)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QTextStream & IOFontGode::outHexByte(QTextStream &out, uint8_t byte, int &numInLine, int Numberlen)
+QTextStream & IOFontCode::outHexByte(QTextStream &out, uint8_t byte, int &numInLine, int Numberlen)
 {
     if(numInLine%17 == 16)
     {

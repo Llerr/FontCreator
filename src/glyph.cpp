@@ -1,4 +1,9 @@
+#include <QJsonObject>
+#include <QImage>
+
 #include "glyph.h"
+#include "qdebug.h"
+#include "qnamespace.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -14,6 +19,81 @@ Glyph::Glyph():
     yAdvance(0)
 {
 
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+int Glyph::save(QJsonObject &json)
+{
+    QString fileName = QString::number(key, 16).rightJustified(4, '0') + ".xbm";
+
+    json["key"] = key;
+    json["dX"] = dx;
+    json["dY"] = dy;
+    json["xAdvance"] = xAdvance;
+    json["yAdvance"] = yAdvance;
+    json["height"] = height;
+    json["width"] = width;
+    json["fileName"] = fileName;
+
+    if(img.save(fileName, "XBM") == false)
+    {
+        qWarning() << "Error save file: " << fileName;
+        return -1;
+    }
+
+    return 0;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+int Glyph::load(QJsonObject &json)
+{
+    int numLoaded = 0;
+    if (json.contains("key") && json["key"].isDouble())
+    {
+        key = json["key"].toInt();
+        ++numLoaded;
+    }
+    if (json.contains("dX") && json["dX"].isDouble())
+    {
+        dx = json["dX"].toInt();
+        ++numLoaded;
+    }
+    if (json.contains("dY") && json["dY"].isDouble())
+    {
+        dy = json["dY"].toInt();
+        ++numLoaded;
+    }
+    if (json.contains("xAdvance") && json["xAdvance"].isDouble())
+    {
+        xAdvance = json["xAdvance"].toInt();
+        ++numLoaded;
+    }
+    if (json.contains("yAdvance") && json["yAdvance"].isDouble())
+    {
+        yAdvance = json["yAdvance"].toInt();
+        ++numLoaded;
+    }
+    if (json.contains("height") && json["height"].isDouble())
+    {
+        height = json["height"].toInt();
+        ++numLoaded;
+    }
+    if (json.contains("width") && json["width"].isDouble())
+    {
+        width = json["width"].toInt();
+        ++numLoaded;
+    }
+    if (json.contains("fileName") && json["fileName"].isString())
+    {
+        QString fileName = json["fileName"].toString();
+//        QImage img(boundRect.size(), QImage::Format_Mono);
+
+        QImage tmpImg(fileName);
+        img = tmpImg.convertToFormat(QImage::Format_Mono, Qt::MonoOnly);
+        qDebug() << " Img:" << img << "tmpImg: " << tmpImg;
+        ++numLoaded;
+    }
+    return (numLoaded == 8)?0:-1;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -43,3 +123,4 @@ int getByIndex(GlyphsMap &map, int idx)
     }
     return -1;
 }
+

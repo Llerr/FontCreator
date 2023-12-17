@@ -1,6 +1,10 @@
 #include <QtWidgets>
 
+#include "glyph.h"
 #include "glyphsWidget.h"
+#include "qdebug.h"
+#include "qjsonarray.h"
+#include "qjsonobject.h"
 #include "ui_glyphsWidget.h"
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -48,6 +52,63 @@ void GlyphsWidget::removeGlyph(int key)
 void GlyphsWidget::setGlyph(int key, Glyph glyph)
 {
     _glyphs[key] = glyph;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+int GlyphsWidget::save(QJsonObject &json)
+{
+    QJsonArray array;
+    for(auto &glyph: _glyphs)
+    {
+        QJsonObject glyphJson;
+        glyph.save(glyphJson);
+        array.append(glyphJson);
+    }
+    QJsonObject glypshJson;
+    glypshJson["map"] = array;
+    glypshJson["name"] = _fontName;
+    json["glyphs"] = glypshJson;
+
+    return 0;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+int GlyphsWidget::load(QJsonObject &json)
+{
+    qDebug() << "Load glyphs";
+    GlyphsMap loadedGlyphs;
+    QString loadedName;
+    if (json.contains("glyphs") && json["glyphs"].isObject())
+    {
+//        qDebug() << "glyphs";
+        QJsonObject glyphsJson = json["glyphs"].toObject();
+        if(glyphsJson.contains("map") && glyphsJson["map"].isArray())
+        {
+//            qDebug() << "map";
+            QJsonArray glyphArray = glyphsJson["map"].toArray();
+
+            for (int levelIndex = 0; levelIndex < glyphArray.size(); ++levelIndex)
+            {
+                QJsonObject glyphJson = glyphArray[levelIndex].toObject();
+                Glyph glyph;
+                if(glyph.load(glyphJson) == 0)
+                {
+//                    qDebug() << "Load glyph: " << glyph.key;
+                    loadedGlyphs[glyph.key] = glyph;
+                }
+            }
+        }
+        if(glyphsJson.contains("name") && glyphsJson["name"].isString())
+        {
+            loadedName = glyphsJson["name"].toString();
+            qDebug() << "Font name for glyphs: " << loadedName;
+        }
+    }
+    _glyphs.clear();
+    _wgtDraw->resetSelected();
+    receiveGlyphs(loadedGlyphs, loadedName);
+    _wgtDraw->updateSize();
+    return 0;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

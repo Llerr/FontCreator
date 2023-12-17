@@ -1,5 +1,5 @@
-#ifndef IOFONTGODE_H
-#define IOFONTGODE_H
+#ifndef IOFONTCODE_H
+#define IOFONTCODE_H
 
 #include <QString>
 #include <QDir>
@@ -8,10 +8,10 @@
 
 class Settings;
 
-class IOFontGode
+class IOFontCode
 {
 public:
-    IOFontGode(GlyphsMap *glyphs = nullptr, const Settings *sets = nullptr);
+    IOFontCode(GlyphsMap *glyphs = nullptr, const Settings *sets = nullptr);
 
     void setGlyphs(GlyphsMap *newGlyphs);
     void setSettings(const Settings *newSettings);
@@ -36,4 +36,4 @@ private:
     const Settings *_settings; ///< Настройки
 };
 
-#endif // IOFONTGODE_H
+#endif // IOFONTCODE_H

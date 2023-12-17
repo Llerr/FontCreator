@@ -6,7 +6,8 @@
 #include <QDir>
 
 #include "glyph.h"
-#include "ioFontGode.h"
+#include "ioFontCode.h"
+#include "qdir.h"
 
 class EditWidget;
 class GlyphsWidget;
@@ -28,12 +29,16 @@ public:
     Settings *settings() const;
 
 private slots:
+    void openProject();
+    void saveProject();
     void generateCode();
     void generateCodeAs();
     void settingsShow();
     void aboutShow();
 protected:
- void closeEvent(QCloseEvent *event);
+    void save();
+    void load();
+    void closeEvent(QCloseEvent *event);
 private:
     Ui::MainWindow *_ui;
 
@@ -44,6 +49,9 @@ private:
     Settings *_settings; ///< Окно настроек
 
     QDir _baseDir;
-    IOFontGode _generator; ///< Класс создания кода шрифта
+    IOFontCode _generator; ///< Класс создания кода шрифта
+
+    QDir _projectPath; ///< Имя директории для сохранения проекта
+    QString _projName; ///< Имя проекта
 };
 #endif // MAINWINDOW_H
