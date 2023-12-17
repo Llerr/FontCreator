@@ -11,6 +11,9 @@ public:
     Glyph();
     friend QDebug operator<<(QDebug stream, const Glyph &gl);
 
+    int save(QJsonObject &json);
+    int load(QJsonObject &json);
+
 public:
     int key;      ///< Unicode символа
     QImage img;   ///< Изображение символа

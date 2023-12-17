@@ -29,6 +29,9 @@ public:
 
     GlyphsMap *glyphs() {return &_glyphs;}
     const QString &fontName(){return _fontName;}
+
+    int save(QJsonObject &json);
+    int load(QJsonObject &json);
 signals:
     void glyphSelected(const Glyph &);
 

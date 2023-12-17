@@ -23,6 +23,9 @@ public:
 
     void setFontSize(int size);
 
+    int save(QJsonObject &json);
+    int load(QJsonObject &json);
+
 protected:
  void closeEvent(QCloseEvent *event) override;
  void hideEvent(QHideEvent *event) override;

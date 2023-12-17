@@ -21,6 +21,7 @@ public:
 
     void updateSize();
     void calculateSquareSize();
+    void resetSelected();
 public slots:
     void on_btnDel_clicked();
     void on_btnPlus_clicked();

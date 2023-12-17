@@ -33,6 +33,7 @@ void IOFontCode::setBaseDir(const QDir &newBaseDir)
 //----------------------------------------------------------------------------------------------------------------------
 void IOFontCode::saveFont(const QDir &baseDir, const QString &fontName)
 {
+    qDebug() << "Geneate files into a dir: " << baseDir.absolutePath();
     setBaseDir(baseDir);
 
     generateBaseFile();

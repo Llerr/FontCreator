@@ -33,6 +33,7 @@ public:
 
 public slots:
     void accept() override;
+    void selectPath();
 private:
     void saveSettings();
     void loadSettings();

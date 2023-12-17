@@ -20,18 +20,25 @@
      <x>0</x>
      <y>0</y>
      <width>1560</width>
-     <height>22</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="file">
     <property name="title">
      <string>Файл</string>
     </property>
-    <addaction name="actOpenCode"/>
-    <addaction name="actSaveCode"/>
-    <addaction name="actSaveCodeAs"/>
+    <widget class="QMenu" name="menu">
+     <property name="title">
+      <string>Экспорт</string>
+     </property>
+     <addaction name="actSaveCode"/>
+     <addaction name="actSaveCodeAs"/>
+    </widget>
     <addaction name="separator"/>
+    <addaction name="actOpenProj"/>
+    <addaction name="actSaveProj"/>
     <addaction name="actOpenFont"/>
+    <addaction name="menu"/>
     <addaction name="separator"/>
     <addaction name="actExit"/>
    </widget>
@@ -146,6 +153,21 @@
   <action name="actSaveCodeAs">
    <property name="text">
     <string>Сохранить код как ...</string>
+   </property>
+  </action>
+  <action name="actSaveProj">
+   <property name="text">
+    <string>Сохранить проект</string>
+   </property>
+  </action>
+  <action name="actSaveProjAs">
+   <property name="text">
+    <string>Сохранить проект как ...</string>
+   </property>
+  </action>
+  <action name="actOpenProj">
+   <property name="text">
+    <string>Открыть проект</string>
    </property>
   </action>
  </widget>
