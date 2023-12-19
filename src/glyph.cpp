@@ -32,9 +32,6 @@ Glyph::Glyph():
     xAdvance(0),
     yAdvance(0)
 {
-    img.convertTo(QImage::Format_Mono);
-    img.setColor(1, qRgb(0,0,0));
-    img.setColor(0, qRgb(255,255,255));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -102,11 +99,6 @@ int Glyph::load(QJsonObject &json)
     if (json.contains("fileName") && json["fileName"].isString())
     {
         QString fileName = json["fileName"].toString();
-//        QImage img(boundRect.size(), QImage::Format_Mono);
-//        img.format();
-//        QImage tmpImg(fileName);
-//        tmpImg.reinterpretAsFormat(QImage::Format_Mono);
-//        img = tmpImg.convertToFormat(QImage::Format_Mono);
         img.load(fileName);
         img.convertTo(QImage::Format_Mono);
         ++numLoaded;
