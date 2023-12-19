@@ -52,11 +52,11 @@ void DrawTextWidget::wheelEvent(QWheelEvent *event)
     {
         if(event->angleDelta().y() < 0)
         {
-            on_btnZoomIn_clicked();
+            on_btnZoomOut_clicked();
         }
         else
         {
-            on_btnZoomOut_clicked();
+            on_btnZoomIn_clicked();
         }
     }
     else
