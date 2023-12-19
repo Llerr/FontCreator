@@ -6,6 +6,8 @@
 #include "drawCharactersWidget.h"
 #include "fontWidget.h"
 #include "qfont.h"
+#include "qnamespace.h"
+#include "qrgb.h"
 #include "ui_fontWidget.h"
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -281,14 +283,19 @@ void FontWidget::addGlyphsClick()
         QImage img(boundRect.size(), QImage::Format_Mono);
         qDebug() << "key: " << key << " " << QString(symb) << boundRect << boundRect.topLeft();
         qDebug() << "img: " << img;
-        img.fill(1);
+        img.setColor(1, qRgba(0,0,0,255));
+        img.setColor(0, qRgba(255,255,255,255));
+        img.fill(0);
         QPainter painter(&img);
-        painter.setPen(Qt::black);
 
         painter.setFont(_font);
+        painter.setPen(Qt::black);
+
         painter.drawText(-boundRect.topLeft(), QString(symb));
         painter.end();
-//        img.save(QString::number(key,16) + ".xpm");
+        qDebug() << ", Img pixels: " << img.pixelIndex(1,1)
+                 << ", " << img.pixelIndex(1,2);
+        img.save(QString::number(key,16) + ".xpm");
         glyph.key = key;
         glyph.img = img;
         glyph.width = boundRect.size().width();
