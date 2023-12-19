@@ -278,10 +278,10 @@ void FontWidget::addGlyphsClick()
     for(auto &&key:keys)
     {
         QChar symb(key);
-        QRect boundRect = fm.boundingRect(symb);
+        QRect boundRect = fm.boundingRect(QString(symb));
         Glyph glyph;
         QImage img(boundRect.size(), QImage::Format_Mono);
-        qDebug() << "key: " << key << " " << QString(symb) << boundRect << boundRect.topLeft();
+        qDebug() << "key: " << key << " " << QString(symb) << boundRect;
         qDebug() << "img: " << img;
         img.setColor(1, qRgba(0,0,0,255));
         img.setColor(0, qRgba(255,255,255,255));
@@ -293,8 +293,6 @@ void FontWidget::addGlyphsClick()
 
         painter.drawText(-boundRect.topLeft(), QString(symb));
         painter.end();
-        qDebug() << ", Img pixels: " << img.pixelIndex(1,1)
-                 << ", " << img.pixelIndex(1,2);
         img.save(QString::number(key,16) + ".xpm");
         glyph.key = key;
         glyph.img = img;

@@ -42,7 +42,7 @@ private:
 private:
     Ui::EditWidget *_ui;
 
-    DrawTextWidget *_wgtEdit;
+    DrawEditWidget *_wgtEdit;
 
     int _sale;
 

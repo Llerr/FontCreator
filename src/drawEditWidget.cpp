@@ -3,20 +3,20 @@
 #include "drawEditWidget.h"
 #include "qnamespace.h"
 #include "qrgb.h"
+#include "qwidget.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-DrawTextWidget::DrawTextWidget(Glyph &glyph, QWidget *parent) :
+DrawEditWidget::DrawEditWidget(Glyph &glyph, QWidget *parent) :
     QWidget(parent),
     _glyph(glyph),
     _scale(1)
 {
-
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QSize DrawTextWidget::sizeHint() const
+QSize DrawEditWidget::sizeHint() const
 {
     QWidget *parent = parentWidget();
     QSize retSize = parent->size();
@@ -28,7 +28,7 @@ QSize DrawTextWidget::sizeHint() const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void DrawTextWidget::on_btnZoomOut_clicked()
+void DrawEditWidget::on_btnZoomOut_clicked()
 {
     _scale -= (_scale < 2)?0:1;
     adjustSize();
@@ -36,7 +36,7 @@ void DrawTextWidget::on_btnZoomOut_clicked()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void DrawTextWidget::on_btnZoomIn_clicked()
+void DrawEditWidget::on_btnZoomIn_clicked()
 {
     _scale += (_scale > 101)?0:1;
     adjustSize();
@@ -46,7 +46,7 @@ void DrawTextWidget::on_btnZoomIn_clicked()
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------- P R O T E C T E D ----------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-void DrawTextWidget::wheelEvent(QWheelEvent *event)
+void DrawEditWidget::wheelEvent(QWheelEvent *event)
 {
     if(event->modifiers() == Qt::NoModifier)
     {
@@ -66,7 +66,14 @@ void DrawTextWidget::wheelEvent(QWheelEvent *event)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void DrawTextWidget::mousePressEvent(QMouseEvent *event)
+void DrawEditWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    qDebug() << "DrawTextWidget::mouseMoveEvent" << event->screenPos();
+    QWidget::mouseMoveEvent(event);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void DrawEditWidget::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
@@ -93,7 +100,7 @@ void DrawTextWidget::mousePressEvent(QMouseEvent *event)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void DrawTextWidget::paintEvent(QPaintEvent *event)
+void DrawEditWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
     QPainter painter(this);
@@ -106,7 +113,7 @@ void DrawTextWidget::paintEvent(QPaintEvent *event)
     int x = size().width()/2 - width/2;
     int y = size().height()/2 - height/2;
     QRect rect(x,y, width, height);
-//    painter.drawRect(rect);
+    painter.drawRect(rect);
 
     _glyph.img.setColor(0, qRgba(0,0,0,0));
     _glyph.img.setColor(1, qRgba(0,0,0,255));

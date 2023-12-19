@@ -5,11 +5,11 @@
 
 #include "glyph.h"
 
-class DrawTextWidget : public QWidget
+class DrawEditWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DrawTextWidget(Glyph &glyph, QWidget *parent = nullptr);
+    explicit DrawEditWidget(Glyph &glyph, QWidget *parent = nullptr);
 
     QSize sizeHint() const override;
 
@@ -21,7 +21,7 @@ public:
 signals:
 protected:
     void wheelEvent(QWheelEvent *event) override;
-//    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
 //    void mouseDoubleClickEvent(QMouseEvent *event) override;
     void paintEvent(QPaintEvent *event) override;

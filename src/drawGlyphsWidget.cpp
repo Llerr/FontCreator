@@ -90,9 +90,7 @@ void DrawGlyphsWidget::on_btnDel_clicked()
 //----------------------------------------------------------------------------------------------------------------------
 void DrawGlyphsWidget::on_btnPlus_clicked()
 {
-    qDebug() << "Button plus";
     _scale *= (_scale > 10.) ? 1 : 1.2;
-
     updateSize();
 }
 
@@ -106,7 +104,6 @@ void DrawGlyphsWidget::on_btnOne_clicked()
 //----------------------------------------------------------------------------------------------------------------------
 void DrawGlyphsWidget::on_btnMinus_clicked()
 {
-    qDebug() << "Button minus";
     _scale /= (_scale < 0.2) ? 1 : 1.2;
     updateSize();
 }

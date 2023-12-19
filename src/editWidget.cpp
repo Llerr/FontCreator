@@ -15,12 +15,12 @@ EditWidget::EditWidget(QWidget *parent) :
     _ui->setupUi(this);
 
     QScrollArea *scrollArea = new QScrollArea(this);
-    _wgtEdit = new DrawTextWidget(_glyphEdt);
+    _wgtEdit = new DrawEditWidget(_glyphEdt);
     scrollArea->setWidget(_wgtEdit);
     _ui->verticalLayout->addWidget(scrollArea);
 
-    connect(_ui->btnZoomIn,  qOverload<bool>(&QPushButton::clicked), _wgtEdit, &DrawTextWidget::on_btnZoomIn_clicked);
-    connect(_ui->btnZoomOut, qOverload<bool>(&QPushButton::clicked), _wgtEdit, &DrawTextWidget::on_btnZoomOut_clicked);
+    connect(_ui->btnZoomIn,  qOverload<bool>(&QPushButton::clicked), _wgtEdit, &DrawEditWidget::on_btnZoomIn_clicked);
+    connect(_ui->btnZoomOut, qOverload<bool>(&QPushButton::clicked), _wgtEdit, &DrawEditWidget::on_btnZoomOut_clicked);
 
 
 }
@@ -38,7 +38,7 @@ void EditWidget::receiveGlyph(const Glyph &glyph)
 {
     qDebug() << "Select glyph: U+" << Qt::hex << glyph.key
              << ", " << glyph.img.pixelIndex(1,1)
-             << ", " << glyph.img.pixelIndex(1,2);;
+             << ", " << glyph.img.pixelIndex(1,2);
     _glyphIn = glyph;
     _glyphEdt = _glyphIn;
 
