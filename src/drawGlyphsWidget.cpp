@@ -121,11 +121,11 @@ void DrawGlyphsWidget::wheelEvent(QWheelEvent *event)
     {
         if(event->angleDelta().y() < 0)
         {
-            on_btnPlus_clicked();
+            on_btnMinus_clicked();
         }
         else
         {
-            on_btnMinus_clicked();
+            on_btnPlus_clicked();
         }
     }
     else
@@ -141,7 +141,8 @@ void DrawGlyphsWidget::mouseMoveEvent(QMouseEvent *event)
     int sqSize = _squareSize * _scale;
     int idx = (widgetPosition.y()/(sqSize))*_columns + widgetPosition.x()/sqSize;
     if(idx < 0)
-    {
+    {//        qDebug() << start << "| " << stop;
+
         return;
     }
 
@@ -156,7 +157,6 @@ void DrawGlyphsWidget::mouseMoveEvent(QMouseEvent *event)
     {
         uint start = std::min(idx, _lastIdx);
         uint stop = std::max(idx, _lastIdx);
-//        qDebug() << start << "| " << stop;
         for(uint i = start+1; i < stop +1; ++i)
         {
             if(_Idxs.contains(i))
@@ -230,20 +230,6 @@ void DrawGlyphsWidget::paintEvent(QPaintEvent *event)
         }
     }
 
-
-//    painter.setBrush(brush);
-//    int width = _glyph.width * _scale;
-//    int height = _glyph.height * _scale;
-//    int x = size().width()/2 - width/2;
-//    int y = size().height()/2 - height/2;
-//    QRect rect(x,y, width, height);
-//    painter.drawRect(rect);
-
-//    painter.drawImage(rect, _glyph.img);
-
-//    QFontMetrics fontMetrics(_displayFont);
-//    painter.setPen(QPen(Qt::black));
-//    qDebug() << "Glyph size: " << _glyphs.size();
     for (int row = beginRow; row <= endRow; ++row) {
 
         for (int column = beginColumn; column <= endColumn; ++column)
@@ -268,10 +254,6 @@ void DrawGlyphsWidget::paintEvent(QPaintEvent *event)
             img.setColor(0, qRgba(0xFF,0xFF,0xFF,0) );
             painter.setPen(Qt::black);
             painter.drawImage(drawRect, img);
-//            qDebug() << key << ": " << glyph;
-//            painter.drawText(cpointForImageolumn*_squareSize + (_squareSize / 2) - fontMetrics.horizontalAdvance(QChar(key))/2,
-//                             row*_squareSize + 4 + fontMetrics.ascent(),
-//                             QString(QChar(key)));
         }
     }
 }
