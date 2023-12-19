@@ -1,6 +1,8 @@
 #include <QtWidgets>
 
 #include "drawEditWidget.h"
+#include "qnamespace.h"
+#include "qrgb.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -75,11 +77,13 @@ void DrawTextWidget::mousePressEvent(QMouseEvent *event)
         int iY = (event->y() - size().height()/2 + height/2)/_scale;
 
         auto color = _glyph.img.pixelIndex(iX, iY);
-        qDebug() << "(" << iX << ", " << iY << ")  - color ("
+        qDebug() << "(" << iX << ", " << iY << ")  - cur color ("
                  << Qt::hex << color << " ), " << _glyph.img.format();
 
         color = (color)?0:1;
         _glyph.img.setPixel(iX, iY, color);
+        qDebug() << "(" << iX << ", " << iY << ")  - set color ("
+                 << Qt::hex << color << " ), " << _glyph.img.format();
         update();
     }
     else
@@ -102,9 +106,11 @@ void DrawTextWidget::paintEvent(QPaintEvent *event)
     int x = size().width()/2 - width/2;
     int y = size().height()/2 - height/2;
     QRect rect(x,y, width, height);
-    painter.drawRect(rect);
+//    painter.drawRect(rect);
 
-    painter.setPen(QPen(Qt::black));
+    _glyph.img.setColor(0, qRgba(0,0,0,0));
+    _glyph.img.setColor(1, qRgba(0,0,0,255));
+//    painter.setPen(QPen(Qt::black));
     painter.drawImage(rect, _glyph.img);
 
     if(_scale > 4)

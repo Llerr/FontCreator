@@ -120,7 +120,9 @@ void GlyphsWidget::receiveGlyphs(const GlyphsMap &glyphs, const QString &name)
     _fontName = name;
     for(auto &&glyph : glyphs)
     {
-        qDebug() << glyph;
+        qDebug() << glyph << ", Img pixels: " << glyph.img.pixelIndex(1,1)
+                 << ", " << glyph.img.pixelIndex(1,2);
+;
         _glyphs[glyph.key] = glyph;
     }
     _ui->lblFont->setText(_fontName);

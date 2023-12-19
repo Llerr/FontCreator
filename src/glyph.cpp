@@ -3,8 +3,22 @@
 
 #include "glyph.h"
 #include "qdebug.h"
+#include "qimage.h"
 #include "qnamespace.h"
+#include "qrgb.h"
 
+//----------------------------------------------------------------------------------------------------------------------
+QImage invert(QImage &img)
+{
+    for(int x = 0; x < img.width(); ++x)
+    {
+        for(int y = 0; y < img.height(); ++y)
+        {
+            img.setPixel(x,y, !img.pixelIndex(x,y));
+        }
+    }
+    return img;
+}
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -18,13 +32,15 @@ Glyph::Glyph():
     xAdvance(0),
     yAdvance(0)
 {
-
+    img.convertTo(QImage::Format_Mono);
+    img.setColor(1, qRgb(0,0,0));
+    img.setColor(0, qRgb(255,255,255));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 int Glyph::save(QJsonObject &json)
 {
-    QString fileName = QString::number(key, 16).rightJustified(4, '0') + ".xbm";
+    QString fileName = QString::number(key, 16).rightJustified(4, '0') + ".xpm";
 
     json["key"] = key;
     json["dX"] = dx;
@@ -34,8 +50,8 @@ int Glyph::save(QJsonObject &json)
     json["height"] = height;
     json["width"] = width;
     json["fileName"] = fileName;
-
-    if(img.save(fileName, "XBM") == false)
+    qDebug() << "Img pixel: " << img.pixel(1,1);
+    if(img.save(fileName) == false)
     {
         qWarning() << "Error save file: " << fileName;
         return -1;
@@ -77,7 +93,7 @@ int Glyph::load(QJsonObject &json)
     {
         height = json["height"].toInt();
         ++numLoaded;
-    }
+    };
     if (json.contains("width") && json["width"].isDouble())
     {
         width = json["width"].toInt();
@@ -87,10 +103,12 @@ int Glyph::load(QJsonObject &json)
     {
         QString fileName = json["fileName"].toString();
 //        QImage img(boundRect.size(), QImage::Format_Mono);
-
-        QImage tmpImg(fileName);
-        img = tmpImg.convertToFormat(QImage::Format_Mono, Qt::MonoOnly);
-        qDebug() << " Img:" << img << "tmpImg: " << tmpImg;
+//        img.format();
+//        QImage tmpImg(fileName);
+//        tmpImg.reinterpretAsFormat(QImage::Format_Mono);
+//        img = tmpImg.convertToFormat(QImage::Format_Mono);
+        img.load(fileName);
+        img.convertTo(QImage::Format_Mono);
         ++numLoaded;
     }
     return (numLoaded == 8)?0:-1;

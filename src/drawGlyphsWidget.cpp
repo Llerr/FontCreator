@@ -3,6 +3,7 @@
 
 #include "drawGlyphsWidget.h"
 #include "glyph.h"
+#include "qnamespace.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -262,6 +263,10 @@ void DrawGlyphsWidget::paintEvent(QPaintEvent *event)
             QSize imgSize(_glyphs[key].width*_scale, _glyphs[key].height*_scale);
             QRect drawRect(pointForImage, imgSize);
             painter.setPen(QPen(Qt::black));
+            painter.setBrush(QBrush(Qt::lightGray));
+            img.setColor(1, qRgba(0,0,0,0xFF) );
+            img.setColor(0, qRgba(0xFF,0xFF,0xFF,0) );
+            painter.setPen(Qt::black);
             painter.drawImage(drawRect, img);
 //            qDebug() << key << ": " << glyph;
 //            painter.drawText(cpointForImageolumn*_squareSize + (_squareSize / 2) - fontMetrics.horizontalAdvance(QChar(key))/2,
