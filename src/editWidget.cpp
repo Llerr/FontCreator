@@ -2,7 +2,10 @@
 #include <QScrollArea>
 #include <QPushButton>
 
+#include "drawEditWidget.h"
 #include "editWidget.h"
+#include "mainwindow.h"
+#include "qmainwindow.h"
 #include "ui_editWidget.h"
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -21,7 +24,12 @@ EditWidget::EditWidget(QWidget *parent) :
 
     connect(_ui->btnZoomIn,  qOverload<bool>(&QPushButton::clicked), _wgtEdit, &DrawEditWidget::on_btnZoomIn_clicked);
     connect(_ui->btnZoomOut, qOverload<bool>(&QPushButton::clicked), _wgtEdit, &DrawEditWidget::on_btnZoomOut_clicked);
-
+    if(nullptr != parent)
+    {
+        connect(_wgtEdit, SIGNAL(coordChange(QPoint, int)), parent, SLOT(coordChanged(QPoint, int)));
+//        connect(_wgtEdit, &DrawEditWidget::coordChange(QPoint), parent, &QMainWindow::coordChanged(QPoint));
+//        connect(_wgtEdit, &DrawEditWidget::coordChange, parent, &MainWindow::coordChanged);
+    }
 
 }
 
@@ -150,5 +158,6 @@ void EditWidget::updateEditFields()
 
     _wgtEdit->adjustSize();
     _wgtEdit->update();
+    _wgtEdit->setMouseTracking((_glyphIn.key == 0)?false:true);
 }
 

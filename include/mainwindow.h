@@ -8,6 +8,8 @@
 #include "glyph.h"
 #include "ioFontCode.h"
 #include "qdir.h"
+#include "qlabel.h"
+#include "qobjectdefs.h"
 
 class EditWidget;
 class GlyphsWidget;
@@ -27,7 +29,8 @@ public:
     ~MainWindow();
 
     Settings *settings() const;
-
+public slots:
+    void coordChanged(QPoint point, int idx);
 private slots:
     void openProject();
     void saveProject();
@@ -53,5 +56,8 @@ private:
 
     QDir _projectPath; ///< Имя директории для сохранения проекта
     QString _projName; ///< Имя проекта
+
+    QLabel *_coord; ///< Координаты курсора, в строке состояния
+    QLabel *_idx;   ///< Индекс точки, в строке состояния
 };
 #endif // MAINWINDOW_H

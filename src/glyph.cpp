@@ -3,8 +3,10 @@
 
 #include "glyph.h"
 #include "qdebug.h"
+#include "qglobal.h"
 #include "qimage.h"
 #include "qnamespace.h"
+#include "qpoint.h"
 #include "qrgb.h"
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -32,6 +34,24 @@ Glyph::Glyph():
     xAdvance(0),
     yAdvance(0)
 {
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void Glyph::fillPoints()
+{
+    points.clear();
+    points.reserve(img.width() * img.height());
+    for(int y = 0; y < img.height(); ++y)
+    {
+        for(int x = 0; x < img.width(); ++x)
+        {
+            int color = img.pixelIndex(x, y);
+            if(color > 0)
+            {
+                points.push_back(QPoint(x,y));
+            }
+        }
+    }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -122,8 +122,8 @@ void GlyphsWidget::receiveGlyphs(const GlyphsMap &glyphs, const QString &name)
     {
         qDebug() << glyph << ", Img pixels: " << glyph.img.pixelIndex(1,1)
                  << ", " << glyph.img.pixelIndex(1,2);
-;
         _glyphs[glyph.key] = glyph;
+        _glyphs[glyph.key].fillPoints();
     }
     _ui->lblFont->setText(_fontName);
     _wgtDraw->updateSize();

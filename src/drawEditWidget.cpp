@@ -1,7 +1,10 @@
 #include <QtWidgets>
 
 #include "drawEditWidget.h"
+#include "qfont.h"
 #include "qnamespace.h"
+#include "qpen.h"
+#include "qpoint.h"
 #include "qrgb.h"
 #include "qwidget.h"
 
@@ -38,7 +41,7 @@ void DrawEditWidget::on_btnZoomOut_clicked()
 //----------------------------------------------------------------------------------------------------------------------
 void DrawEditWidget::on_btnZoomIn_clicked()
 {
-    _scale += (_scale > 101)?0:1;
+    _scale += (_scale > 201)?0:1;
     adjustSize();
     update();
 }
@@ -48,7 +51,7 @@ void DrawEditWidget::on_btnZoomIn_clicked()
 //----------------------------------------------------------------------------------------------------------------------
 void DrawEditWidget::wheelEvent(QWheelEvent *event)
 {
-    if(event->modifiers() == Qt::NoModifier)
+    if(event->modifiers() == Qt::ControlModifier)
     {
         if(event->angleDelta().y() < 0)
         {
@@ -68,7 +71,28 @@ void DrawEditWidget::wheelEvent(QWheelEvent *event)
 //----------------------------------------------------------------------------------------------------------------------
 void DrawEditWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    qDebug() << "DrawTextWidget::mouseMoveEvent" << event->screenPos();
+    int idx = -1;
+
+    int width = _glyph.width * _scale;
+    int height = _glyph.height * _scale;
+
+    int iX = (event->x() - size().width()/2 + width/2)/_scale;
+    int iY = (event->y() - size().height()/2 + height/2)/_scale;
+    if(iX > _glyph.width || iX < 0 || iY > _glyph.height || iY < 0)
+    {
+        emit coordChange(QPoint(-1, -1), -1);
+        QWidget::mouseMoveEvent(event);
+        return;
+    }
+    QPoint point(iX, iY);
+    static QPoint oldPoint;
+    if(oldPoint != point)
+    {
+        oldPoint = point;
+        idx = _glyph.points.indexOf(QPoint(iX, iY));
+        emit coordChange(point, idx);
+//        qDebug() << "[" << iX << ", " << iY << "]" << "width: " << _glyph.width << ", height: " << _glyph.height;
+    }
     QWidget::mouseMoveEvent(event);
 }
 
@@ -108,11 +132,11 @@ void DrawEditWidget::paintEvent(QPaintEvent *event)
     QBrush brush(Qt::white);
 
     painter.setBrush(brush);
-    int width = _glyph.width * _scale;
-    int height = _glyph.height * _scale;
-    int x = size().width()/2 - width/2;
-    int y = size().height()/2 - height/2;
-    QRect rect(x,y, width, height);
+    int widthGlyph  = _glyph.width * _scale;
+    int heightGlyph = _glyph.height * _scale;
+    int x = size().width()/2 - widthGlyph/2;
+    int y = size().height()/2 - heightGlyph/2;
+    QRect rect(x,y, widthGlyph, heightGlyph);
     painter.drawRect(rect);
 
     _glyph.img.setColor(0, qRgba(0,0,0,0));
@@ -125,11 +149,33 @@ void DrawEditWidget::paintEvent(QPaintEvent *event)
         painter.setPen(QColor(127,127,127,127));
         for (int dx = 0; dx < _glyph.width; ++dx)
         {
-            painter.drawLine(x+dx*_scale, y, x+dx*_scale, y+height);
+            painter.drawLine(x+dx*_scale, y, x+dx*_scale, y+heightGlyph);
         }
         for (int dy = 0; dy < _glyph.height; ++dy)
         {
-            painter.drawLine(x, y + dy*_scale, x + width, y + dy*_scale);
+            painter.drawLine(x, y + dy*_scale, x + widthGlyph, y + dy*_scale);
+        }
+    }
+    if(_scale > 10)
+    {
+        painter.setPen(QPen(Qt::white));
+        QFont font = painter.font();
+        font.setPixelSize(10);
+        painter.setFont(font);
+        for (int dy = 0; dy < _glyph.height; ++dy)
+        {
+            for (int dx = 0; dx < _glyph.width; ++dx)
+            {
+                int idx = _glyph.points.indexOf(QPoint(dx,dy));
+                if(idx != -1)
+                {
+                    QRect rect = QRect(x + dx*_scale + 2, y + dy*_scale,
+                                       x + (dx + 1)*_scale, y + (dy + 1)*_scale);
+                    QString text = QString::number(_glyph.points.indexOf(QPoint(dx, dy)));
+//                    painter.drawText(rect, Qt::AlignBottom|Qt::AlignRight, text);
+                    painter.drawText(rect, text);
+                }
+            }
         }
     }
 

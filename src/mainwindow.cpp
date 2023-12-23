@@ -10,7 +10,10 @@
 #include "glyphsWidget.h"
 #include "editWidget.h"
 
+#include "qboxlayout.h"
 #include "qdir.h"
+#include "qlabel.h"
+#include "qwidget.h"
 #include "settings.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -63,6 +66,19 @@ MainWindow::MainWindow(QWidget *parent)
 
     _baseDir.setPath( _settings->basePath());
 
+//    QHBoxLayout *layoutStatus = new QHBoxLayout(_ui->statusbar);
+    QLabel *idxText = new QLabel("Индекс: ");
+    QLabel *coordText = new QLabel(" Координаты: ");
+    _idx = new QLabel("-");
+    _coord = new QLabel("(-, -)");
+    QWidget *empty = new QWidget;
+    statusBar()->addWidget(empty, 1);
+    statusBar()->addWidget(idxText);
+    statusBar()->addWidget(_idx);
+    statusBar()->addWidget(coordText);
+    statusBar()->addWidget(_coord);
+
+
     setWindowTitle(NEW_NAME);
 }
 
@@ -76,6 +92,29 @@ MainWindow::~MainWindow()
 Settings *MainWindow::settings() const
 {
     return _settings;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+//------------------------- P U B L I C   S L O T S --------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+void MainWindow::coordChanged(QPoint point, int idx)
+{
+//    qDebug() << "Coord changed: " << point;
+
+    QString text("-, -");
+    QString idxStr("-");
+    if(point.rx() > -1 )
+    {
+        text = "" + QString::number(point.rx()) +
+                ", " + QString::number(point.ry()) + "";
+    }
+    if(idx > -1)
+    {
+        idxStr = QString::number(idx);
+    }
+
+    _coord->setText(text);
+    _idx->setText(idxStr);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
