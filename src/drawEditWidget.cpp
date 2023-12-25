@@ -1,12 +1,10 @@
 #include <QtWidgets>
+#include <QFont>
+#include <QPoint>
 
 #include "drawEditWidget.h"
-#include "qfont.h"
+#include "qinputdialog.h"
 #include "qnamespace.h"
-#include "qpen.h"
-#include "qpoint.h"
-#include "qrgb.h"
-#include "qwidget.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -78,20 +76,20 @@ void DrawEditWidget::mouseMoveEvent(QMouseEvent *event)
 
     int iX = (event->x() - size().width()/2 + width/2)/_scale;
     int iY = (event->y() - size().height()/2 + height/2)/_scale;
-    if(iX > _glyph.width || iX < 0 || iY > _glyph.height || iY < 0)
-    {
-        emit coordChange(QPoint(-1, -1), -1);
-        QWidget::mouseMoveEvent(event);
-        return;
-    }
-    QPoint point(iX, iY);
     static QPoint oldPoint;
+    QPoint point(iX, iY);
     if(oldPoint != point)
     {
         oldPoint = point;
+        if(iX > (_glyph.width - 1) || iX < 0 || iY > (_glyph.height - 1) || iY < 0)
+        {
+            emit coordChange(QPoint(-1, -1), -1);
+            QWidget::mouseMoveEvent(event);
+            return;
+        }
+        oldPoint = point;
         idx = _glyph.points.indexOf(QPoint(iX, iY));
         emit coordChange(point, idx);
-//        qDebug() << "[" << iX << ", " << iY << "]" << "width: " << _glyph.width << ", height: " << _glyph.height;
     }
     QWidget::mouseMoveEvent(event);
 }
@@ -99,13 +97,19 @@ void DrawEditWidget::mouseMoveEvent(QMouseEvent *event)
 //----------------------------------------------------------------------------------------------------------------------
 void DrawEditWidget::mousePressEvent(QMouseEvent *event)
 {
+    int width = _glyph.width * _scale;
+    int height = _glyph.height * _scale;
+
+    int iX = (event->x() - size().width()/2 + width/2)/_scale;
+    int iY = (event->y() - size().height()/2 + height/2)/_scale;
+
     if (event->button() == Qt::LeftButton)
     {
-        int width = _glyph.width * _scale;
-        int height = _glyph.height * _scale;
 
-        int iX = (event->x() - size().width()/2 + width/2)/_scale;
-        int iY = (event->y() - size().height()/2 + height/2)/_scale;
+        if(iX > _glyph.img.width() - 1 || iY > _glyph.img.height() - 1)
+        {
+            return;
+        }
 
         auto color = _glyph.img.pixelIndex(iX, iY);
         qDebug() << "(" << iX << ", " << iY << ")  - cur color ("
@@ -127,6 +131,18 @@ void DrawEditWidget::mousePressEvent(QMouseEvent *event)
         qDebug() << "(" << iX << ", " << iY << ")  - set color ("
                  << Qt::hex << color << " ), " << _glyph.img.format();
         update();
+    }
+    else if(event->button() == Qt::RightButton)
+    {
+        auto color = _glyph.img.pixelIndex(iX, iY);
+        int idx = _glyph.points.indexOf(QPoint(iX, iY));
+        if(color)
+        {
+            int val = QInputDialog::getInt(this, "idx input", "индекс", idx, 0,
+                                           _glyph.points.size() - 1, 1, nullptr, Qt::Popup);
+            _glyph.points.swapItemsAt(idx, val);
+            update();
+        }
     }
     else
     {
