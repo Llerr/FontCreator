@@ -92,7 +92,9 @@ void DrawEditWidget::mouseMoveEvent(QMouseEvent *event)
         emit coordChange(point, idx);
     }
     QWidget::mouseMoveEvent(event);
-}
+}//        qDebug() << glyph << ", Img pixels: " << glyph.img.pixelIndex(1,1)
+//                 << ", " << glyph.img.pixelIndex(1,2);
+
 
 //----------------------------------------------------------------------------------------------------------------------
 void DrawEditWidget::mousePressEvent(QMouseEvent *event)

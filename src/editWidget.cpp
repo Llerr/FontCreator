@@ -58,7 +58,6 @@ void EditWidget::receiveGlyph(const Glyph &glyph)
 //----------------------------------------------------------------------------------------------------------------------
 void EditWidget::on_btnCancel_clicked()
 {
-    qDebug() << __func__;
     _glyphEdt = _glyphIn;
     updateEditFields();
 }
@@ -66,7 +65,6 @@ void EditWidget::on_btnCancel_clicked()
 //----------------------------------------------------------------------------------------------------------------------
 void EditWidget::on_btnOk_clicked()
 {
-    qDebug() << __func__;
     _glyphIn = _glyphEdt;
     emit editFinished(_glyphIn);
 }
@@ -85,7 +83,6 @@ void EditWidget::on_btnZoomIn_clicked()
 //----------------------------------------------------------------------------------------------------------------------
 void EditWidget::on_edtUnicode_editingFinished()
 {
-    qDebug() << __func__;
     int key = _ui->edtUnicode->text().toInt(nullptr, 16);
     if(key > 0)
         _glyphEdt.key = key;
@@ -94,7 +91,6 @@ void EditWidget::on_edtUnicode_editingFinished()
 //----------------------------------------------------------------------------------------------------------------------
 void EditWidget::on_edtXAdvance_editingFinished()
 {
-    qDebug() << __func__;
     int xAdvance = _ui->edtXAdvance->text().toInt();
     if(xAdvance > 0)
         _glyphEdt.xAdvance = xAdvance;
@@ -103,7 +99,6 @@ void EditWidget::on_edtXAdvance_editingFinished()
 //----------------------------------------------------------------------------------------------------------------------
 void EditWidget::on_edtWidth_editingFinished()
 {
-    qDebug() << __func__;
     int width = _ui->edtWidth->text().toInt();
     if(width > 0)
     {
@@ -116,7 +111,6 @@ void EditWidget::on_edtWidth_editingFinished()
 //----------------------------------------------------------------------------------------------------------------------
 void EditWidget::on_edtHeight_editingFinished()
 {
-    qDebug() << __func__;
     int height = _ui->edtHeight->text().toInt();
     if(height > 0)
     {
@@ -129,7 +123,6 @@ void EditWidget::on_edtHeight_editingFinished()
 //----------------------------------------------------------------------------------------------------------------------
 void EditWidget::on_edtDX_editingFinished()
 {
-    qDebug() << __func__;
     int dX = _ui->edtDX->text().toInt();
     if(dX > 0)
         _glyphEdt.dx = dX;
@@ -138,7 +131,6 @@ void EditWidget::on_edtDX_editingFinished()
 //----------------------------------------------------------------------------------------------------------------------
 void EditWidget::on_edtDY_editingFinished()
 {
-    qDebug() << __func__;
     int dY = _ui->edtDY->text().toInt();
     if(dY > 0)
         _glyphEdt.dy = dY;

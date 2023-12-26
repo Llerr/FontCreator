@@ -14,7 +14,7 @@ public:
     Glyph();
     friend QDebug operator<<(QDebug stream, const Glyph &gl);
 
-    void fillPoints();
+    void calcPoints();
 
     int save(QJsonObject &json);
     int load(QJsonObject &json);
