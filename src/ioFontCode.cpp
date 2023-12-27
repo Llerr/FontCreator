@@ -246,7 +246,7 @@ void IOFontCode::generateFontMorphBody(const QString &fontName)
     QDir path = filePath("src");
     qDebug() << "Generate body: " << path.path() << fontName;
     QFile file(path.filePath(fontName+".cpp"));
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    if (!file.open(QIODevice::ReadWrite | QIODevice::Text | QIODevice::Truncate))
     {
         return;
     }
@@ -259,27 +259,33 @@ void IOFontCode::generateFontMorphBody(const QString &fontName)
     {
         out << "pint_t pointsOf_" << QString::number(glyph.key, 16).rightJustified(4, '0') << "[] "
             << "/*" << QChar(glyph.key) << "*/" << " = {";
-        for(int i = 0; i < glyph.points.size() - 1; ++i)
+        QString strPoints;
+        for(auto &point: glyph.points)
         {
-            out << "{" << glyph.points[i].rx() << ", " << glyph.points[i].ry() << "}, ";
+            strPoints += "{";
+            strPoints += QString::number(point.rx());
+            strPoints += ", ";
+            strPoints += QString::number(point.ry());
+            strPoints += "}, ";
         }
-
-        out << glyph.points[glyph.points.size() - 1].rx();
-        out << ", ";
-        out << glyph.points[glyph.points.size() - 1].ry() << "}";
+        strPoints.chop(2);
+        out << strPoints;
         out << "}; ///< " << QChar(glyph.key) << "\n";
     }
     out << "\n";
     out << "// symbols\n";
     out << "symbol_t " << fontName << "Symbols[] = {";
+    QString strSymbols;
     for(auto &glyph: *_glyphs)
     {
-        out << "{";
-        out << "'" << QChar(glyph.key) << "', ";
-        out << glyph.points.size() << ", ";
-        out << "pointsOf_" << QString::number(glyph.key, 16).rightJustified(4, '0');
-        out << "},";
+        strSymbols += "{";
+        strSymbols += "'" + QString(QChar(glyph.key)) + "', ";
+        strSymbols += QString::number(glyph.points.size()) + ", ";
+        strSymbols += "pointsOf_" + QString::number(glyph.key, 16).rightJustified(4, '0');
+        strSymbols += "}, ";
     }
+    strSymbols.chop(2);
+    out << strSymbols;
     out << "};\n";
     out << _settings->genPostfix() << "\n\n";
 }
