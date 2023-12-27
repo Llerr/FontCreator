@@ -21,10 +21,15 @@ public:
 //    void setSettings(const QSettings &newSettings);
 
     const QString &basePath() const;
+    const QString &baseFileNameCurrent() const;
     const QString &baseFileName() const;
+    const QString &baseFileNameMorph() const;
+
+    const QString &baseFileBodyCurrent() const;
     const QString &baseFileBody() const;
+    const QString &baseFileBodyMorph() const;
     bool baseGenPathStruct() const;
-    bool baseGenPixelCoords() const;
+    bool baseGenMorphFont() const;
 
     const QString &genPrefix() const;
     bool genPointer() const;
@@ -53,7 +58,7 @@ private:
     QString _baseFileName;
     QString _baseFileNameMorph;
     bool _baseGenPathStruct;
-    bool _baseGenPixelCoords;
+    bool _baseGenMorphFont;
     // Содержимое
     QString _baseFileBody;
     QString _baseFileBodyMorph;

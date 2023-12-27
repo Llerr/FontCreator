@@ -1,10 +1,11 @@
 #include <QtWidgets>
 #include <QFont>
 #include <QPoint>
+#include "QInputDialog"
 
 #include "drawEditWidget.h"
-#include "qinputdialog.h"
-#include "qnamespace.h"
+#include "mainwindow.h"
+#include "settings.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -134,7 +135,7 @@ void DrawEditWidget::mousePressEvent(QMouseEvent *event)
                  << Qt::hex << color << " ), " << _glyph.img.format();
         update();
     }
-    else if(event->button() == Qt::RightButton)
+    else if(event->button() == Qt::RightButton && MainWindow::settings()->baseGenMorphFont())
     {
         auto color = _glyph.img.pixelIndex(iX, iY);
         int idx = _glyph.points.indexOf(QPoint(iX, iY));
@@ -185,7 +186,7 @@ void DrawEditWidget::paintEvent(QPaintEvent *event)
             painter.drawLine(x, y + dy*_scale, x + widthGlyph, y + dy*_scale);
         }
     }
-    if(_scale > 10)
+    if(_scale > 10 && MainWindow::settings()->baseGenMorphFont())
     {
         painter.setPen(QPen(Qt::white));
         QFont font = painter.font();

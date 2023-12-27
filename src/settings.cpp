@@ -77,9 +77,22 @@ bool Settings::baseGenPathStruct() const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-bool Settings::baseGenPixelCoords() const
+bool Settings::baseGenMorphFont() const
 {
-    return _baseGenPixelCoords;
+    return _baseGenMorphFont;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+const QString &Settings::baseFileBodyCurrent() const
+{
+    if(_baseGenMorphFont)
+    {
+        return _baseFileBodyMorph;
+    }
+    else
+    {
+        return _baseFileBody;
+    }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -89,9 +102,34 @@ const QString &Settings::baseFileBody() const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+const QString &Settings::baseFileBodyMorph() const
+{
+    return _baseFileBodyMorph;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+const QString &Settings::baseFileNameCurrent() const
+{
+    if(_baseGenMorphFont)
+    {
+        return _baseFileNameMorph;
+    }
+    else
+    {
+        return _baseFileName;
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 const QString &Settings::baseFileName() const
 {
     return _baseFileName;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+const QString &Settings::baseFileNameMorph() const
+{
+    return _baseFileNameMorph;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -135,7 +173,7 @@ void Settings::saveSettings()
     _baseFileName       = _ui->edtFileName->text();
     _baseFileNameMorph  = _ui->edtFileNameMorph->text();
     _baseGenPathStruct  = _ui->chkGenPathStruct->isChecked();
-    _baseGenPixelCoords = _ui->chkGenPixelCoords->isChecked();
+    _baseGenMorphFont = _ui->chkGenPixelCoords->isChecked();
 
     _settings.setValue("Base/Path",           _basePath         );
     _settings.setValue("Base/FileName",       _baseFileName     );
@@ -177,13 +215,13 @@ void Settings::loadSettings()
     _baseFileName       = _settings.value("Base/FileName").toString();
     _baseFileNameMorph  = _settings.value("Base/FileNameMorph").toString();
     _baseGenPathStruct  = _settings.value("Base/GenPathStruct").toBool();
-    _baseGenPixelCoords = _settings.value("Base/GenPixelCoords").toBool();
+    _baseGenMorphFont = _settings.value("Base/GenPixelCoords").toBool();
 
     _ui->edtPath->setText(_basePath);
     _ui->edtFileName->setText(_baseFileName);
     _ui->edtFileNameMorph->setText(_baseFileNameMorph);
     _ui->chkGenPathStruct->setChecked(_baseGenPathStruct);
-    _ui->chkGenPixelCoords->setChecked(_baseGenPixelCoords);
+    _ui->chkGenPixelCoords->setChecked(_baseGenMorphFont);
 
 
     // Содержимое

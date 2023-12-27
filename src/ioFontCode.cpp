@@ -1,4 +1,5 @@
 
+#include "qchar.h"
 #include "settings.h"
 #include "ioFontCode.h"
 
@@ -38,24 +39,27 @@ void IOFontCode::saveFont(const QDir &baseDir, const QString &fontName)
 
     generateBaseFile();
     generateFontHeader(fontName);
-    generateFontBody(fontName);
+    if(_settings->baseGenMorphFont())
+        generateFontMorphBody(fontName);
+    else
+        generateFontBody(fontName);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 void IOFontCode::generateBaseFile()
 {
-    qDebug() << "Generate base file: " << _settings->baseFileName();
-    if(_settings->baseFileName().isEmpty())
+    qDebug() << "Generate base file: " << _settings->baseFileNameCurrent();
+    if(_settings->baseFileNameCurrent().isEmpty())
     {
         return;
     }
-    QFile file(_basePath.filePath(_settings->baseFileName()));
+    QFile file(_basePath.filePath(_settings->baseFileNameCurrent()));
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         return;
     }
     QTextStream out(&file);
-    out << _settings->baseFileBody();
+    out << _settings->baseFileBodyCurrent();
     qDebug() << "Base file saved.";
 }
 
@@ -74,26 +78,20 @@ void IOFontCode::generateFontHeader(const QString &fontName)
     out << "#ifndef _" << fontName.toUpper() << "_FONT_H_\n";
     out << "#define _" << fontName.toUpper() << "_FONT_H_\n\n";
 
-    out << "#include \" " << _settings->baseFileName() << "\"\n\n";
-    if(_settings->genGenFunc())
-    {
-        out << "#ifdef __cplusplus\n"
-               "extern \"C\" {\n"
-               "#endif\n\n";
+    out << "#include \" " << _settings->baseFileNameCurrent() << "\"\n\n";
 
-        out << "dgx_font_t *" << fontName << "();\n\n";
-        out << "#ifdef __cplusplus\n"
-               "}\n"
-               "#endif\n\n";
+    if(_settings->baseGenMorphFont())
+    {
+        genBaseMorphHeader(out, fontName);
     }
     else
     {
-        out << "extern const dgx_font_t " << fontName << ";\n\n";
+        genBaseHeader(out, fontName);
     }
-
     out << "#endif // _" << fontName.toUpper() << "_FONT_H_\n";
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 void IOFontCode::generateFontBody(const QString &fontName)
 {
 
@@ -242,7 +240,79 @@ void IOFontCode::generateFontBody(const QString &fontName)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+void IOFontCode::generateFontMorphBody(const QString &fontName)
+{
+
+    QDir path = filePath("src");
+    qDebug() << "Generate body: " << path.path() << fontName;
+    QFile file(path.filePath(fontName+".cpp"));
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        return;
+    }
+    QTextStream out(&file);
+    out << _settings->genPrefix() << "\n\n";
+    out << "#include \" " << _settings->baseFileNameCurrent() << "\"\n\n";
+
+    out << "// points\n";
+    for(auto &glyph: *_glyphs)
+    {
+        out << "pint_t pointsOf_" << QString::number(glyph.key, 16).rightJustified(4, '0') << "[] "
+            << "/*" << QChar(glyph.key) << "*/" << " = {";
+        for(int i = 0; i < glyph.points.size() - 1; ++i)
+        {
+            out << "{" << glyph.points[i].rx() << ", " << glyph.points[i].ry() << "}, ";
+        }
+
+        out << glyph.points[glyph.points.size() - 1].rx();
+        out << ", ";
+        out << glyph.points[glyph.points.size() - 1].ry() << "}";
+        out << "}; ///< " << QChar(glyph.key) << "\n";
+    }
+    out << "\n";
+    out << "// symbols\n";
+    out << "symbol_t " << fontName << "Symbols[] = {";
+    for(auto &glyph: *_glyphs)
+    {
+        out << "{";
+        out << "'" << QChar(glyph.key) << "', ";
+        out << glyph.points.size() << ", ";
+        out << "pointsOf_" << QString::number(glyph.key, 16).rightJustified(4, '0');
+        out << "},";
+    }
+    out << "};\n";
+    out << _settings->genPostfix() << "\n\n";
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 //------------------------------------ P R O T E C T E D ---------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+void IOFontCode::genBaseHeader(QTextStream &out, const QString &fontName)
+{
+    if(_settings->genGenFunc())
+    {
+        out << "#ifdef __cplusplus\n"
+               "extern \"C\" {\n"
+               "#endif\n\n";
+
+        out << "dgx_font_t *" << fontName << "();\n\n";
+
+        out << "#ifdef __cplusplus\n"
+               "}\n"
+               "#endif\n\n";
+    }
+    else
+    {
+        out << "extern const dgx_font_t " << fontName << ";\n\n";
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void IOFontCode::genBaseMorphHeader(QTextStream &out, const QString &fontName)
+{
+    out << "extern const symbol_t " << fontName << "Symbols[];\n\n";
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 QDir IOFontCode::filePath(const QString &&dir)
 {
