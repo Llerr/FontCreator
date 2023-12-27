@@ -23,6 +23,7 @@
 static const QString programName(QStringLiteral("Font creator"));
 static const QString version(QStringLiteral("0.0.1 "));
 
+Settings *MainWindow::_settings = nullptr;
 
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -89,7 +90,7 @@ MainWindow::~MainWindow()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-Settings *MainWindow::settings() const
+Settings *MainWindow::settings()
 {
     return _settings;
 }

@@ -24,6 +24,7 @@ public:
     const QString &baseFileName() const;
     const QString &baseFileBody() const;
     bool baseGenPathStruct() const;
+    bool baseGenPixelCoords() const;
 
     const QString &genPrefix() const;
     bool genPointer() const;
@@ -41,6 +42,7 @@ private:
     Ui::Settings *_ui;
 
     Highlighter *_highliterMain;
+    Highlighter *_highliterMainMorph;
     Highlighter *_highliterPrefix;
     Highlighter *_highliterPostfix;
 
@@ -49,9 +51,12 @@ private:
     // Основное
     QString _basePath;
     QString _baseFileName;
-    QString _baseFileBody;
+    QString _baseFileNameMorph;
     bool _baseGenPathStruct;
+    bool _baseGenPixelCoords;
     // Содержимое
+    QString _baseFileBody;
+    QString _baseFileBodyMorph;
     QString _genPrefix;
     bool _genPointer;
     bool _genGenFunc;
@@ -60,3 +65,5 @@ private:
 };
 
 #endif // SETTINGS_H
+
+

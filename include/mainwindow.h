@@ -28,7 +28,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    Settings *settings() const;
+    static Settings *settings();
+
+
 public slots:
     void coordChanged(QPoint point, int idx);
 private slots:
@@ -49,7 +51,7 @@ private:
     GlyphsWidget *_wgtGlyphs; ///< Выбраные глифы шрифта
     EditWidget   *_wgtEdit;   ///< Редактируемый глиф
 
-    Settings *_settings; ///< Окно настроек
+    static Settings *_settings; ///< Окно настроек
 
     QDir _baseDir;
     IOFontCode _generator; ///< Класс создания кода шрифта
