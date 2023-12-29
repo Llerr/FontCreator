@@ -194,7 +194,7 @@ void DrawEditWidget::paintEvent(QPaintEvent *event)
         }
         for (int dy = 0; dy < _glyph.height; ++dy)
         {
-            painter.setPen((dy == _glyph.baseLine)?QPen(Qt::red, 2):QPen(Qt::gray));
+            painter.setPen((dy == (-_glyph.dy))?QPen(Qt::red, 2):QPen(Qt::gray));
             painter.drawLine(x, y + dy*_scale, x + widthGlyph, y + dy*_scale);
         }
     }
