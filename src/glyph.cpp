@@ -66,6 +66,8 @@ int Glyph::save(QJsonObject &json)
     json["yAdvance"] = yAdvance;
     json["height"] = height;
     json["width"] = width;
+    json["baseLine"] = baseLine;
+
     json["fileName"] = fileNameImg;
     json["fileNamePts"] = fileNamePts;
     qDebug() << "Key: " << key << "Img pixel (0, 0): " << img.pixelIndex(0,0) << ", fmt: " << img.format();
@@ -125,6 +127,11 @@ int Glyph::load(QJsonObject &json)
         width = json["width"].toInt();
         ++numLoaded;
     }
+    if (json.contains("baseLine") && json["baseLine"].isDouble())
+    {
+        baseLine = json["baseLine"].toInt();
+        ++numLoaded;
+    }
     if (json.contains("fileName") && json["fileName"].isString())
     {
         QString fileName = json["fileName"].toString();
@@ -147,7 +154,7 @@ int Glyph::load(QJsonObject &json)
         QDataStream stream(&filePts);
         stream >> points;
     }
-    return (numLoaded == 9)?0:-1;
+    return (numLoaded == 10)?0:-1;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
