@@ -75,8 +75,13 @@ void DrawEditWidget::mouseMoveEvent(QMouseEvent *event)
     int width = _glyph.width * _scale;
     int height = _glyph.height * _scale;
 
-    int iX = (event->x() - size().width()/2 + width/2)/_scale;
-    int iY = (event->y() - size().height()/2 + height/2)/_scale;
+    int iX = event->x() - size().width()/2 + width/2;
+    int iY = event->y() - size().height()/2 + height/2;
+    if(iX >= 0 && iY >= 0)
+    {
+        iX = iX/_scale;
+        iY = iY/_scale;
+    }
     static QPoint oldPoint;
     QPoint point(iX, iY);
     if(oldPoint != point)
@@ -103,16 +108,21 @@ void DrawEditWidget::mousePressEvent(QMouseEvent *event)
     int width = _glyph.width * _scale;
     int height = _glyph.height * _scale;
 
-    int iX = (event->x() - size().width()/2 + width/2)/_scale;
-    int iY = (event->y() - size().height()/2 + height/2)/_scale;
+    int iX = event->x() - size().width()/2 + width/2;
+    int iY = event->y() - size().height()/2 + height/2;
+    if(iX >= 0 && iY >= 0)
+    {
+        iX = iX/_scale;
+        iY = iY/_scale;
+    }
+
+    if(iX > (_glyph.width - 1) || iX < 0 || iY > (_glyph.height - 1) || iY < 0)
+    {
+        return;
+    }
 
     if (event->button() == Qt::LeftButton)
     {
-
-        if(iX > _glyph.img.width() - 1 || iY > _glyph.img.height() - 1)
-        {
-            return;
-        }
 
         auto color = _glyph.img.pixelIndex(iX, iY);
         qDebug() << "(" << iX << ", " << iY << ")  - cur color ("
