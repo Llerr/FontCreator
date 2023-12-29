@@ -206,9 +206,9 @@ void DrawGlyphsWidget::mouseDoubleClickEvent(QMouseEvent *event)
 //----------------------------------------------------------------------------------------------------------------------
 void DrawGlyphsWidget::paintEvent(QPaintEvent *event)
 {
+    QPalette pal = palette();
     QPainter painter(this);
     int key;
-//    painter.fillRect(event->rect(), QBrush(Qt::white));
     int sqSize = _squareSize * _scale;
     QRect redrawRect = event->rect();
     int beginRow = redrawRect.top()/sqSize;
@@ -217,7 +217,7 @@ void DrawGlyphsWidget::paintEvent(QPaintEvent *event)
     int endColumn = redrawRect.right()/sqSize;
 
     painter.setPen(QPen(Qt::gray));
-    painter.setBrush(QBrush(Qt::white));
+    painter.setBrush(pal.base());
     for (int row = beginRow; row <= endRow; ++row)
     {
         for (int column = beginColumn; column <= endColumn; ++column)
@@ -236,20 +236,22 @@ void DrawGlyphsWidget::paintEvent(QPaintEvent *event)
             int idx = row*_columns + column;
             painter.setClipRect(column*sqSize, row*sqSize, sqSize, sqSize);
 
-            if (_Idxs.contains(idx))
-                painter.fillRect(column*sqSize + 1, row*sqSize + 1, sqSize, sqSize, QBrush(Qt::lightGray));
-
             key = getByIndex(_glyphs, idx);
             QImage img = _glyphs[key].img;
             QPoint pointForImage(column*sqSize + (sqSize / 2) - _glyphs[key].width*_scale/2,
                               (row + 1)*sqSize - 4 + _glyphs[key].dy*_scale);
             QSize imgSize(_glyphs[key].width*_scale, _glyphs[key].height*_scale);
             QRect drawRect(pointForImage, imgSize);
-            painter.setPen(QPen(Qt::black));
-            painter.setBrush(QBrush(Qt::lightGray));
-            img.setColor(1, qRgba(0,0,0,0xFF) );
-            img.setColor(0, qRgba(0xFF,0xFF,0xFF,0) );
-            painter.setPen(Qt::black);
+
+            img.setColor(1, pal.text().color().rgba() );
+            img.setColor(0, qRgba(0, 0, 0, 0) );
+            if (_Idxs.contains(idx))
+            {
+                painter.fillRect(column*sqSize + 1, row*sqSize + 1, sqSize, sqSize, pal.highlight());
+                img.setColor(1, pal.highlightedText().color().rgba() );
+            }
+
+
             painter.drawImage(drawRect, img);
         }
     }
