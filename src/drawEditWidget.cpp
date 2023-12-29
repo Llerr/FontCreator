@@ -5,6 +5,7 @@
 
 #include "drawEditWidget.h"
 #include "mainwindow.h"
+#include "qnamespace.h"
 #include "settings.h"
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -186,13 +187,14 @@ void DrawEditWidget::paintEvent(QPaintEvent *event)
 
     if(_scale > 4)
     {
-        painter.setPen(QColor(127,127,127,127));
+        painter.setPen(Qt::gray);
         for (int dx = 0; dx < _glyph.width; ++dx)
         {
             painter.drawLine(x+dx*_scale, y, x+dx*_scale, y+heightGlyph);
         }
         for (int dy = 0; dy < _glyph.height; ++dy)
         {
+            painter.setPen((dy == _glyph.baseLine)?QPen(Qt::red, 2):QPen(Qt::gray));
             painter.drawLine(x, y + dy*_scale, x + widthGlyph, y + dy*_scale);
         }
     }

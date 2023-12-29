@@ -293,7 +293,7 @@ void FontWidget::addGlyphsClick()
 
         painter.drawText(-boundRect.topLeft(), QString(symb));
         painter.end();
-        img.save(QString::number(key,16) + ".xpm");
+//        img.save(QString::number(key,16) + ".xpm");
         glyph.key = key;
         glyph.img = img;
         glyph.width = boundRect.size().width();
@@ -302,6 +302,8 @@ void FontWidget::addGlyphsClick()
         glyph.dy = boundRect.topLeft().ry();
         glyph.xAdvance = fm.horizontalAdvance(symb);
         glyph.yAdvance = fm.lineSpacing();
+        glyph.baseLine = fm.ascent();
+//        qDebug() << "descent: " << fm.descent() << "ascent: " << fm.ascent();
 
         _glyphs[key] = glyph;
     }
