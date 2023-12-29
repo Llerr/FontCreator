@@ -1,11 +1,11 @@
 #include <QJsonObject>
 #include <QImage>
+#include <QDebug>
+#include <QPoint>
+#include <QFile>
+#include <QDataStream>
 
 #include "glyph.h"
-#include "qdebug.h"
-#include "qimage.h"
-#include "qnamespace.h"
-#include "qrgb.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 QImage invert(QImage &img)
@@ -35,9 +35,29 @@ Glyph::Glyph():
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+void Glyph::calcPoints()
+{
+    qDebug() << __FUNCTION__;
+    points.clear();
+    points.reserve(img.width() * img.height());
+    for(int y = 0; y < img.height(); ++y)
+    {
+        for(int x = 0; x < img.width(); ++x)
+        {
+            int color = img.pixelIndex(x, y);
+            if(color > 0)
+            {
+                points.push_back(QPoint(x,y));
+            }
+        }
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 int Glyph::save(QJsonObject &json)
 {
-    QString fileName = QString::number(key, 16).rightJustified(4, '0') + ".xpm";
+    QString fileNameImg = QString::number(key, 16).rightJustified(4, '0') + ".xbm";
+    QString fileNamePts = QString::number(key, 16).rightJustified(4, '0') + ".vec";
 
     json["key"] = key;
     json["dX"] = dx;
@@ -46,14 +66,23 @@ int Glyph::save(QJsonObject &json)
     json["yAdvance"] = yAdvance;
     json["height"] = height;
     json["width"] = width;
-    json["fileName"] = fileName;
-    qDebug() << "Img pixel: " << img.pixel(1,1);
-    if(img.save(fileName) == false)
+    json["fileName"] = fileNameImg;
+    json["fileNamePts"] = fileNamePts;
+    qDebug() << "Key: " << key << "Img pixel (0, 0): " << img.pixelIndex(0,0) << ", fmt: " << img.format();
+    if(img.save(fileNameImg) == false)
     {
-        qWarning() << "Error save file: " << fileName;
+        qWarning() << "Error save file: " << fileNameImg;
         return -1;
     }
-
+    QFile filePts(fileNamePts);
+    filePts.open(QIODevice::WriteOnly);
+    if(!filePts.isOpen())
+    {
+        qWarning() << "Can`t save points sequence";
+        return 0;
+    }
+    QDataStream stream(&filePts);
+    stream << points;
     return 0;
 }
 
@@ -101,9 +130,24 @@ int Glyph::load(QJsonObject &json)
         QString fileName = json["fileName"].toString();
         img.load(fileName);
         img.convertTo(QImage::Format_Mono);
+        qDebug() << "Key: " << key << "Img pixel (0, 0): " << img.pixelIndex(0,0) << ", fmt: " << img.format();
         ++numLoaded;
     }
-    return (numLoaded == 8)?0:-1;
+    if (json.contains("fileNamePts") && json["fileNamePts"].isString())
+    {
+        QString fileNamePts = json["fileNamePts"].toString();
+        ++numLoaded;
+        QFile filePts(fileNamePts);
+        filePts.open(QIODevice::ReadOnly);
+        if(!filePts.isOpen())
+        {
+            qWarning() << "Can`t load points sequence";
+            return 0;
+        }
+        QDataStream stream(&filePts);
+        stream >> points;
+    }
+    return (numLoaded == 9)?0:-1;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

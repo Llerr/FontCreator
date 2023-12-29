@@ -4,6 +4,7 @@
 #include <QWidget>
 
 #include "glyph.h"
+#include "qpoint.h"
 
 class DrawEditWidget : public QWidget
 {
@@ -19,6 +20,7 @@ public:
     void on_btnZoomIn_clicked();
 
 signals:
+    void coordChange(QPoint point, int idx);
 protected:
     void wheelEvent(QWheelEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;

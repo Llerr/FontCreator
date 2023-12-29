@@ -21,9 +21,15 @@ public:
 //    void setSettings(const QSettings &newSettings);
 
     const QString &basePath() const;
+    const QString &baseFileNameCurrent() const;
     const QString &baseFileName() const;
+    const QString &baseFileNameMorph() const;
+
+    const QString &baseFileBodyCurrent() const;
     const QString &baseFileBody() const;
+    const QString &baseFileBodyMorph() const;
     bool baseGenPathStruct() const;
+    bool baseGenMorphFont() const;
 
     const QString &genPrefix() const;
     bool genPointer() const;
@@ -41,6 +47,7 @@ private:
     Ui::Settings *_ui;
 
     Highlighter *_highliterMain;
+    Highlighter *_highliterMainMorph;
     Highlighter *_highliterPrefix;
     Highlighter *_highliterPostfix;
 
@@ -49,9 +56,12 @@ private:
     // Основное
     QString _basePath;
     QString _baseFileName;
-    QString _baseFileBody;
+    QString _baseFileNameMorph;
     bool _baseGenPathStruct;
+    bool _baseGenMorphFont;
     // Содержимое
+    QString _baseFileBody;
+    QString _baseFileBodyMorph;
     QString _genPrefix;
     bool _genPointer;
     bool _genGenFunc;
@@ -60,3 +70,5 @@ private:
 };
 
 #endif // SETTINGS_H
+
+
