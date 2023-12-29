@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>514</width>
+    <width>611</width>
     <height>360</height>
    </rect>
   </property>
@@ -34,7 +34,8 @@
         <string>Отменить</string>
        </property>
        <property name="icon">
-        <iconset theme="dialog-cancel"/>
+        <iconset theme="dialog-cancel">
+         <normaloff>.</normaloff>.</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -50,7 +51,8 @@
         <string>Принять</string>
        </property>
        <property name="icon">
-        <iconset theme="dialog-ok"/>
+        <iconset theme="dialog-ok">
+         <normaloff>.</normaloff>.</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -79,7 +81,8 @@
         <string>Уменьшить</string>
        </property>
        <property name="icon">
-        <iconset theme="zoom-out"/>
+        <iconset theme="zoom-out">
+         <normaloff>.</normaloff>.</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -98,7 +101,8 @@
         <string>Увеличить</string>
        </property>
        <property name="icon">
-        <iconset theme="zoom-in"/>
+        <iconset theme="zoom-in">
+         <normaloff>.</normaloff>.</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -133,7 +137,14 @@
       <widget class="QLineEdit" name="edtHeight"/>
      </item>
      <item row="1" column="5">
-      <widget class="QLineEdit" name="edtDX"/>
+      <widget class="QSpinBox" name="edtDX">
+       <property name="minimum">
+        <number>-1024</number>
+       </property>
+       <property name="maximum">
+        <number>1024</number>
+       </property>
+      </widget>
      </item>
      <item row="1" column="2">
       <widget class="QLabel" name="label_3">
@@ -166,7 +177,14 @@
       </widget>
      </item>
      <item row="1" column="7">
-      <widget class="QLineEdit" name="edtDY"/>
+      <widget class="QSpinBox" name="edtDY">
+       <property name="minimum">
+        <number>-1024</number>
+       </property>
+       <property name="maximum">
+        <number>1024</number>
+       </property>
+      </widget>
      </item>
      <item row="0" column="2">
       <widget class="QLabel" name="label_12">

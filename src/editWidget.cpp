@@ -6,6 +6,7 @@
 #include "editWidget.h"
 #include "mainwindow.h"
 #include "qmainwindow.h"
+#include "qspinbox.h"
 #include "ui_editWidget.h"
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -24,6 +25,8 @@ EditWidget::EditWidget(QWidget *parent) :
 
     connect(_ui->btnZoomIn,  qOverload<bool>(&QPushButton::clicked), _wgtEdit, &DrawEditWidget::on_btnZoomIn_clicked);
     connect(_ui->btnZoomOut, qOverload<bool>(&QPushButton::clicked), _wgtEdit, &DrawEditWidget::on_btnZoomOut_clicked);
+    connect(_ui->edtDX,qOverload<int>(&QSpinBox::valueChanged), this, &EditWidget::edtDX_changed);
+    connect(_ui->edtDY,qOverload<int>(&QSpinBox::valueChanged), this, &EditWidget::edtDY_changed);
     if(nullptr != parent)
     {
         connect(_wgtEdit, SIGNAL(coordChange(QPoint, int)), parent, SLOT(coordChanged(QPoint, int)));
@@ -121,19 +124,18 @@ void EditWidget::on_edtHeight_editingFinished()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void EditWidget::on_edtDX_editingFinished()
+void EditWidget::edtDX_changed(int val)
 {
-    int dX = _ui->edtDX->text().toInt();
-    if(dX > 0)
-        _glyphEdt.dx = dX;
+    int dX = val;
+    _glyphEdt.dx = dX;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void EditWidget::on_edtDY_editingFinished()
+void EditWidget::edtDY_changed(int val)
 {
-    int dY = _ui->edtDY->text().toInt();
-    if(dY > 0)
-        _glyphEdt.dy = dY;
+    int dY = val;
+    _glyphEdt.dy = dY;
+    _wgtEdit->update();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -145,8 +147,8 @@ void EditWidget::updateEditFields()
     _ui->edtXAdvance->setText(QString("%1").arg(_glyphEdt.xAdvance));
     _ui->edtWidth->setText(QString("%1").arg(_glyphEdt.width));
     _ui->edtHeight->setText(QString("%1").arg(_glyphEdt.height));
-    _ui->edtDX->setText(QString("%1").arg(_glyphEdt.dx));
-    _ui->edtDY->setText(QString("%1").arg(_glyphEdt.dy));
+    _ui->edtDX->setValue(_glyphEdt.dx);
+    _ui->edtDY->setValue(_glyphEdt.dy);
 
     _wgtEdit->adjustSize();
     _wgtEdit->update();
