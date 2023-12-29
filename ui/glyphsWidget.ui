@@ -37,7 +37,7 @@
         <string>Удалить</string>
        </property>
        <property name="icon">
-        <iconset theme="remove"/>
+        <iconset theme="list-remove"/>
        </property>
        <property name="iconSize">
         <size>
@@ -114,7 +114,8 @@
         <string>1:1</string>
        </property>
        <property name="icon">
-        <iconset theme="zoom-original"/>
+        <iconset theme="zoom-original">
+         <normaloff>.</normaloff>.</iconset>
        </property>
        <property name="iconSize">
         <size>

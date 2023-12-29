@@ -74,13 +74,12 @@
         <string>Открыть</string>
        </property>
        <property name="icon">
-        <iconset theme="fileopen">
-         <normaloff>.</normaloff>.</iconset>
+        <iconset theme="document-open"/>
        </property>
        <property name="iconSize">
         <size>
-         <width>18</width>
-         <height>18</height>
+         <width>19</width>
+         <height>19</height>
         </size>
        </property>
       </widget>
@@ -164,13 +163,12 @@
         <string>Добавить</string>
        </property>
        <property name="icon">
-        <iconset theme="add">
-         <normaloff>.</normaloff>.</iconset>
+        <iconset theme="list-add"/>
        </property>
        <property name="iconSize">
         <size>
-         <width>18</width>
-         <height>18</height>
+         <width>19</width>
+         <height>19</height>
         </size>
        </property>
       </widget>
