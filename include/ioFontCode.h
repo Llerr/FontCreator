@@ -1,5 +1,5 @@
-#ifndef IOFONTGODE_H
-#define IOFONTGODE_H
+#ifndef IOFONTCODE_H
+#define IOFONTCODE_H
 
 #include <QString>
 #include <QDir>
@@ -8,10 +8,10 @@
 
 class Settings;
 
-class IOFontGode
+class IOFontCode
 {
 public:
-    IOFontGode(GlyphsMap *glyphs = nullptr, const Settings *sets = nullptr);
+    IOFontCode(GlyphsMap *glyphs = nullptr, const Settings *sets = nullptr);
 
     void setGlyphs(GlyphsMap *newGlyphs);
     void setSettings(const Settings *newSettings);
@@ -22,7 +22,13 @@ public:
     void generateBaseFile();
     void generateFontHeader(const QString &fontName);
     void generateFontBody(const QString &fontName);
+
+    void generateBaseFileMorph();
+    void generateFontMorphBody(const QString &fontName);
+
 protected:
+    void genBaseHeader(QTextStream &out, const QString &fontName);
+    void genBaseMorphHeader(QTextStream &out, const QString &fontName);
     QDir filePath(const QString &&dir);
     void outImage(QTextStream &out, QImage &img, uint16_t &idx);
     /// Вывод байта в 16-ричной системе.
@@ -36,4 +42,4 @@ private:
     const Settings *_settings; ///< Настройки
 };
 
-#endif // IOFONTGODE_H
+#endif // IOFONTCODE_H

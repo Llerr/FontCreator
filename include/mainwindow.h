@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QMap>
 #include <QDir>
+#include <QLabel>
 
 #include "glyph.h"
 #include "ioFontCode.h"

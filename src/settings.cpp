@@ -1,5 +1,6 @@
 #include <QDebug>
 #include <QFileDialog>
+#include <QPushButton>
 
 #include "settings.h"
 #include "highlighter.h"
