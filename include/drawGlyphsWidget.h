@@ -21,6 +21,7 @@ public:
 
     void updateSize();
     void calculateSquareSize();
+    void resetSelected();
 public slots:
     void on_btnDel_clicked();
     void on_btnPlus_clicked();
@@ -44,6 +45,8 @@ private:
     int _lastIdx;
     QSet<int> _Idxs;
     int _squareSize;
+
+    int _key = -1; ///< Номер глифа отправленого на редактирование
 
     GlyphsMap &_glyphs;
 

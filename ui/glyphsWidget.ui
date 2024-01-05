@@ -37,8 +37,7 @@
         <string>Удалить</string>
        </property>
        <property name="icon">
-        <iconset theme="list-remove">
-         <normaloff>.</normaloff>.</iconset>
+        <iconset theme="list-remove"/>
        </property>
        <property name="iconSize">
         <size>

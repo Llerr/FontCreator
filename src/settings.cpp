@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QFileDialog>
 
 #include "settings.h"
 #include "highlighter.h"
@@ -16,8 +17,11 @@ Settings::Settings(QWidget *parent) :
     _ui->setupUi(this);
 
     _highliterMain = new Highlighter(_ui->edtFileBody->document());
+    _highliterMainMorph = new Highlighter(_ui->edtFileBodyMorph->document());
     _highliterPrefix = new Highlighter(_ui->edtPrefix->document());
     _highliterPostfix = new Highlighter(_ui->edtPostfix->document());
+
+    connect(_ui->btnSelectPath, qOverload<>(&QPushButton::pressed), this, &Settings::selectPath);
 
     if(_settings.allKeys().size() > 0)
     {
@@ -78,9 +82,34 @@ const QString &Settings::baseFileBody() const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+const QString &Settings::baseFileBodyMorph() const
+{
+    return _baseFileBodyMorph;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+const QString &Settings::baseFileNameCurrent() const
+{
+    if(_baseGenMorphFont)
+    {
+        return _baseFileNameMorph;
+    }
+    else
+    {
+        return _baseFileName;
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 const QString &Settings::baseFileName() const
 {
     return _baseFileName;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+const QString &Settings::baseFileNameMorph() const
+{
+    return _baseFileNameMorph;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -100,32 +129,54 @@ void Settings::accept()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+void Settings::selectPath()
+{
+    QString dirStr = QFileDialog::getExistingDirectory(this, tr("Выбрать базовый путь"),
+                                                     _basePath,
+                                                     QFileDialog::ShowDirsOnly
+                                                     | QFileDialog::DontResolveSymlinks);
+    qDebug() << "Base path: " << dirStr;
+    if(dirStr.length() > 0)
+    {
+        _basePath = dirStr;
+    }
+    _ui->edtPath->setText(_basePath);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 //--------------------------- P R I V A T E ----------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 void Settings::saveSettings()
 {
     // Основное
-    _basePath          = _ui->edtPath->text();
-    _baseFileName      = _ui->edtFileName->text();
-    _baseFileBody      = _ui->edtFileBody->toPlainText();
-    _baseGenPathStruct = _ui->chkGenPathStruct->isChecked();
+    _basePath           = _ui->edtPath->text();
+    _baseFileName       = _ui->edtFileName->text();
+    _baseFileNameMorph  = _ui->edtFileNameMorph->text();
+    _baseGenPathStruct  = _ui->chkGenPathStruct->isChecked();
+    _baseGenMorphFont = _ui->chkGenPixelCoords->isChecked();
 
-    _settings.setValue("Base/Path"         , _baseGenPathStruct);
-    _settings.setValue("Base/FileName"     , _baseFileName     );
-    _settings.setValue("Base/FileBody"     , _baseFileBody     );
-    _settings.setValue("Base/GenPathStruct", _basePath         );
+    _settings.setValue("Base/Path",           _basePath         );
+    _settings.setValue("Base/FileName",       _baseFileName     );
+    _settings.setValue("Base/FileNameMorph",  _baseFileNameMorph);
+    _settings.setValue("Base/GenPathStruct",  _baseGenPathStruct);
+    _settings.setValue("Base/GenPixelCoords", _baseGenPathStruct);
 
     // Содержимое
-    _genPrefix  = _ui->edtPrefix->toPlainText();
-    _genPointer = _ui->chkPointer->isChecked();
-    _genGenFunc = _ui->chkGenFunc->isChecked();
-    _genPack    = _ui->chkPack->isChecked();
-    _genPostfix = _ui->edtPostfix->toPlainText();
-    _settings.setValue("Generation/Prefix",  _genPrefix);
-    _settings.setValue("Generation/Pointer", _genPointer  );
-    _settings.setValue("Generation/GenFunc", _genGenFunc);
-    _settings.setValue("Generation/Pack",    _genPack);
-    _settings.setValue("Generation/Postfix",  _genPostfix);
+    _baseFileBody      = _ui->edtFileBody->toPlainText();
+    _baseFileBodyMorph = _ui->edtFileBodyMorph->toPlainText();
+    _genPrefix         = _ui->edtPrefix->toPlainText();
+    _genPointer        = _ui->chkPointer->isChecked();
+    _genGenFunc        = _ui->chkGenFunc->isChecked();
+    _genPack           = _ui->chkPack->isChecked();
+    _genPostfix        = _ui->edtPostfix->toPlainText();
+
+    _settings.setValue("Generation/FileBody",      _baseFileBody);
+    _settings.setValue("Generation/FileBodyMorph", _baseFileBodyMorph);
+    _settings.setValue("Generation/Prefix",       _genPrefix);
+    _settings.setValue("Generation/Pointer",      _genPointer  );
+    _settings.setValue("Generation/GenFunc",      _genGenFunc);
+    _settings.setValue("Generation/Pack",         _genPack);
+    _settings.setValue("Generation/Postfix",      _genPostfix);
 
     qDebug() << "Save settings";
 
@@ -140,24 +191,30 @@ void Settings::saveSettings()
 void Settings::loadSettings()
 {
     // Основное
-    _basePath          = _settings.value("Base/Path").toString();
-    _baseFileName      = _settings.value("Base/FileName").toString();
-    _baseFileBody      = _settings.value("Base/FileBody").toString();
-    _baseGenPathStruct = _settings.value("Base/GenPathStruct").toBool();
+    _basePath           = _settings.value("Base/Path").toString();
+    _baseFileName       = _settings.value("Base/FileName").toString();
+    _baseFileNameMorph  = _settings.value("Base/FileNameMorph").toString();
+    _baseGenPathStruct  = _settings.value("Base/GenPathStruct").toBool();
+    _baseGenMorphFont = _settings.value("Base/GenPixelCoords").toBool();
 
     _ui->edtPath->setText(_basePath);
     _ui->edtFileName->setText(_baseFileName);
-    _ui->edtFileBody->setPlainText(_baseFileBody);
+    _ui->edtFileNameMorph->setText(_baseFileNameMorph);
     _ui->chkGenPathStruct->setChecked(_baseGenPathStruct);
+    _ui->chkGenPixelCoords->setChecked(_baseGenMorphFont);
 
 
     // Содержимое
-    _genPrefix  = _settings.value("Generation/Prefix").toString();
-    _genPointer = _settings.value("Generation/Pointer").toBool();
-    _genGenFunc = _settings.value("Generation/GenFunc").toBool();
-    _genPack    = _settings.value("Generation/Pack").toBool();
-    _genPostfix = _settings.value("Generation/Postfix").toString();
+    _baseFileBody      = _settings.value("Generation/FileBody").toString();
+    _baseFileBodyMorph = _settings.value("Generation/FileBodyMorph").toString();
+    _genPrefix         = _settings.value("Generation/Prefix").toString();
+    _genPointer        = _settings.value("Generation/Pointer").toBool();
+    _genGenFunc        = _settings.value("Generation/GenFunc").toBool();
+    _genPack           = _settings.value("Generation/Pack").toBool();
+    _genPostfix        = _settings.value("Generation/Postfix").toString();
 
+    _ui->edtFileBody->setPlainText(_baseFileBody);
+    _ui->edtFileBodyMorph->setPlainText(_baseFileBodyMorph);
     _ui->edtPrefix->setPlainText(_genPrefix);
     _ui->chkPointer->setChecked(_genPointer);
     _ui->chkGenFunc->setChecked(_genGenFunc);

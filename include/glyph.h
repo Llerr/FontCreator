@@ -11,6 +11,11 @@ public:
     Glyph();
     friend QDebug operator<<(QDebug stream, const Glyph &gl);
 
+    void calcPoints();
+
+    int save(QJsonObject &json);
+    int load(QJsonObject &json);
+
 public:
     int key;      ///< Unicode символа
     QImage img;   ///< Изображение символа
@@ -20,6 +25,9 @@ public:
     int16_t dy;       ///< Смещение левого нижнего угла символа от точки рисования по Y
     int16_t xAdvance; ///< Смещение следующего символа по координате X в пикселях
     int16_t yAdvance; ///< Смещение следующего символа по координате Y в пикселях
+    int16_t baseLine; ///< Базовая линия шрифта @note Пока игнорируем
+
+    QVector<QPoint> points; ///< Порядок точек в глифе
 
     uint16_t idx; ///< Индекс глифа в массиве данных шрифта @note Расчитыется во ремя генерации выходного файла
 };

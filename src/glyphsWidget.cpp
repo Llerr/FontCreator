@@ -1,6 +1,10 @@
 #include <QtWidgets>
 
+#include "glyph.h"
 #include "glyphsWidget.h"
+#include "qdebug.h"
+#include "qjsonarray.h"
+#include "qjsonobject.h"
 #include "ui_glyphsWidget.h"
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -51,6 +55,63 @@ void GlyphsWidget::setGlyph(int key, Glyph glyph)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+int GlyphsWidget::save(QJsonObject &json)
+{
+    QJsonArray array;
+    for(auto &glyph: _glyphs)
+    {
+        QJsonObject glyphJson;
+        glyph.save(glyphJson);
+        array.append(glyphJson);
+    }
+    QJsonObject glypshJson;
+    glypshJson["map"] = array;
+    glypshJson["name"] = _fontName;
+    json["glyphs"] = glypshJson;
+
+    return 0;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+int GlyphsWidget::load(QJsonObject &json)
+{
+    qDebug() << "Load glyphs";
+    GlyphsMap loadedGlyphs;
+    QString loadedName;
+    if (json.contains("glyphs") && json["glyphs"].isObject())
+    {
+//        qDebug() << "glyphs";
+        QJsonObject glyphsJson = json["glyphs"].toObject();
+        if(glyphsJson.contains("map") && glyphsJson["map"].isArray())
+        {
+//            qDebug() << "map";
+            QJsonArray glyphArray = glyphsJson["map"].toArray();
+
+            for (int levelIndex = 0; levelIndex < glyphArray.size(); ++levelIndex)
+            {
+                QJsonObject glyphJson = glyphArray[levelIndex].toObject();
+                Glyph glyph;
+                if(glyph.load(glyphJson) == 0)
+                {
+//                    qDebug() << "Load glyph: " << glyph.key;
+                    loadedGlyphs[glyph.key] = glyph;
+                }
+            }
+        }
+        if(glyphsJson.contains("name") && glyphsJson["name"].isString())
+        {
+            loadedName = glyphsJson["name"].toString();
+            qDebug() << "Font name for glyphs: " << loadedName;
+        }
+    }
+    _glyphs.clear();
+    _wgtDraw->resetSelected();
+    receiveGlyphs(loadedGlyphs, loadedName);
+    _wgtDraw->updateSize();
+    return 0;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 //------------------------------ P U B L I C S   S L O T S -------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 void GlyphsWidget::receiveGlyphs(const GlyphsMap &glyphs, const QString &name)
@@ -59,8 +120,11 @@ void GlyphsWidget::receiveGlyphs(const GlyphsMap &glyphs, const QString &name)
     _fontName = name;
     for(auto &&glyph : glyphs)
     {
-        qDebug() << glyph;
+//        qDebug() << glyph << ", Img pixels: " << glyph.img.pixelIndex(1,1)
+//                 << ", " << glyph.img.pixelIndex(1,2);
         _glyphs[glyph.key] = glyph;
+        if(glyph.points.size() == 0)
+            _glyphs[glyph.key].calcPoints();
     }
     _ui->lblFont->setText(_fontName);
     _wgtDraw->updateSize();

@@ -74,8 +74,7 @@
         <string>Открыть</string>
        </property>
        <property name="icon">
-        <iconset theme="document-open">
-         <normaloff>.</normaloff>.</iconset>
+        <iconset theme="document-open"/>
        </property>
        <property name="iconSize">
         <size>
@@ -131,12 +130,6 @@
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4"/>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3"/>
-     </item>
-     <item>
       <widget class="QPushButton" name="pushButton">
        <property name="text">
         <string/>
@@ -170,8 +163,7 @@
         <string>Добавить</string>
        </property>
        <property name="icon">
-        <iconset theme="list-add">
-         <normaloff>.</normaloff>.</iconset>
+        <iconset theme="list-add"/>
        </property>
        <property name="iconSize">
         <size>
