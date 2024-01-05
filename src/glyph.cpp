@@ -37,7 +37,6 @@ Glyph::Glyph():
 //----------------------------------------------------------------------------------------------------------------------
 void Glyph::calcPoints()
 {
-    qDebug() << __FUNCTION__;
     points.clear();
     points.reserve(img.width() * img.height());
     for(int y = 0; y < img.height(); ++y)
