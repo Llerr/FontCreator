@@ -6,6 +6,7 @@
 #include "drawCharactersWidget.h"
 #include "fontWidget.h"
 #include "ui_fontWidget.h"
+#include "unicoderanges.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -20,6 +21,7 @@ FontWidget::FontWidget(QWidget *parent) :
 
     qDebug() << "Start font: " << _font << " size: " << _font.pointSize();
     setFontSize(_font.pointSize());
+
     _scrollArea = new QScrollArea(this);
     _wgtChars = new DrawCharactersWidget();
     _scrollArea->setWidget(_wgtChars);
@@ -33,6 +35,8 @@ FontWidget::FontWidget(QWidget *parent) :
     _lbl->setWindowFlag(Qt::Dialog, true);
     _lbl->setWindowTitle("Glyph");
     _testImage = new QImage(150,100, QImage::Format_RGB32);
+
+    fontChange(_ui->cmbFont->font());
 //    _lbl->setPixmap(QPixmap::fromImage(*_testImage));
 //    //    _testImage = new QImage(this);
 //    _lbl->show();
@@ -49,7 +53,6 @@ FontWidget::FontWidget(QWidget *parent) :
 //    connect(_ui->cmbFontSize, qOverload<const QString &>(&QComboBox::currentIndexChanged), _wgtChars, &DrawCharactersWidget::updateSize);
     connect(_wgtChars, qOverload<const QString &>(&DrawCharactersWidget::characterSelectedInfo), _ui->lblSymbolCode, &QLabel::setText);
     connect(_wgtChars, qOverload<const QChar &>(&DrawCharactersWidget::characterSelected), this, &FontWidget::receiveChar);
-    fontChange(_ui->cmbFont->font());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -146,6 +149,17 @@ void FontWidget::findSizes(const QFont &font)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+void FontWidget::fillUnicodeRanges()
+{
+    auto &ranges = UnicodeRanges::unicodeRanges();
+    for(auto &range: ranges)
+    {
+        _ui->cmbSymbolRanges->addItem(range.name);
+    }
+}
+
+
+//----------------------------------------------------------------------------------------------------------------------
 //--------------------------------  S L O T S --------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 void FontWidget::openFontClick()
@@ -184,6 +198,7 @@ void FontWidget::fontChange(const QFont &font)
     findSizes(_font);
     _wgtChars->updateFont(_font);
     _font.setStyleStrategy(QFont::NoFontMerging);
+    fillUnicodeRanges();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -208,7 +223,7 @@ void FontWidget::fontSizeChange(int idx)
     _wgtChars->updateSize(fontSize);
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------
 void FontWidget::symbSearchEdit(const QString &text)
 {
     int key = 0;

@@ -4,12 +4,15 @@
 #include <QWidget>
 
 #include "glyph.h"
+#include "qvector.h"
 
 class DrawCharactersWidget;
 class QLabel;
 class QScrollArea;
 
-namespace Ui {
+//----------------------------------------------------------------------------------------------------------------------
+namespace Ui
+{
 class FontWidget;
 }
 
@@ -30,6 +33,7 @@ protected:
 private:
     void findStyles(const QFont &font);
     void findSizes(const QFont &font);
+    void fillUnicodeRanges();
 public slots:
     void openFontClick();
     void fontChange(const QFont &font);
@@ -43,12 +47,12 @@ signals:
 private:
     Ui::FontWidget *_ui;
 
-    GlyphsMap _glyphs;
-    int _pointSize;
-    QFont _font;
-    DrawCharactersWidget *_wgtChars;
+    GlyphsMap _glyphs;                    ///< Выбранные глифы
+    int _pointSize;                       ///< Текущий размер шрифта
+    QFont _font;                          ///< Выбранный шрифт
+    DrawCharactersWidget *_wgtChars;      ///< Виджет для отрисовки символов шрифта
 
-    QScrollArea *_scrollArea;
+    QScrollArea *_scrollArea;  ///< Для прокрутки и отображения всего содержимого _wgtChars
     QImage *_testImage;
     QLabel *_lbl;
     QWidget *_wgt;
