@@ -1,11 +1,12 @@
 
+#include "qchar.h"
 #include "settings.h"
-#include "ioFontGode.h"
+#include "ioFontCode.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-IOFontGode::IOFontGode(GlyphsMap *glyphs, const Settings *sets):
+IOFontCode::IOFontCode(GlyphsMap *glyphs, const Settings *sets):
     _glyphs(glyphs),
     _settings(sets)
 {
@@ -13,53 +14,57 @@ IOFontGode::IOFontGode(GlyphsMap *glyphs, const Settings *sets):
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void IOFontGode::setGlyphs(GlyphsMap *newGlyphs)
+void IOFontCode::setGlyphs(GlyphsMap *newGlyphs)
 {
     _glyphs = newGlyphs;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void IOFontGode::setSettings(const Settings *newSettings)
+void IOFontCode::setSettings(const Settings *newSettings)
 {
     _settings = newSettings;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void IOFontGode::setBaseDir(const QDir &newBaseDir)
+void IOFontCode::setBaseDir(const QDir &newBaseDir)
 {
     _basePath = newBaseDir;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void IOFontGode::saveFont(const QDir &baseDir, const QString &fontName)
+void IOFontCode::saveFont(const QDir &baseDir, const QString &fontName)
 {
+    qDebug() << "Geneate files into a dir: " << baseDir.absolutePath();
     setBaseDir(baseDir);
 
     generateBaseFile();
     generateFontHeader(fontName);
-    generateFontBody(fontName);
+    if(_settings->baseGenMorphFont())
+        generateFontMorphBody(fontName);
+    else
+        generateFontBody(fontName);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void IOFontGode::generateBaseFile()
+void IOFontCode::generateBaseFile()
 {
-    qDebug() << "Generate base file: " << _settings->baseFileName();
-    if(_settings->baseFileName().isEmpty())
+    qDebug() << "Generate base file: " << _settings->baseFileNameCurrent();
+    if(_settings->baseFileNameCurrent().isEmpty())
     {
         return;
     }
-    QFile file(_basePath.filePath(_settings->baseFileName()));
+    QFile file(_basePath.filePath(_settings->baseFileNameCurrent()));
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         return;
     }
     QTextStream out(&file);
-    out << _settings->baseFileBody();
+    out << _settings->baseFileBodyCurrent();
     qDebug() << "Base file saved.";
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void IOFontGode::generateFontHeader(const QString &fontName)
+void IOFontCode::generateFontHeader(const QString &fontName)
 {
     QDir path = filePath("include");
     qDebug() << "Generate body: " << path.path() << fontName;
@@ -73,27 +78,21 @@ void IOFontGode::generateFontHeader(const QString &fontName)
     out << "#ifndef _" << fontName.toUpper() << "_FONT_H_\n";
     out << "#define _" << fontName.toUpper() << "_FONT_H_\n\n";
 
-    out << "#include \" " << _settings->baseFileName() << "\"\n\n";
-    if(_settings->genGenFunc())
-    {
-        out << "#ifdef __cplusplus\n"
-               "extern \"C\" {\n"
-               "#endif\n\n";
+    out << "#include \" " << _settings->baseFileNameCurrent() << "\"\n\n";
 
-        out << "dgx_font_t *" << fontName << "();\n\n";
-        out << "#ifdef __cplusplus\n"
-               "}\n"
-               "#endif\n\n";
+    if(_settings->baseGenMorphFont())
+    {
+        genBaseMorphHeader(out, fontName);
     }
     else
     {
-        out << "extern const dgx_font_t " << fontName << ";\n\n";
+        genBaseHeader(out, fontName);
     }
-
     out << "#endif // _" << fontName.toUpper() << "_FONT_H_\n";
 }
 
-void IOFontGode::generateFontBody(const QString &fontName)
+//----------------------------------------------------------------------------------------------------------------------
+void IOFontCode::generateFontBody(const QString &fontName)
 {
 
     QDir path = filePath("src");
@@ -141,7 +140,7 @@ void IOFontGode::generateFontBody(const QString &fontName)
 
         outImage(out, glyph.img, idx);
         // чтобы вывести запятые, кроме последнего изображения
-        if(glyph.key != _glyphs->last().key)
+        if(glyph.key != _glyphs->last().key && glyph.img.sizeInBytes() > 0)
         {
             out << ", ";
         }
@@ -241,9 +240,87 @@ void IOFontGode::generateFontBody(const QString &fontName)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+void IOFontCode::generateFontMorphBody(const QString &fontName)
+{
+
+    QDir path = filePath("src");
+    qDebug() << "Generate body: " << path.path() << fontName;
+    QFile file(path.filePath(fontName+".cpp"));
+    if (!file.open(QIODevice::ReadWrite | QIODevice::Text | QIODevice::Truncate))
+    {
+        return;
+    }
+    QTextStream out(&file);
+    out << _settings->genPrefix() << "\n\n";
+    out << "#include \" " << _settings->baseFileNameCurrent() << "\"\n\n";
+
+    out << "// points\n";
+    for(auto &glyph: *_glyphs)
+    {
+        out << "pint_t pointsOf_" << QString::number(glyph.key, 16).rightJustified(4, '0') << "[] "
+            << "/*" << QChar(glyph.key) << "*/" << " = {";
+        QString strPoints;
+        for(auto &point: glyph.points)
+        {
+            strPoints += "{";
+            strPoints += QString::number(point.rx());
+            strPoints += ", ";
+            strPoints += QString::number(point.ry());
+            strPoints += "}, ";
+        }
+        strPoints.chop(2);
+        out << strPoints;
+        out << "}; ///< " << QChar(glyph.key) << "\n";
+    }
+    out << "\n";
+    out << "// symbols\n";
+    out << "symbol_t " << fontName << "Symbols[] = {";
+    QString strSymbols;
+    for(auto &glyph: *_glyphs)
+    {
+        strSymbols += "{";
+        strSymbols += "'" + QString(QChar(glyph.key)) + "', ";
+        strSymbols += QString::number(glyph.points.size()) + ", ";
+        strSymbols += "pointsOf_" + QString::number(glyph.key, 16).rightJustified(4, '0');
+        strSymbols += "}, ";
+    }
+    strSymbols.chop(2);
+    out << strSymbols;
+    out << "};\n";
+    out << _settings->genPostfix() << "\n\n";
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 //------------------------------------ P R O T E C T E D ---------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-QDir IOFontGode::filePath(const QString &&dir)
+void IOFontCode::genBaseHeader(QTextStream &out, const QString &fontName)
+{
+    if(_settings->genGenFunc())
+    {
+        out << "#ifdef __cplusplus\n"
+               "extern \"C\" {\n"
+               "#endif\n\n";
+
+        out << "dgx_font_t *" << fontName << "();\n\n";
+
+        out << "#ifdef __cplusplus\n"
+               "}\n"
+               "#endif\n\n";
+    }
+    else
+    {
+        out << "extern const dgx_font_t " << fontName << ";\n\n";
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void IOFontCode::genBaseMorphHeader(QTextStream &out, const QString &fontName)
+{
+    out << "extern const symbol_t " << fontName << "Symbols[];\n\n";
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+QDir IOFontCode::filePath(const QString &&dir)
 {
     QDir path = _basePath;
     if(_settings->baseGenPathStruct())
@@ -257,51 +334,59 @@ QDir IOFontGode::filePath(const QString &&dir)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void IOFontGode::outImage(QTextStream &out, QImage &img, uint16_t &idx)
+void IOFontCode::outImage(QTextStream &out, QImage &img, uint16_t &idx)
 {
     int numInLine = 0;
     uint8_t byte = 0;
     int x = 0;
+    int numBit = 0;
 
     // Пройдёмся по всем пикселям глифа
     for(int y  = 0; y < img.height(); ++y)
     {
-        for(x = 0; x < img.width(); ++x)
+        for(x = 0; x < img.width(); ++x, ++numBit)
         {
 //                qDebug() << "(" << x << ", " << y << "): " << glyph.img.pixelIndex(x ,y);
-            byte |= !img.pixelIndex(x ,y);
-            if((x % 8) == 7)
+            byte |= img.pixelIndex(x ,y);
+            // Если набрали 8 бит, то выведем их
+            if((numBit % 8) == 7)
             {
                 outHexByte(out, byte, numInLine);
                 ++idx;
-                // Чтобы не вывести запятую после вывода картинки
-                if(x != img.width() - 1)
-                {
-                    out << ", ";
-                }
+                out << ", ";
+                numBit = -1;
                 byte = 0;
             }
             byte <<=1;
         }
+
         if(!_settings->genPack())
         {
-            if(x%8 != 0)
+            if(numBit%8 != 0)
             {
                 byte <<= 8 - (x+1)%8;
                 outHexByte(out, byte, numInLine);
                 ++idx;
+                numBit = 0;
             }
             // Чтобы не вывести запятую после вывода картинки
             if(y != img.height() - 1)
             {
-                out << ", ";
+                out << ",";
             }
         }
     }
+    if(numBit%8 != 0)
+    {
+        byte <<= 8 - (x+1)%8;
+        outHexByte(out, byte, numInLine);
+        ++idx;
+    }
+
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QTextStream & IOFontGode::outHexByte(QTextStream &out, uint8_t byte, int &numInLine, int Numberlen)
+QTextStream & IOFontCode::outHexByte(QTextStream &out, uint8_t byte, int &numInLine, int Numberlen)
 {
     if(numInLine%17 == 16)
     {
@@ -310,6 +395,6 @@ QTextStream & IOFontGode::outHexByte(QTextStream &out, uint8_t byte, int &numInL
     }
     ++numInLine;
 
-    return out << QString("0x%1").arg(byte, Numberlen, 16, QChar('0'));
+    return out << QString(" 0x%1").arg(byte, Numberlen, 16, QChar('0'));
 }
 
