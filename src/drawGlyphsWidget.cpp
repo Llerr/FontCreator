@@ -227,8 +227,8 @@ void DrawGlyphsWidget::paintEvent(QPaintEvent *event)
         }
     }
 
-    for (int row = beginRow; row <= endRow; ++row) {
-
+    for (int row = beginRow; row <= endRow; ++row)
+    {
         for (int column = beginColumn; column <= endColumn; ++column)
         {
             if( (column + row*_columns) >= _glyphs.size() )
@@ -250,7 +250,6 @@ void DrawGlyphsWidget::paintEvent(QPaintEvent *event)
                 painter.fillRect(column*sqSize + 1, row*sqSize + 1, sqSize, sqSize, pal.highlight());
                 img.setColor(1, pal.highlightedText().color().rgba() );
             }
-
 
             painter.drawImage(drawRect, img);
         }
