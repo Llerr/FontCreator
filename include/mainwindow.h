@@ -6,7 +6,7 @@
 #include <QDir>
 
 #include "glyph.h"
-#include "ioFontGode.h"
+#include "ioFontCode.h"
 
 class EditWidget;
 class GlyphsWidget;
