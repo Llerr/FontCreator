@@ -27,7 +27,8 @@ SOURCES += \
     src/ioFontCode.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
-    src/settings.cpp
+    src/settings.cpp \
+    src/unicoderanges.cpp
 
 HEADERS += \
     include/drawCharactersWidget.h \
@@ -40,7 +41,8 @@ HEADERS += \
     include/highlighter.h \
     include/ioFontCode.h \
     include/mainwindow.h \
-    include/settings.h
+    include/settings.h \
+    include/unicoderanges.h
 
 FORMS += \
     ui/editWidget.ui \

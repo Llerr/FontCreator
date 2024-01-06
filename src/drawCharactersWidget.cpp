@@ -60,10 +60,13 @@ DrawCharactersWidget::DrawCharactersWidget(QWidget *parent)
     : QWidget(parent),
       _columns(16),
       _lastKey(-1),
-      _squareSize(16)
+      _squareSize(16),
+      _startCode(0),
+      _endCode(0x10FFFF)
 {
     calculateSquareSize();
     setMouseTracking(true);
+    setSizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -116,14 +119,28 @@ void DrawCharactersWidget::calculateSquareSize()
 //----------------------------------------------------------------------------------------------------------------------
 QSize DrawCharactersWidget::sizeHint() const
 {
-    return QSize(_columns*_squareSize + 1, (65536/_columns)*_squareSize);
+    int numChars = _endCode - _startCode;
+    QSize ret = QSize(_columns*_squareSize + 1, ((numChars + _columns)/_columns)*_squareSize + 1); ///< Количество символов
+    return ret;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void DrawCharactersWidget::setUnicodeGroup(const UnicodeRange &range)
+{
+//    _numChars = range;
+    qDebug() << "Set group: " << range.name << Qt::hex
+             << ", start: " << range.start << ", end: " << range.end;
+    _startCode = range.start;
+    _endCode = range.end;
+    resize(sizeHint());
+    update();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 void DrawCharactersWidget::mouseMoveEvent(QMouseEvent *event)
 {
     QPoint widgetPosition = mapFromGlobal(event->globalPos());
-    int key = (widgetPosition.y()/_squareSize)*_columns + widgetPosition.x()/_squareSize;
+    int key = (widgetPosition.y()/_squareSize)*_columns + widgetPosition.x()/_squareSize +_startCode;
 
     QString text = QString("U+%1").arg(key, 4, 16, QLatin1Char('0')).toUpper();
     emit characterSelectedInfo(text);
@@ -149,7 +166,7 @@ void DrawCharactersWidget::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        _lastKey = (event->y()/_squareSize)*_columns + event->x()/_squareSize;
+        _lastKey = (event->y()/_squareSize)*_columns + event->x()/_squareSize +_startCode;
         if((event->modifiers() & Qt::ControlModifier) != Qt::ControlModifier )
         {
             _keys.clear();
@@ -203,7 +220,8 @@ void DrawCharactersWidget::paintEvent(QPaintEvent *event)
     {
         for (int column = beginColumn; column <= endColumn; ++column)
         {
-            int key = row*_columns + column;
+            int key = row*_columns + column + _startCode;
+
             painter.setClipRect(column*_squareSize, row*_squareSize, _squareSize, _squareSize);
 
             if (_keys.contains(key))

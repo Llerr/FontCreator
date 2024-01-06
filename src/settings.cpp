@@ -1,5 +1,7 @@
 #include <QDebug>
 #include <QFileDialog>
+#include <QPushButton>
+
 
 #include "qpushbutton.h"
 #include "settings.h"
