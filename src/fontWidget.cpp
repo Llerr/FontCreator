@@ -6,10 +6,6 @@
 
 #include "drawCharactersWidget.h"
 #include "fontWidget.h"
-#include "qcombobox.h"
-#include "qglobal.h"
-#include "qrawfont.h"
-#include "qvariant.h"
 #include "ui_fontWidget.h"
 #include "unicoderanges.h"
 

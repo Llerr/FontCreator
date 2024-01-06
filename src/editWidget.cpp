@@ -2,7 +2,11 @@
 #include <QScrollArea>
 #include <QPushButton>
 
+#include "drawEditWidget.h"
 #include "editWidget.h"
+#include "mainwindow.h"
+#include "qmainwindow.h"
+#include "qspinbox.h"
 #include "ui_editWidget.h"
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -2,6 +2,8 @@
 #include <QFileDialog>
 #include <QPushButton>
 
+
+#include "qpushbutton.h"
 #include "settings.h"
 #include "highlighter.h"
 #include "ui_settings.h"

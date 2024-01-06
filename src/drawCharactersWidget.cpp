@@ -221,6 +221,7 @@ void DrawCharactersWidget::paintEvent(QPaintEvent *event)
         for (int column = beginColumn; column <= endColumn; ++column)
         {
             int key = row*_columns + column + _startCode;
+
             painter.setClipRect(column*_squareSize, row*_squareSize, _squareSize, _squareSize);
 
             if (_keys.contains(key))

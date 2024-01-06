@@ -1,6 +1,9 @@
 #ifndef GLYPH_H
 #define GLYPH_H
 
+#include "qpoint.h"
+#include "qvector.h"
+#include "qvector2d.h"
 #include <QImage>
 #include <QMap>
 #include <QDebug>

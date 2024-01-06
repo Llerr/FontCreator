@@ -10,6 +10,10 @@
 #include "glyphsWidget.h"
 #include "editWidget.h"
 
+#include "qboxlayout.h"
+#include "qdir.h"
+#include "qlabel.h"
+#include "qwidget.h"
 #include "settings.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
