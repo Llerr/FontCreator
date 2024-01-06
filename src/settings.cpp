@@ -77,6 +77,25 @@ bool Settings::baseGenPathStruct() const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+bool Settings::baseGenMorphFont() const
+{
+    return _baseGenMorphFont;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+const QString &Settings::baseFileBodyCurrent() const
+{
+    if(_baseGenMorphFont)
+    {
+        return _baseFileBodyMorph;
+    }
+    else
+    {
+        return _baseFileBody;
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 const QString &Settings::baseFileBody() const
 {
     return _baseFileBody;

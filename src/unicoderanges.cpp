@@ -1,18 +1,15 @@
 #include "unicoderanges.h"
 
+
+const QVector<UnicodeRange> UnicodeRanges::unicodesRanges = getUnicodeRanges();
+
+//----------------------------------------------------------------------------------------------------------------------
 UnicodeRanges::UnicodeRanges()
 {
-    fillUnicodeRanges();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void UnicodeRanges::fillUnicodeRanges()
-{
-    unicodesRanges = unicodeRanges();
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-UnicodeRange UnicodeRanges::getRange(const QString &name) const
+UnicodeRange UnicodeRanges::getRange(const QString &name)
 {
 //    UnicodeRange range;
     for(int i = 0; i < unicodesRanges.size(); ++i)
@@ -27,11 +24,11 @@ UnicodeRange UnicodeRanges::getRange(const QString &name) const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-const QVector<UnicodeRange> &UnicodeRanges::unicodeRanges()
+const QVector<UnicodeRange> &UnicodeRanges::getUnicodeRanges()
 {
     static const QVector<UnicodeRange> uniRanges =
     {
-        {   0, 0x0000, 0xFFFFFF,   "Все" },
+        {   0, 0x0000, 0x10FFFF,   "Все" },
         {   1, 0x0000, 0x007F,     "Basic Latin" },
         {   2, 0x0080, 0x00FF,     "Latin-1 Supplement" },
         {   3, 0x0100, 0x017F,     "Latin Extended-A" },

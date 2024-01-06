@@ -6,6 +6,10 @@
 
 #include "drawCharactersWidget.h"
 #include "fontWidget.h"
+#include "qcombobox.h"
+#include "qglobal.h"
+#include "qrawfont.h"
+#include "qvariant.h"
 #include "ui_fontWidget.h"
 #include "unicoderanges.h"
 
@@ -28,23 +32,16 @@ FontWidget::FontWidget(QWidget *parent) :
     _ui->verticalLayout->addWidget(_scrollArea);
     _wgtChars->updateFontMerging(false);
 
-//    _wgt = new QWidget;
-//    _wgt->resize(100,100);
     _lbl = new QLabel(this);
     _lbl->resize(150,100);
     _lbl->setWindowFlag(Qt::Dialog, true);
     _lbl->setWindowTitle("Glyph");
     _testImage = new QImage(150,100, QImage::Format_RGB32);
 
-    fontChange(_ui->cmbFont->font());
-//    _lbl->setPixmap(QPixmap::fromImage(*_testImage));
-//    //    _testImage = new QImage(this);
-//    _lbl->show();
-
     connect(_ui->btnOpenFont, qOverload<bool>(&QToolButton::clicked), this, &FontWidget::openFontClick);
     connect(_ui->cmbFont, qOverload<const QFont &>(&QFontComboBox::currentFontChanged), this, &FontWidget::fontChange);
-    connect(_ui->cmbStyles, qOverload<int>(&QFontComboBox::currentIndexChanged), this, &FontWidget::StyleChange);
-    connect(_ui->cmbFontSize, qOverload<int>(&QFontComboBox::currentIndexChanged), this, &FontWidget::fontSizeChange);
+    connect(_ui->cmbStyles, qOverload<int>(&QComboBox::currentIndexChanged), this, &FontWidget::StyleChange);
+    connect(_ui->cmbFontSize, qOverload<int>(&QComboBox::currentIndexChanged), this, &FontWidget::fontSizeChange);
     connect(_ui->edtSymbSearch, qOverload<const QString &>(&QLineEdit::textEdited), this, &FontWidget::symbSearchEdit);
     connect(_ui->btnAddGlyphs, qOverload<bool>(&QToolButton::clicked), this, &FontWidget::addGlyphsClick);
 
@@ -53,6 +50,9 @@ FontWidget::FontWidget(QWidget *parent) :
 //    connect(_ui->cmbFontSize, qOverload<const QString &>(&QComboBox::currentIndexChanged), _wgtChars, &DrawCharactersWidget::updateSize);
     connect(_wgtChars, qOverload<const QString &>(&DrawCharactersWidget::characterSelectedInfo), _ui->lblSymbolCode, &QLabel::setText);
     connect(_wgtChars, qOverload<const QChar &>(&DrawCharactersWidget::characterSelected), this, &FontWidget::receiveChar);
+
+    connect(_ui->cmbSymbolRanges, qOverload<int>(&QComboBox::currentIndexChanged), this, &FontWidget::unicodeGroupChange);
+    fontChange(_ui->cmbFont->font());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -181,11 +181,30 @@ void FontWidget::findSizes(const QFont &font)
 //----------------------------------------------------------------------------------------------------------------------
 void FontWidget::fillUnicodeRanges()
 {
-    auto &ranges = UnicodeRanges::unicodeRanges();
-//    QRawFont rFont(_font);
-    for(auto &range: ranges)
+    auto &ranges = UnicodeRanges::getUnicodeRanges();
+    QRawFont rFont = QRawFont::fromFont(_font);
+    _ui->cmbSymbolRanges->clear();
+    for(const auto &range: ranges)
     {
-        _ui->cmbSymbolRanges->addItem(range.name);
+        UnicodeRange curRange;
+        for(int key = range.start; key <= range.end; ++key)
+        {
+            if(rFont.supportsCharacter(key))
+            {
+                curRange.name = range.name;
+                curRange.end = key;
+                if(curRange.start == -1)
+                {
+                    curRange.start = key;
+                }
+            }
+        }
+        if(curRange.end != -1)
+        {
+            QVariant var;
+            var.setValue(curRange);
+            _ui->cmbSymbolRanges->addItem(curRange.name, var);
+        }
     }
 }
 
@@ -254,6 +273,17 @@ void FontWidget::fontSizeChange(int idx)
     setFontSize(fontSize.toInt());
 
     _wgtChars->updateSize(fontSize);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void FontWidget::unicodeGroupChange(int idx)
+{
+    UnicodeRange range = _ui->cmbSymbolRanges->currentData().value<UnicodeRange>();
+    qDebug() << "Select group: " << idx << ", " << Qt::hex
+             << range.name << ", start: " << range.start << ", end: " << range.end;
+    UnicodeRange range1 = UnicodeRanges::getRange(_ui->cmbSymbolRanges->currentText());
+    qDebug() << Qt::hex << range1.name << ", start: " << range1.start << ", end: " << range1.end;
+    _wgtChars->setUnicodeGroup(range);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

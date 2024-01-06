@@ -42,6 +42,7 @@ public slots:
     void fontChange(const QFont &font);
     void StyleChange(int idx);
     void fontSizeChange(int idx);
+    void unicodeGroupChange(int idx);
     void symbSearchEdit(const QString &text);
     void addGlyphsClick();
     void receiveChar(const QChar &symb);
@@ -58,7 +59,7 @@ private:
     QScrollArea *_scrollArea;  ///< Для прокрутки и отображения всего содержимого _wgtChars
     QImage *_testImage;
     QLabel *_lbl;
-    QWidget *_wgt;
+//    QWidget *_wgt;
 };
 
 #endif // FONT_H

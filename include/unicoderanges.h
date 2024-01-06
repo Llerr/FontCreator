@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QVector>
+#include <QVariant>
 
 //----------------------------------------------------------------------------------------------------------------------
 struct UnicodeRange
@@ -18,6 +19,7 @@ struct UnicodeRange
     int end;   ///< конечный код символа в наборе
     QString name; ///< Имя набора
 };
+ Q_DECLARE_METATYPE(UnicodeRange)
 
 //----------------------------------------------------------------------------------------------------------------------
 class UnicodeRanges
@@ -25,12 +27,11 @@ class UnicodeRanges
 public:
     UnicodeRanges();
 
-    void fillUnicodeRanges();
-    UnicodeRange getRange(const QString &name) const;
-    static const QVector<UnicodeRange> &unicodeRanges();
+    static UnicodeRange getRange(const QString &name) ;
+    static const QVector<UnicodeRange> &getUnicodeRanges();
 
 public:
-    QVector<UnicodeRange> unicodesRanges; ///< Список групп кодов
+    static const QVector<UnicodeRange> unicodesRanges; ///< Список групп кодов
 };
 
 #endif // UNICODERANGES_H
