@@ -282,15 +282,12 @@ void FontWidget::fontSizeChange(int idx)
 //----------------------------------------------------------------------------------------------------------------------
 void FontWidget::unicodeGroupChange(int idx)
 {
+    Q_UNUSED(idx);
     UnicodeRange range = _ui->cmbSymbolRanges->currentData().value<UnicodeRange>();
-    qDebug() << "Select group: " << idx << ", " << Qt::hex
-             << range.name << ", start: " << range.start << ", end: " << range.end;
     if(!_settings->cutCodeGroup())
     {
         range = UnicodeRanges::getRange(_ui->cmbSymbolRanges->currentText());
     }
-    UnicodeRange rangeFull = UnicodeRanges::getRange(_ui->cmbSymbolRanges->currentText());
-    qDebug() << Qt::hex << rangeFull.name << ", start: " << rangeFull.start << ", end: " << rangeFull.end;
     _wgtChars->setUnicodeGroup(range);
 }
 
