@@ -64,6 +64,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     _generator.setGlyphs(_wgtGlyphs->glyphs());
     _generator.setSettings(_settings);
+    _wgtFont->setSettings(_settings);
 
     _baseDir.setPath( _settings->basePath());
 

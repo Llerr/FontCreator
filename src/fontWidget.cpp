@@ -6,8 +6,10 @@
 
 #include "drawCharactersWidget.h"
 #include "fontWidget.h"
+#include "qsettings.h"
 #include "ui_fontWidget.h"
 #include "unicoderanges.h"
+#include "settings.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -64,6 +66,12 @@ void FontWidget::setFontSize(int size)
     _font.setPointSize(_pointSize);
 //    _font.setPixelSize(_pointSize);
     //    ui->lblFontSize->setText(QString::number(_font.pointSize()));
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void FontWidget::setSettings(Settings *sets)
+{
+    _settings = sets;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -277,8 +285,12 @@ void FontWidget::unicodeGroupChange(int idx)
     UnicodeRange range = _ui->cmbSymbolRanges->currentData().value<UnicodeRange>();
     qDebug() << "Select group: " << idx << ", " << Qt::hex
              << range.name << ", start: " << range.start << ", end: " << range.end;
-    UnicodeRange range1 = UnicodeRanges::getRange(_ui->cmbSymbolRanges->currentText());
-    qDebug() << Qt::hex << range1.name << ", start: " << range1.start << ", end: " << range1.end;
+    if(!_settings->cutCodeGroup())
+    {
+        range = UnicodeRanges::getRange(_ui->cmbSymbolRanges->currentText());
+    }
+    UnicodeRange rangeFull = UnicodeRanges::getRange(_ui->cmbSymbolRanges->currentText());
+    qDebug() << Qt::hex << rangeFull.name << ", start: " << rangeFull.start << ", end: " << rangeFull.end;
     _wgtChars->setUnicodeGroup(range);
 }
 

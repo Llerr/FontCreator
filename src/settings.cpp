@@ -84,6 +84,11 @@ bool Settings::baseGenMorphFont() const
     return _baseGenMorphFont;
 }
 
+bool Settings::cutCodeGroup() const
+{
+    return _baseCutCodeGroup;
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 const QString &Settings::baseFileBodyCurrent() const
 {
@@ -175,13 +180,15 @@ void Settings::saveSettings()
     _baseFileName       = _ui->edtFileName->text();
     _baseFileNameMorph  = _ui->edtFileNameMorph->text();
     _baseGenPathStruct  = _ui->chkGenPathStruct->isChecked();
-    _baseGenMorphFont = _ui->chkGenPixelCoords->isChecked();
+    _baseGenMorphFont   = _ui->chkGenPixelCoords->isChecked();
+    _baseCutCodeGroup   = _ui->chkCutCodeGroup->isChecked();
 
     _settings.setValue("Base/Path",           _basePath         );
     _settings.setValue("Base/FileName",       _baseFileName     );
     _settings.setValue("Base/FileNameMorph",  _baseFileNameMorph);
     _settings.setValue("Base/GenPathStruct",  _baseGenPathStruct);
     _settings.setValue("Base/GenPixelCoords", _baseGenPathStruct);
+    _settings.setValue("Base/CutCodeGroup",   _baseCutCodeGroup);
 
     // Содержимое
     _baseFileBody      = _ui->edtFileBody->toPlainText();
@@ -194,19 +201,11 @@ void Settings::saveSettings()
 
     _settings.setValue("Generation/FileBody",      _baseFileBody);
     _settings.setValue("Generation/FileBodyMorph", _baseFileBodyMorph);
-    _settings.setValue("Generation/Prefix",       _genPrefix);
-    _settings.setValue("Generation/Pointer",      _genPointer  );
-    _settings.setValue("Generation/GenFunc",      _genGenFunc);
-    _settings.setValue("Generation/Pack",         _genPack);
-    _settings.setValue("Generation/Postfix",      _genPostfix);
-
-    qDebug() << "Save settings";
-
-    qDebug() << "Prefix: " << genPrefix();
-    qDebug() << " Generate pointer: " << genPointer();
-    qDebug() << " Generate function: " << genGenFunc();
-    qDebug() << " Pack data: " << genPack();
-    qDebug() << "Postfix: " << genPostfix();
+    _settings.setValue("Generation/Prefix",        _genPrefix);
+    _settings.setValue("Generation/Pointer",       _genPointer  );
+    _settings.setValue("Generation/GenFunc",       _genGenFunc);
+    _settings.setValue("Generation/Pack",          _genPack);
+    _settings.setValue("Generation/Postfix",       _genPostfix);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -217,13 +216,15 @@ void Settings::loadSettings()
     _baseFileName       = _settings.value("Base/FileName").toString();
     _baseFileNameMorph  = _settings.value("Base/FileNameMorph").toString();
     _baseGenPathStruct  = _settings.value("Base/GenPathStruct").toBool();
-    _baseGenMorphFont = _settings.value("Base/GenPixelCoords").toBool();
+    _baseGenMorphFont   = _settings.value("Base/GenPixelCoords").toBool();
+    _baseCutCodeGroup   = _settings.value("Base/CutCodeGroup").toBool();
 
     _ui->edtPath->setText(_basePath);
     _ui->edtFileName->setText(_baseFileName);
     _ui->edtFileNameMorph->setText(_baseFileNameMorph);
     _ui->chkGenPathStruct->setChecked(_baseGenPathStruct);
     _ui->chkGenPixelCoords->setChecked(_baseGenMorphFont);
+    _ui->chkCutCodeGroup->setChecked(_baseCutCodeGroup);
 
 
     // Содержимое
