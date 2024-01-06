@@ -30,6 +30,7 @@ public:
     const QString &baseFileBodyMorph() const;
     bool baseGenPathStruct() const;
     bool baseGenMorphFont() const;
+    bool cutCodeGroup() const;
 
     const QString &genPrefix() const;
     bool genPointer() const;
@@ -59,6 +60,7 @@ private:
     QString _baseFileNameMorph;
     bool _baseGenPathStruct;
     bool _baseGenMorphFont;
+    bool _baseCutCodeGroup;      ///< Обрезать группы кодов до существующих символов
     // Содержимое
     QString _baseFileBody;
     QString _baseFileBodyMorph;

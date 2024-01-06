@@ -5,10 +5,12 @@
 
 #include "glyph.h"
 #include "qvector.h"
+#include "settings.h"
 
 class DrawCharactersWidget;
 class QLabel;
 class QScrollArea;
+class Settings;
 
 //----------------------------------------------------------------------------------------------------------------------
 namespace Ui
@@ -25,6 +27,8 @@ public:
     ~FontWidget();
 
     void setFontSize(int size);
+
+    void setSettings(Settings *sets);
 
     int save(QJsonObject &json);
     int load(QJsonObject &json);
@@ -59,6 +63,8 @@ private:
     QScrollArea *_scrollArea;  ///< Для прокрутки и отображения всего содержимого _wgtChars
     QImage *_testImage;
     QLabel *_lbl;
+
+    Settings *_settings;
 //    QWidget *_wgt;
 };
 
