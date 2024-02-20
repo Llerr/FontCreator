@@ -58,6 +58,8 @@
 #include <QWidget>
 #include <QSet>
 
+#include "unicoderanges.h"
+
 QT_BEGIN_NAMESPACE
 class QMouseEvent;
 class QPaintEvent;
@@ -74,6 +76,7 @@ public:
     int squareSize() {return _squareSize;}
     int columns() {return _columns;}
     QSet<int> &getKeys() {return _keys;}
+    void setUnicodeGroup(const UnicodeRange &range);
 
 public slots:
     void updateFont(const QFont &font);
@@ -99,6 +102,8 @@ private:
     int _lastKey;
     QSet<int> _keys;
     int _squareSize;
+    int _startCode;
+    int _endCode;
 };
 
 #endif

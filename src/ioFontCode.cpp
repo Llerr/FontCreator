@@ -347,7 +347,7 @@ void IOFontCode::outImage(QTextStream &out, QImage &img, uint16_t &idx)
         for(x = 0; x < img.width(); ++x, ++numBit)
         {
 //                qDebug() << "(" << x << ", " << y << "): " << glyph.img.pixelIndex(x ,y);
-            byte |= !img.pixelIndex(x ,y);
+            byte |= img.pixelIndex(x ,y);
             // Если набрали 8 бит, то выведем их
             if((numBit % 8) == 7)
             {

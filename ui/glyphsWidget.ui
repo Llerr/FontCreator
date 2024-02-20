@@ -37,7 +37,7 @@
         <string>Удалить</string>
        </property>
        <property name="icon">
-        <iconset theme="remove"/>
+        <iconset theme="list-remove"/>
        </property>
        <property name="iconSize">
         <size>
@@ -67,9 +67,16 @@
       </widget>
      </item>
      <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string> :</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QLabel" name="lblGlyph">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
          <horstretch>1</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -114,7 +121,8 @@
         <string>1:1</string>
        </property>
        <property name="icon">
-        <iconset theme="zoom-original"/>
+        <iconset theme="zoom-original">
+         <normaloff>.</normaloff>.</iconset>
        </property>
        <property name="iconSize">
         <size>

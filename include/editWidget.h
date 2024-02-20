@@ -34,8 +34,9 @@ private slots:
     void on_edtXAdvance_editingFinished();
     void on_edtWidth_editingFinished();
     void on_edtHeight_editingFinished();
-    void on_edtDX_editingFinished();
-    void on_edtDY_editingFinished();
+
+    void edtDX_changed(int val);
+    void edtDY_changed(int val);
 
 private:
     void updateEditFields();

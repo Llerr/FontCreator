@@ -66,7 +66,6 @@ int Glyph::save(QJsonObject &json)
     json["height"] = height;
     json["width"] = width;
     json["baseLine"] = baseLine;
-
     json["fileName"] = fileNameImg;
     json["fileNamePts"] = fileNamePts;
     qDebug() << "Key: " << key << "Img pixel (0, 0): " << img.pixelIndex(0,0) << ", fmt: " << img.format();

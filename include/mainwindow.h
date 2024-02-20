@@ -4,12 +4,10 @@
 #include <QMainWindow>
 #include <QMap>
 #include <QDir>
+#include <QLabel>
 
 #include "glyph.h"
 #include "ioFontCode.h"
-#include "qdir.h"
-#include "qlabel.h"
-#include "qobjectdefs.h"
 
 class EditWidget;
 class GlyphsWidget;
