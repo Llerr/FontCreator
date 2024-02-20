@@ -152,7 +152,8 @@ int Glyph::load(QJsonObject &json)
         QDataStream stream(&filePts);
         stream >> points;
     }
-    int color = img.pixelIndex(points[0]);
+
+    int color = (points.length())?img.pixelIndex(points[0]):1;
     if(!color)
         img.invertPixels();
     return (numLoaded == 10)?0:-1;
