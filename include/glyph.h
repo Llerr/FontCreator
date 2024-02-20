@@ -19,6 +19,8 @@ public:
     int save(QJsonObject &json);
     int load(QJsonObject &json);
 
+    void drawVector();
+
 public:
     int key;      ///< Unicode символа
     QImage img;   ///< Изображение символа

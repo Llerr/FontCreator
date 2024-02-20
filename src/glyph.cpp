@@ -6,6 +6,7 @@
 #include <QDataStream>
 
 #include "glyph.h"
+#include "qpainter.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 QImage invert(QImage &img)
@@ -132,10 +133,10 @@ int Glyph::load(QJsonObject &json)
     }
     if (json.contains("fileName") && json["fileName"].isString())
     {
-        QString fileName = json["fileName"].toString();
-        img.load(fileName);
-        img.convertTo(QImage::Format_Mono);
-        qDebug() << "Key: " << key << "Img pixel (0, 0): " << img.pixelIndex(0,0) << ", fmt: " << img.format();
+//        QString fileName = json["fileName"].toString();
+//        img.load(fileName);
+//        img.convertTo(QImage::Format_Mono);
+//        qDebug() << "Key: " << key << "Img pixel (0, 0): " << img.pixelIndex(0,0) << ", fmt: " << img.format();
         ++numLoaded;
     }
     if (json.contains("fileNamePts") && json["fileNamePts"].isString())
@@ -147,16 +148,26 @@ int Glyph::load(QJsonObject &json)
         if(!filePts.isOpen())
         {
             qWarning() << "Can`t load points sequence";
-            return 0;
+            return -1;
         }
         QDataStream stream(&filePts);
         stream >> points;
+        drawVector();
     }
 
-    int color = (points.length())?img.pixelIndex(points[0]):1;
-    if(!color)
-        img.invertPixels();
-    return (numLoaded == 10)?0:-1;
+    return (numLoaded > 8)?0:-1;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void Glyph::drawVector()
+{
+    QImage newImg(width, height, QImage::Format_Mono);
+    newImg.fill(0);
+    for(auto &point: points)
+    {
+        newImg.setPixel(point, 1);
+    }
+    img = newImg;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
