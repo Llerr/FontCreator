@@ -139,8 +139,8 @@ void DrawEditWidget::mousePressEvent(QMouseEvent *event)
         {
 //            qDebug() << "Length: " << _glyph.points.length();
             int idx = _glyph.points.indexOf(QPoint(iX, iY));
-            qDebug() << "Idx: " << idx;
-            _glyph.points.remove(idx);
+            if(idx!= -1)
+                _glyph.points.remove(idx);
 //            qDebug() << "Length: " << _glyph.points.length() << ", idx: " << idx;
         }
         qDebug() << "(" << iX << ", " << iY << ")  - set color ("
