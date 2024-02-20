@@ -5,6 +5,7 @@
 
 #include "drawEditWidget.h"
 #include "mainwindow.h"
+
 #include "settings.h"
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -138,6 +139,7 @@ void DrawEditWidget::mousePressEvent(QMouseEvent *event)
         {
 //            qDebug() << "Length: " << _glyph.points.length();
             int idx = _glyph.points.indexOf(QPoint(iX, iY));
+            qDebug() << "Idx: " << idx;
             _glyph.points.remove(idx);
 //            qDebug() << "Length: " << _glyph.points.length() << ", idx: " << idx;
         }
@@ -167,9 +169,10 @@ void DrawEditWidget::mousePressEvent(QMouseEvent *event)
 void DrawEditWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
+    QPalette pal = palette();
     QPainter painter(this);
 
-    QBrush brush(Qt::white);
+    QBrush brush(pal.base());
 
     painter.setBrush(brush);
     int widthGlyph  = _glyph.width * _scale;
@@ -180,25 +183,27 @@ void DrawEditWidget::paintEvent(QPaintEvent *event)
     painter.drawRect(rect);
 
     _glyph.img.setColor(0, qRgba(0,0,0,0));
-    _glyph.img.setColor(1, qRgba(0,0,0,255));
-//    painter.setPen(QPen(Qt::black));
+    _glyph.img.setColor(1, pal.text().color().rgba());
+
     painter.drawImage(rect, _glyph.img);
 
     if(_scale > 4)
     {
-        painter.setPen(QColor(127,127,127,127));
+        painter.setPen(Qt::gray);
         for (int dx = 0; dx < _glyph.width; ++dx)
         {
             painter.drawLine(x+dx*_scale, y, x+dx*_scale, y+heightGlyph);
         }
         for (int dy = 0; dy < _glyph.height; ++dy)
         {
+            painter.setPen((dy == (-_glyph.dy))?QPen(Qt::red, 2):QPen(Qt::gray));
             painter.drawLine(x, y + dy*_scale, x + widthGlyph, y + dy*_scale);
         }
     }
     if(_scale > 10 && MainWindow::settings()->baseGenMorphFont())
     {
-        painter.setPen(QPen(Qt::white));
+//        painter.setPen(QPen(Qt::white));
+        painter.setPen(pal.brightText().color());
         QFont font = painter.font();
         font.setPixelSize(10);
         painter.setFont(font);
@@ -212,7 +217,6 @@ void DrawEditWidget::paintEvent(QPaintEvent *event)
                     QRect rect = QRect(x + dx*_scale + 2, y + dy*_scale,
                                        x + (dx + 1)*_scale, y + (dy + 1)*_scale);
                     QString text = QString::number(_glyph.points.indexOf(QPoint(dx, dy)));
-//                    painter.drawText(rect, Qt::AlignBottom|Qt::AlignRight, text);
                     painter.drawText(rect, text);
                 }
             }
