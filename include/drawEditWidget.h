@@ -22,12 +22,13 @@ public:
 signals:
     void coordChange(QPoint point, int idx);
 protected:
+    void setColor(const QPoint &point, int color);
+protected:
     void wheelEvent(QWheelEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
 //    void mouseDoubleClickEvent(QMouseEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
-
 private:
     Glyph &_glyph; ///< Глиф для редактирования
 

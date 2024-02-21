@@ -49,6 +49,24 @@ void DrawEditWidget::on_btnZoomIn_clicked()
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------- P R O T E C T E D ----------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
+void DrawEditWidget::setColor(const QPoint &point, int color)
+{
+    _glyph.img.setPixel(point, color);
+    if(color)
+    {
+        _glyph.points.push_back(point);
+    }
+    else
+    {
+        int idx = _glyph.points.indexOf(point);
+        if(idx!= -1)
+            _glyph.points.remove(idx);
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------- P R O T E C T E D   E V E N T S --------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 void DrawEditWidget::wheelEvent(QWheelEvent *event)
 {
     if(event->modifiers() == Qt::ControlModifier)
@@ -84,7 +102,16 @@ void DrawEditWidget::mouseMoveEvent(QMouseEvent *event)
         iY = iY/_scale;
     }
     static QPoint oldPoint;
+    int color = -1;
+    if(_glyph.img.valid(oldPoint))
+        color = _glyph.img.pixelIndex(oldPoint);
     QPoint point(iX, iY);
+    if(event->buttons() == Qt::LeftButton && oldPoint != point)
+    {
+        setColor(point, color);
+        update();
+    }
+
     if(oldPoint != point)
     {
         oldPoint = point;
@@ -116,33 +143,18 @@ void DrawEditWidget::mousePressEvent(QMouseEvent *event)
         iX = iX/_scale;
         iY = iY/_scale;
     }
-
-    if(iX > (_glyph.width - 1) || iX < 0 || iY > (_glyph.height - 1) || iY < 0)
+    QPoint point(iX, iY);
+    if(!_glyph.img.valid(point))
     {
         return;
     }
 
     if (event->button() == Qt::LeftButton)
     {
-
-        auto color = _glyph.img.pixelIndex(iX, iY);
-        qDebug() << "(" << iX << ", " << iY << ")  - cur color ("
-                 << Qt::hex << color << " ), " << _glyph.img.format();
+        auto color = _glyph.img.pixelIndex(point);
 
         color = (color)?0:1;
-        _glyph.img.setPixel(iX, iY, color);
-        if(color)
-        {
-            _glyph.points.push_back(QPoint(iX, iY));
-        }
-        else
-        {
-            int idx = _glyph.points.indexOf(QPoint(iX, iY));
-            if(idx!= -1)
-                _glyph.points.remove(idx);
-        }
-        qDebug() << "(" << iX << ", " << iY << ")  - set color ("
-                 << Qt::hex << color << " ), " << _glyph.img.format();
+        setColor(point, color);
         update();
     }
     else if(event->button() == Qt::RightButton && MainWindow::settings()->baseGenMorphFont())
