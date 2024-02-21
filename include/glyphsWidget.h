@@ -32,10 +32,14 @@ public:
 
     int save(QJsonObject &json);
     int load(QJsonObject &json);
+    bool isNeedSave(){return _modifed;}
+    void setNeedSave(bool need);
 signals:
     void glyphSelected(const Glyph &);
+    void neededSave(bool need);
 
 public slots:
+    void deletedGlyph();
     void receiveGlyphs(const GlyphsMap &glyphs, const QString &name);
     void editFinish(const Glyph &glyph);
 
@@ -54,6 +58,8 @@ private:
 
     QString _fontName; ///< Имя шрифта
     GlyphsMap _glyphs; ///< Набор глифов с изображениями
+
+    bool _modifed; ///< Набор глифов изменён и требуется сохранение
 };
 
 #endif // GLYPHS_H

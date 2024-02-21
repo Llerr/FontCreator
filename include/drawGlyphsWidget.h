@@ -31,6 +31,7 @@ public slots:
 signals:
     void characterSelectedInfo(const QString &character);
     void glyphSelected(const Glyph &);
+    void glyphDeleted();
 
 protected:
     void wheelEvent(QWheelEvent *event) override;
