@@ -6,6 +6,7 @@
 #include "drawEditWidget.h"
 #include "mainwindow.h"
 
+#include "qnamespace.h"
 #include "settings.h"
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -101,27 +102,28 @@ void DrawEditWidget::mouseMoveEvent(QMouseEvent *event)
         iX = iX/_scale;
         iY = iY/_scale;
     }
-    static QPoint oldPoint;
+
     int color = -1;
-    if(_glyph.img.valid(oldPoint))
-        color = _glyph.img.pixelIndex(oldPoint);
+    if(_glyph.img.valid(_selPoint))
+        color = _glyph.img.pixelIndex(_selPoint);
+
     QPoint point(iX, iY);
-    if(event->buttons() == Qt::LeftButton && oldPoint != point)
+    if(event->buttons() == Qt::LeftButton && _selPoint != point)
     {
         setColor(point, color);
         update();
     }
 
-    if(oldPoint != point)
+    if(_selPoint != point)
     {
-        oldPoint = point;
-        if(iX > (_glyph.width - 1) || iX < 0 || iY > (_glyph.height - 1) || iY < 0)
+        _selPoint = point;
+        update();
+        if(!_glyph.img.valid(point))
         {
             emit coordChange(QPoint(-1, -1), -1);
             QWidget::mouseMoveEvent(event);
             return;
         }
-        oldPoint = point;
         idx = _glyph.points.indexOf(QPoint(iX, iY));
         emit coordChange(point, idx);
     }
@@ -208,6 +210,13 @@ void DrawEditWidget::paintEvent(QPaintEvent *event)
         {
             painter.setPen((dy == (-_glyph.dy))?QPen(Qt::red, 2):QPen(Qt::gray));
             painter.drawLine(x, y + dy*_scale, x + widthGlyph, y + dy*_scale);
+        }
+        if(_glyph.img.valid(_selPoint))
+        {
+            painter.setPen(QPen(Qt::blue, 2));
+            painter.setBrush(Qt::NoBrush);
+            painter.drawRect(QRect(x + _selPoint.x()*_scale, y + _selPoint.y()*_scale,
+                                   _scale, _scale));
         }
     }
     if(_scale > 10 && MainWindow::settings()->baseGenMorphFont())

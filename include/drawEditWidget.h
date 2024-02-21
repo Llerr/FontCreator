@@ -32,6 +32,8 @@ protected:
 private:
     Glyph &_glyph; ///< Глиф для редактирования
 
+    QPoint _selPoint; ///< Точка над которой находится курсор
+
     int _scale;
 };
 
