@@ -5,20 +5,17 @@
 #include <QDir>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QCloseEvent>
 
 #include "fontWidget.h"
 #include "glyphsWidget.h"
 #include "editWidget.h"
 
-#include "qboxlayout.h"
-#include "qdir.h"
-#include "qlabel.h"
-#include "qwidget.h"
 #include "settings.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#define NEW_NAME "Новый"
+#define NEW_NAME "Новый[*]"
 
 static const QString programName(QStringLiteral("Font creator"));
 static const QString version(QStringLiteral("0.0.1 "));
@@ -61,6 +58,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(_wgtEdit, qOverload<const Glyph &>(&EditWidget::editFinished),
             _wgtGlyphs, &GlyphsWidget::editFinish);
+    connect(_wgtGlyphs, qOverload<bool>(&GlyphsWidget::neededSave),
+            this, &MainWindow::needSave);
 
     _generator.setGlyphs(_wgtGlyphs->glyphs());
     _generator.setSettings(_settings);
@@ -81,7 +80,7 @@ MainWindow::MainWindow(QWidget *parent)
     statusBar()->addWidget(_coord);
 
 
-    setWindowTitle(NEW_NAME);
+    setWindowTitle(QString(NEW_NAME));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -124,6 +123,8 @@ void MainWindow::coordChanged(QPoint point, int idx)
 //----------------------------------------------------------------------------------------------------------------------
 void MainWindow::openProject()
 {
+    if (!maybeSave())
+        return;
     qDebug() << "Load project";
     QString dirStr = QFileDialog::getExistingDirectory(this, tr("Открыть проект из папки"),
                                                      _baseDir.absolutePath(),
@@ -154,7 +155,7 @@ void MainWindow::saveProject()
         _projectPath.setPath(dirStr);
         _projName = _projectPath.dirName();
     }
-    setWindowTitle(_projName);
+    setWindowTitle(_projName+"[*]");
     qDebug() << "Save path: " << _projectPath.absolutePath();
     // Очистим путь
     _projectPath.setNameFilters(QStringList() << "*");
@@ -210,6 +211,12 @@ void MainWindow::aboutShow()
                    "<p> Версия 0.0.1</p>"));
 }
 
+void MainWindow::needSave(bool needSave)
+{
+    qDebug() << "Need save " << needSave;
+    setWindowModified(needSave);
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 void MainWindow::save()
 {
@@ -261,7 +268,7 @@ void MainWindow::load()
     if (json.contains("name") && json["name"].isString())
     {
         _projName = json["name"].toString();
-        setWindowTitle(_projName);
+        setWindowTitle(_projName+"[*]");
     }
     if (json.contains("version") && json["version"].isString())
     {
@@ -273,6 +280,28 @@ void MainWindow::load()
 
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+bool MainWindow::maybeSave()
+{
+    if (!_wgtGlyphs->isNeedSave())
+        return true;
+    const QMessageBox::StandardButton ret
+            = QMessageBox::warning(this, _projName,
+                                   "Проект изменён.\n"
+                                   "Сохранить изменения?",
+                                   QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    switch (ret)
+    {
+    case QMessageBox::Save:
+        saveProject();
+        return true;
+    case QMessageBox::Cancel:
+        return false;
+    default:
+        break;
+    }
+    return true;
+}
 //----------------------------------------------------------------------------------------------------------------------
 void MainWindow::settingsShow()
 {
@@ -289,6 +318,12 @@ void MainWindow::settingsShow()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     qDebug() << "MainWindow::closeEvent: Close event";
-    QMainWindow::closeEvent(event);
+    if (maybeSave())
+    {
+        event->accept();
+    } else
+    {
+        event->ignore();
+    }
 }
 

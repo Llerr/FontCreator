@@ -64,14 +64,13 @@ void DrawGlyphsWidget::resetSelected()
 void DrawGlyphsWidget::on_btnDel_clicked()
 {
     qDebug() << "Delete " << _Idxs.size() << " glyphs";
-//    qDebug() << "Before delete size: " << _glyphs.size();
-    int cnt = 0;
+
     QVector<int> rmKeys;
-    qDebug() << "rmKeyes size: " << rmKeys.size();
+
     for(const auto &idx:qAsConst(_Idxs))
     {
         int key = getByIndex(_glyphs, idx);
-        qDebug() << ++cnt << ": ix: " << idx << ", key: " << key;
+
         rmKeys.push_back(key);
         if(_key == key)
         {
@@ -82,7 +81,11 @@ void DrawGlyphsWidget::on_btnDel_clicked()
     {
         _glyphs.remove(key);
     }
-//    qDebug() << "After delete size: " << _glyphs.size();
+    if(!rmKeys.empty())
+    {
+        emit glyphDeleted();
+    }
+
     _Idxs.clear();
     updateSize();
 }

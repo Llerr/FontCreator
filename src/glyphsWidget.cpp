@@ -1,10 +1,11 @@
 #include <QtWidgets>
+#include <QDebug>
+#include <QJsonArray>
+#include <QJsonObject>
 
 #include "glyph.h"
 #include "glyphsWidget.h"
-#include "qdebug.h"
-#include "qjsonarray.h"
-#include "qjsonobject.h"
+#include "qobjectdefs.h"
 #include "ui_glyphsWidget.h"
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -13,8 +14,8 @@
 GlyphsWidget::GlyphsWidget(QWidget *parent) :
     QWidget(parent),
     _ui(new Ui::GlyphsWidget),
-    _glyphs()
-
+    _glyphs(),
+    _modifed(false)
 {
     _ui->setupUi(this);
 
@@ -28,6 +29,8 @@ GlyphsWidget::GlyphsWidget(QWidget *parent) :
             _ui->lblGlyph, &QLabel::setText);
     connect(_wgtDraw, qOverload<const Glyph &>(&DrawGlyphsWidget::glyphSelected),
             this, qOverload<const Glyph &>(&GlyphsWidget::glyphSelected));
+    connect(_wgtDraw, (&DrawGlyphsWidget::glyphDeleted),
+            this, &GlyphsWidget::deletedGlyph);
 
     connect(_ui->btnDel, qOverload<bool>(&QPushButton::clicked), _wgtDraw, &DrawGlyphsWidget::on_btnDel_clicked);
     connect(_ui->btnPlus, qOverload<bool>(&QPushButton::clicked), _wgtDraw, &DrawGlyphsWidget::on_btnPlus_clicked);
@@ -46,12 +49,14 @@ GlyphsWidget::~GlyphsWidget()
 void GlyphsWidget::removeGlyph(int key)
 {
     _glyphs.remove(key);
+    setNeedSave(true);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 void GlyphsWidget::setGlyph(int key, Glyph glyph)
 {
     _glyphs[key] = glyph;
+    setNeedSave(true);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -68,7 +73,7 @@ int GlyphsWidget::save(QJsonObject &json)
     glypshJson["map"] = array;
     glypshJson["name"] = _fontName;
     json["glyphs"] = glypshJson;
-
+    _modifed = false;
     return 0;
 }
 
@@ -108,11 +113,25 @@ int GlyphsWidget::load(QJsonObject &json)
     _wgtDraw->resetSelected();
     receiveGlyphs(loadedGlyphs, loadedName);
     _wgtDraw->updateSize();
+    setNeedSave(false);
     return 0;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+void GlyphsWidget::setNeedSave(bool need)
+{
+    _modifed = need;
+    emit neededSave(_modifed);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 //------------------------------ P U B L I C S   S L O T S -------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+void GlyphsWidget::deletedGlyph()
+{
+    setNeedSave(true);
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 void GlyphsWidget::receiveGlyphs(const GlyphsMap &glyphs, const QString &name)
 {
@@ -122,12 +141,14 @@ void GlyphsWidget::receiveGlyphs(const GlyphsMap &glyphs, const QString &name)
     {
 //        qDebug() << glyph << ", Img pixels: " << glyph.img.pixelIndex(1,1)
 //                 << ", " << glyph.img.pixelIndex(1,2);
+        _modifed = true;
         _glyphs[glyph.key] = glyph;
         if(glyph.points.size() == 0)
             _glyphs[glyph.key].calcPoints();
     }
     _ui->lblFont->setText(_fontName);
     _wgtDraw->updateSize();
+    setNeedSave(_modifed);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -135,6 +156,7 @@ void GlyphsWidget::editFinish(const Glyph &glyph)
 {
     _glyphs[glyph.key] = glyph;
     _wgtDraw->updateSize();
+    setNeedSave(true);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

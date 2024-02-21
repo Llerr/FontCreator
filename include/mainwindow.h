@@ -38,10 +38,13 @@ private slots:
     void generateCodeAs();
     void settingsShow();
     void aboutShow();
+    void needSave(bool);
 protected:
     void save();
     void load();
+    bool maybeSave();
     void closeEvent(QCloseEvent *event);
+
 private:
     Ui::MainWindow *_ui;
 
