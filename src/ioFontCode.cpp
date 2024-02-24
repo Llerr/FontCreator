@@ -270,7 +270,8 @@ void IOFontCode::generateFontMorphBody(const QString &fontName)
         }
         strPoints.chop(2);
         out << strPoints;
-        out << "}; ///< " << QChar(glyph.key) << "\n";
+        out << "}; ///< " << QChar(glyph.key) << ", size: " << glyph.points.size() <<
+               "" << "\n";
     }
     out << "\n";
     out << "// symbols\n";
@@ -353,8 +354,8 @@ void IOFontCode::outImage(QTextStream &out, QImage &img, uint16_t &idx)
             {
                 outHexByte(out, byte, numInLine);
                 ++idx;
-                out << ", ";
-                numBit = -1;
+                out << ",";
+                numBit = 0;
                 byte = 0;
             }
             byte <<=1;
