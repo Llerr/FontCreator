@@ -252,7 +252,7 @@ void IOFontCode::generateFontMorphBody(const QString &fontName)
     }
     QTextStream out(&file);
     out << _settings->genPrefix() << "\n\n";
-    out << "#include \" " << _settings->baseFileNameCurrent() << "\"\n\n";
+    out << "#include \"" << _settings->baseFileNameCurrent() << "\"\n\n";
 
     out << "// points\n";
     for(auto &glyph: *_glyphs)
@@ -383,7 +383,6 @@ void IOFontCode::outImage(QTextStream &out, QImage &img, uint16_t &idx)
         outHexByte(out, byte, numInLine);
         ++idx;
     }
-
 }
 
 //----------------------------------------------------------------------------------------------------------------------
