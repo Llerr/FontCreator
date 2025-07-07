@@ -6,7 +6,6 @@
 #include "drawEditWidget.h"
 #include "mainwindow.h"
 
-#include "qnamespace.h"
 #include "settings.h"
 
 //----------------------------------------------------------------------------------------------------------------------
