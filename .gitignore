@@ -74,3 +74,4 @@ Thumbs.db
 debug/
 release/
 profile/
+/build
