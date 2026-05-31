@@ -75,3 +75,5 @@ debug/
 release/
 profile/
 /build
+CMakeLists.txt.user
+cmake_install.cmake
